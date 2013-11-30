@@ -60,7 +60,7 @@ public class Gui{
 
 	private void initComponents() {
 			
-		Dimension buttonSize = new Dimension(150,100);
+		//Dimension buttonSize = new Dimension(150,100);
 		Dimension frameDimension = new Dimension(800, 550);
 		Dimension frameMinDimension = new Dimension(500, 200);
 		
