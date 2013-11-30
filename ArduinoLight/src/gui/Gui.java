@@ -95,7 +95,7 @@ public class Gui{
 		_panel.add(_horizontalStrut_1);
 		_panel.add(_channelLabel);
 		_panel.add(_channelSpinner);
-			_channelSpinner.setModel(new SpinnerListModel(new String[] {"2", "4"}));
+			_channelSpinner.setModel(new SpinnerListModel(new String[] {"1", "2","3", "4"}));
 		_panel.add(_horizontalStrut);
 		_panel.add(_lblNewLabel);
 		_panel.add(_comboBox);
