@@ -1,10 +1,9 @@
 package arduino;
 
 /**
- * Diese Klasse dient dazu, die konkreten byte-Werte der Flags zu kapseln.
- * Enthält Konstanten zu den Flags.
+ * This class provides concrete Byte-Values for the Flags (for encapsulation).
  */
-public class AmbloneFlags //enum als bytearray
+public class AmbloneFlags
 {
 	public static final byte STARTFLAG1 = 1;
 	public static final byte STARTFLAG2 = 2;
