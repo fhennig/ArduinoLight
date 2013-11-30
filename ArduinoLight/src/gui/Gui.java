@@ -7,6 +7,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +19,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
+
 import java.awt.Component;
+
 import javax.swing.Box;
 import javax.swing.SpinnerListModel;
 import javax.swing.JComboBox;
@@ -28,7 +32,7 @@ public class Gui{
 	
 	private final JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	
-	private final JPanel _ambiLightPanel = new JPanel();	
+	private final AmbientlightPanel _ambientlightPanel = new AmbientlightPanel();
 	
 	private final JPanel _soundToLightPanel = new JPanel();
 	
@@ -81,10 +85,7 @@ public class Gui{
 		Dimension frameDimension = new Dimension(800, 550);
 		Dimension frameMinDimension = new Dimension(500, 200);
 		
-		_ambiLightPanel.setLayout(new BorderLayout());
-		_soundToLightPanel.setLayout(new BorderLayout());
-
-		_menuTabs.addTab("AmbiLight", _ambiLightPanel);
+		_menuTabs.addTab("AmbiLight", _ambientlightPanel);
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
 		
 		_connectionPanel.setLayout(new BorderLayout(0, 0));
