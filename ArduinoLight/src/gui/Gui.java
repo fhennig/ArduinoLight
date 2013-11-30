@@ -1,3 +1,8 @@
+/**
+ * The Guided User Interface for the ArduinoLight
+ * @author Tom Hohendorf
+ */
+
 package gui;
 
 import java.awt.BorderLayout;
@@ -23,7 +28,7 @@ public class Gui{
 	
 	private final JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	
-	private final JPanel _ambiLightPanel = new JPanel();
+	private final JPanel _ambiLightPanel = new JPanel();	
 	
 	private final JPanel _soundToLightPanel = new JPanel();
 	
@@ -48,6 +53,11 @@ public class Gui{
 		new Gui();
 	}
 		
+	/**
+	 * Initialize the Look and Feel
+	 * First try is "Nimbus"
+	 * Second try is the OS Standard Look and Feel
+	 */
 	private static void initLookAndFeel(){
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
