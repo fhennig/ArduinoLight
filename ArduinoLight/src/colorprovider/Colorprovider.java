@@ -19,7 +19,7 @@ public abstract class Colorprovider
 	public Colorprovider()
 	{
 		_colors = new ArrayList<>();
-		_colorChangedListeners = new ArrayList<>();
+		_colorChangedListeners = new ArrayList<>(); 
 		_colorsChangedListeners = new ArrayList<>();
 	}
 	
