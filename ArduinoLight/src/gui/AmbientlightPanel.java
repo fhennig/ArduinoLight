@@ -1,3 +1,8 @@
+/**
+ * The Ambientlight Panel that is used in the GUI
+ * @author Tom Hohendorf
+ */
+
 package gui;
 
 import java.awt.Dimension;
@@ -41,7 +46,6 @@ public class AmbientlightPanel extends JPanel {
 		_leftPanel.add(_performancePanel);
 		
 		_rgbSliderPanel.setLayout(new BoxLayout(_rgbSliderPanel, BoxLayout.PAGE_AXIS));
-		
 		_rgbSliderPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		_rgbSliderPanel.add(Box.createVerticalGlue());
 		_rgbSliderPanel.add(_redLabel);

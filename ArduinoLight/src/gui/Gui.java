@@ -31,7 +31,7 @@ public class Gui{
 	
 	private final JPanel _soundToLightPanel = new JPanel();
 	
-	private final JPanel _panel = new JPanel();
+	private final JPanel _mainPanel = new JPanel();
 	private final JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	private final JLabel _channelLabel = new JLabel("Channels: ");
 	private final JSpinner _channelSpinner = new JSpinner();
@@ -73,29 +73,26 @@ public class Gui{
 
 	private void initComponents() {
 			
-		Dimension frameDimension = new Dimension(800, 550);
-		Dimension frameMinDimension = new Dimension(500, 200);
-		
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
 		
-		_panel.setLayout(new FlowLayout());
-		_panel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
-		_panel.add(_connectionSpeedLabel);
-		_panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_panel.add(_channelLabel);
-		_panel.add(_channelSpinner);
+		_mainPanel.setLayout(new FlowLayout());
+		_mainPanel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
+		_mainPanel.add(_connectionSpeedLabel);
+		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(_channelLabel);
+		_mainPanel.add(_channelSpinner);
 			_channelSpinner.setModel(new SpinnerListModel(new String[] {"1", "2","3", "4"}));
-		_panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_panel.add(_lblNewLabel);
-		_panel.add(_comboBox);
-		_panel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_panel.add(_connectButton);
+		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(_lblNewLabel);
+		_mainPanel.add(_comboBox);
+		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(_connectButton);
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
-		_frame.add(_panel, BorderLayout.SOUTH);
-		_frame.setMinimumSize(frameMinDimension);
-		_frame.setSize(frameDimension);
+		_frame.add(_mainPanel, BorderLayout.SOUTH);
+		_frame.setMinimumSize(new Dimension(500, 200));
+		_frame.setSize(new Dimension(800, 550));
 		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		_frame.setVisible(true);
 		_frame.pack();
