@@ -5,13 +5,14 @@
 
 package gui;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
@@ -20,6 +21,10 @@ public class AmbientlightPanel extends JPanel {
 	JPanel _leftPanel = new JPanel();
 	
 	JPanel _screenPartPanel = new JPanel();
+	JTable _screenTable = new JTable();
+	JComboBox _rowBox = new JComboBox();
+	JComboBox _colBox = new JComboBox();
+	JSpinner _channelSpinner = new JSpinner();
 	
 	JPanel _rgbSliderPanel = new JPanel();
 	JLabel _redLabel = new JLabel("Red: ");
@@ -41,12 +46,17 @@ public class AmbientlightPanel extends JPanel {
 	private void initComponents(){
 		
 		
-		_leftPanel.setLayout(new BoxLayout(_leftPanel, BoxLayout.LINE_AXIS));
+		_leftPanel.setLayout(new BoxLayout(_leftPanel, BoxLayout.PAGE_AXIS));
 		_leftPanel.add(_screenPartPanel);
 		_leftPanel.add(_performancePanel);
 		
+		_screenPartPanel.add(_rowBox);
+		_screenPartPanel.add(_colBox);
+		_screenPartPanel.add(_channelSpinner);
+		_screenPartPanel.add(_screenTable);
+		_screenPartPanel.setBorder(new TitledBorder(null, "Screen Selection", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
+		
 		_rgbSliderPanel.setLayout(new BoxLayout(_rgbSliderPanel, BoxLayout.PAGE_AXIS));
-		_rgbSliderPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		_rgbSliderPanel.add(Box.createVerticalGlue());
 		_rgbSliderPanel.add(_redLabel);
 		_rgbSliderPanel.add(_redSlider);
@@ -60,12 +70,10 @@ public class AmbientlightPanel extends JPanel {
 		_rgbSliderPanel.add(_brightnessLabel);
 		_rgbSliderPanel.add(_brightnessSlider);
 		_rgbSliderPanel.add(Box.createVerticalGlue());
-		_rgbSliderPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		_rgbSliderPanel.setBorder(new TitledBorder(null, "Color Correction", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.add(_leftPanel);
 		this.add(_rgbSliderPanel);
-		this.add(Box.createRigidArea(new Dimension(5, 0)));
 	}
 }

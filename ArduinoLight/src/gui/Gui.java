@@ -8,6 +8,8 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -76,17 +78,17 @@ public class Gui{
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
 		
-		_mainPanel.setLayout(new FlowLayout());
+		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
 		_mainPanel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
 		_mainPanel.add(_connectionSpeedLabel);
-		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(Box.createVerticalGlue());
 		_mainPanel.add(_channelLabel);
 		_mainPanel.add(_channelSpinner);
 			_channelSpinner.setModel(new SpinnerListModel(new String[] {"1", "2","3", "4"}));
-		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(Box.createVerticalGlue());
 		_mainPanel.add(_lblNewLabel);
 		_mainPanel.add(_comboBox);
-		_mainPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_mainPanel.add(Box.createVerticalGlue());
 		_mainPanel.add(_connectButton);
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
