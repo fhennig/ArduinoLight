@@ -1,4 +1,4 @@
-package arduino;
+package arduino.amblone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class AmblonePackage
 	/**
 	 * @return A Byte-Array representing an Amblonepackage (Startflag, colorvalues, Endflag).
 	 */
-	public byte[] getArray()
+	public byte[] toByteArray()
 	{
 		Byte[] bArr = (Byte[]) _package.toArray();
 		byte[] byteArray = new byte[bArr.length];

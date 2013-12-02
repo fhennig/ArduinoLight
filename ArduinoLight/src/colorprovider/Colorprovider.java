@@ -12,6 +12,7 @@ import util.IRGBColor;
  */
 public abstract class Colorprovider
 {
+	protected boolean _active;
 	protected List<IRGBColor> _colors;
 	protected List<ColorChangedListener> _colorChangedListeners;
 	protected List<ColorsChangedListener> _colorsChangedListeners;
@@ -21,6 +22,16 @@ public abstract class Colorprovider
 		_colors = new ArrayList<>();
 		_colorChangedListeners = new ArrayList<>(); 
 		_colorsChangedListeners = new ArrayList<>();
+	}
+	
+	public boolean IsActive()
+	{
+		return _active;
+	}
+	
+	public void setActive(boolean newActiveState)
+	{
+		_active = newActiveState;
 	}
 	
 	public List<IRGBColor> getColors()
@@ -68,8 +79,18 @@ public abstract class Colorprovider
 		_colorChangedListeners.add(listener);
 	}
 	
+	public void removeColorChangedListener(ColorChangedListener listener)
+	{
+		_colorChangedListeners.remove(listener);
+	}
+	
 	public void addColorsChangedListener(ColorsChangedListener listener)
 	{
 		_colorsChangedListeners.add(listener);
+	}
+	
+	public void removeColorsChangedListener(ColorsChangedListener listener)
+	{
+		_colorsChangedListeners.remove(listener);
 	}
 }

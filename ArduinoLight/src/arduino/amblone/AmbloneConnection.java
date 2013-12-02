@@ -1,11 +1,9 @@
-package arduino;
+package arduino.amblone;
 
 import gnu.io.*;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +54,6 @@ public class AmbloneConnection
 		{
 			throw new IOException();		//TODO better exception management
 		}
-		
 	}
 	
 	public void disconnect()
@@ -86,7 +83,7 @@ public class AmbloneConnection
 		byte[] packageAsArray;
 		while (_transmissionActive) //TODO test if port is open
 		{
-			packageAsArray = new AmblonePackage(_colors).getArray();
+			packageAsArray = new AmblonePackage(_colors).toByteArray();
 			try
 			{
 				_serialOutputStream.write(packageAsArray);

@@ -1,4 +1,4 @@
-package arduino;
+package arduino.amblone;
 
 /**
  * This class provides concrete Byte-Values for the Flags (for encapsulation).
