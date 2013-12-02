@@ -7,8 +7,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -71,12 +69,12 @@ public class AmbientlightPanel extends JPanel {
 		_performancePanel.setLayout(new BoxLayout(_performancePanel, BoxLayout.LINE_AXIS));
 		_screenOptionPanel.setLayout(new BoxLayout(_screenOptionPanel, BoxLayout.LINE_AXIS));
 		_screenPartPanel.setLayout(new BorderLayout());
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		_redPanel.setLayout(new BoxLayout(_redPanel, BoxLayout.PAGE_AXIS));
 		_greenPanel.setLayout(new BoxLayout(_greenPanel, BoxLayout.PAGE_AXIS));
 		_bluePanel.setLayout(new BoxLayout(_bluePanel, BoxLayout.PAGE_AXIS));
 		_brightnessPanel.setLayout(new BoxLayout(_brightnessPanel, BoxLayout.PAGE_AXIS));
 		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
 		//
 		// Borders
@@ -103,7 +101,7 @@ public class AmbientlightPanel extends JPanel {
 		_screenOptionPanel.add(Box.createHorizontalGlue());
 		_screenOptionPanel.add(_channelLabel);
 		_screenOptionPanel.add(_channelSpinner);
-		_screenTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		_screenTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);		//TODO Fix Table View!!!
 		_screenTable.setRowSelectionAllowed(false);
 		_screenTable.setFillsViewportHeight(true);
 		_screenTable.setColumnSelectionAllowed(true);

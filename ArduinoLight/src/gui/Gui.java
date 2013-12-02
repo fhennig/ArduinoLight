@@ -7,8 +7,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,7 +35,7 @@ public class Gui{
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
 	JSpinner _channelSpinner = new JSpinner();
-	JLabel _lblNewLabel = new JLabel("New label");
+	JLabel _lblNewLabel = new JLabel("New label"); //TODO Set final Labelname
 	JComboBox _comboBox = new JComboBox();
 	JButton _connectButton = new JButton("Connect");
 		
@@ -74,7 +72,7 @@ public class Gui{
 
 	private void initComponents() {
 			
-		_menuTabs.addTab("AmbiLight", _ambientlightPanel);
+		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
 		
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
@@ -93,7 +91,6 @@ public class Gui{
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add(_mainPanel, BorderLayout.SOUTH);
 		_frame.setMinimumSize(new Dimension(600, 450));
-		_frame.setSize(new Dimension(800, 550));
 		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		_frame.setVisible(true);
 		_frame.pack();
