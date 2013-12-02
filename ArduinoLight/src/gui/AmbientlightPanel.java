@@ -5,8 +5,12 @@
 
 package gui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends JPanel {
@@ -21,7 +26,8 @@ public class AmbientlightPanel extends JPanel {
 	JPanel _leftPanel = new JPanel();
 	
 	JPanel _screenPartPanel = new JPanel();
-	JTable _screenTable = new JTable();
+	JPanel _screenOptionPanel = new JPanel();
+	JTable _screenTable = new JTable(new DefaultTableModel(4, 4));
 	JComboBox _rowBox = new JComboBox();
 	JComboBox _colBox = new JComboBox();
 	JSpinner _channelSpinner = new JSpinner();
@@ -37,6 +43,8 @@ public class AmbientlightPanel extends JPanel {
 	JSlider _brightnessSlider = new JSlider();
 	
 	JPanel _performancePanel = new JPanel();
+	JCheckBox _checkBox = new JCheckBox("Checkbox");		//TODO Find better names for Slider and CheckBox
+	JSlider _slider = new JSlider();
 	
 	
 	public AmbientlightPanel(){
@@ -50,10 +58,19 @@ public class AmbientlightPanel extends JPanel {
 		_leftPanel.add(_screenPartPanel);
 		_leftPanel.add(_performancePanel);
 		
-		_screenPartPanel.add(_rowBox);
-		_screenPartPanel.add(_colBox);
-		_screenPartPanel.add(_channelSpinner);
+		_performancePanel.add(_checkBox);
+		_performancePanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_performancePanel.add(_slider);
+		_performancePanel.setBorder(new TitledBorder(null, "Performance", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
+		_performancePanel.setLayout(new BoxLayout(_performancePanel, BoxLayout.LINE_AXIS));
+		
+		_screenOptionPanel.add(_rowBox);
+		_screenOptionPanel.add(_colBox);
+		_screenOptionPanel.add(_channelSpinner);
+		_screenOptionPanel.setLayout(new GridLayout(1, 3));
+		_screenPartPanel.add(_screenOptionPanel);
 		_screenPartPanel.add(_screenTable);
+		_screenPartPanel.setLayout(new BoxLayout(_screenPartPanel, BoxLayout.PAGE_AXIS));
 		_screenPartPanel.setBorder(new TitledBorder(null, "Screen Selection", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
 		_rgbSliderPanel.setLayout(new BoxLayout(_rgbSliderPanel, BoxLayout.PAGE_AXIS));
