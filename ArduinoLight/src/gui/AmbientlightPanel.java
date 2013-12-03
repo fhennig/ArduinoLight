@@ -6,9 +6,13 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -17,26 +21,31 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
-public class AmbientlightPanel extends JPanel {
+public class AmbientlightPanel extends JPanel implements ChangeListener{
 	
 	JPanel _leftPanel = new JPanel();
 	
 	JPanel _screenPartPanel = new JPanel();
 	JPanel _screenOptionPanel = new JPanel();
-	JScrollPane _tablePane = new JScrollPane();
-	DefaultTableModel _tableModel = new DefaultTableModel(4, 4);
-	JTable _screenTable = new JTable();
+	JPanel _table = new JPanel();
+	GridLayout _g = new GridLayout(4, 4);
 	JLabel _rowLabel = new JLabel("Rows: ");
-	JComboBox _rowBox = new JComboBox();
+	JSpinner _rowBox = new JSpinner(new SpinnerNumberModel(4, 1, 10, 1));
 	JLabel _colLabel = new JLabel("Coloumns: ");
-	JComboBox _colBox = new JComboBox();
-	JLabel _channelLabel = new JLabel("Channels: ");
-	JSpinner _channelSpinner = new JSpinner();
+	JSpinner _colBox = new JSpinner(new SpinnerNumberModel(4, 1, 10, 1));
+	JLabel _channelLabel = new JLabel("Channel: ");
+	JComboBox _channelSpinner = new JComboBox();
 	
 	JPanel _rgbPanel = new JPanel();
 	JPanel _redPanel = new JPanel();
@@ -44,17 +53,21 @@ public class AmbientlightPanel extends JPanel {
 	JPanel _bluePanel = new JPanel();
 	JPanel _brightnessPanel = new JPanel();
 	JLabel _redLabel = new JLabel("R");
-	JSlider _redSlider = new JSlider(JSlider.VERTICAL, 0, 255, 0);
+	JLabel _redValue = new JLabel("100");
+	JSlider _redSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
 	JLabel _greenLabel = new JLabel("G");
-	JSlider _greenSlider = new JSlider(JSlider.VERTICAL, 0, 255, 0);
+	JLabel _greenValue = new JLabel("100");
+	JSlider _greenSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
 	JLabel _blueLabel = new JLabel("B");
-	JSlider _blueSlider = new JSlider(JSlider.VERTICAL, 0, 255, 0);
+	JLabel _blueValue = new JLabel("100");
+	JSlider _blueSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
 	JLabel _brightnessLabel = new JLabel("B");
-	JSlider _brightnessSlider = new JSlider(JSlider.VERTICAL, 0, 255, 0);
+	JLabel _brightnessValue = new JLabel("100");
+	JSlider _brightnessSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
 	
 	JPanel _performancePanel = new JPanel();
-	JCheckBox _checkBox = new JCheckBox("Checkbox");		//TODO Find better names for Slider and CheckBox
-	JSlider _slider = new JSlider();
+	JCheckBox _fpsBox = new JCheckBox("Limit FPS");
+	JSlider _fpsSlider = new JSlider();
 	
 	
 	public AmbientlightPanel(){
@@ -74,6 +87,7 @@ public class AmbientlightPanel extends JPanel {
 		_bluePanel.setLayout(new BoxLayout(_bluePanel, BoxLayout.PAGE_AXIS));
 		_brightnessPanel.setLayout(new BoxLayout(_brightnessPanel, BoxLayout.PAGE_AXIS));
 		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
+		_table.setLayout(_g);
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		
 		//
@@ -89,58 +103,55 @@ public class AmbientlightPanel extends JPanel {
 		_leftPanel.add(_screenPartPanel);
 		_leftPanel.add(_performancePanel);
 		
-		_performancePanel.add(_checkBox);
+		_performancePanel.add(_fpsBox);
 		_performancePanel.add(Box.createRigidArea(new Dimension(10, 0)));
-		_performancePanel.add(_slider);
+		_performancePanel.add(_fpsSlider);
 		
+		_screenOptionPanel.add(_channelLabel);
+		_screenOptionPanel.add(_channelSpinner);
+		_screenOptionPanel.add(Box.createHorizontalGlue());
 		_screenOptionPanel.add(_rowLabel);
 		_screenOptionPanel.add(_rowBox);
 		_screenOptionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_screenOptionPanel.add(_colLabel);
 		_screenOptionPanel.add(_colBox);
-		_screenOptionPanel.add(Box.createHorizontalGlue());
-		_screenOptionPanel.add(_channelLabel);
-		_screenOptionPanel.add(_channelSpinner);
-		_screenTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);		//TODO Fix Table View!!!
-		_screenTable.setRowSelectionAllowed(false);
-		_screenTable.setFillsViewportHeight(true);
-		_screenTable.setColumnSelectionAllowed(true);
-		_screenTable.setCellSelectionEnabled(true);
 		
-		_screenTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"A", "B", "C", "D"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		_screenTable.getColumnModel().getColumn(0).setResizable(false);
-		_screenTable.getColumnModel().getColumn(1).setResizable(false);
-		_screenTable.getColumnModel().getColumn(2).setResizable(false);
-		_screenTable.getColumnModel().getColumn(3).setResizable(false);
+		
 		
 		_screenPartPanel.add(_screenOptionPanel, BorderLayout.NORTH);
-		_screenPartPanel.add(_screenTable, BorderLayout.CENTER);
+		_screenPartPanel.add(_table, BorderLayout.CENTER);
+		fillTable(_table);
+		
+		_redLabel.setAlignmentX(CENTER_ALIGNMENT);
+		_redValue.setAlignmentX(CENTER_ALIGNMENT);
+		_greenLabel.setAlignmentX(CENTER_ALIGNMENT);
+		_greenValue.setAlignmentX(CENTER_ALIGNMENT);
+		_blueLabel.setAlignmentX(CENTER_ALIGNMENT);
+		_blueValue.setAlignmentX(CENTER_ALIGNMENT);
+		_brightnessLabel.setAlignmentX(CENTER_ALIGNMENT);
+		_brightnessValue.setAlignmentX(CENTER_ALIGNMENT);
+		
+		_rowBox.getModel().setValue(4);
+		_colBox.getModel().setValue(4);
+		_rowBox.addChangeListener(this);
+		_colBox.addChangeListener(this);
+		_redSlider.addChangeListener(this);
+		_greenSlider.addChangeListener(this);
+		_blueSlider.addChangeListener(this);
+		_brightnessSlider.addChangeListener(this);
 		
 		_redPanel.add(_redSlider);
 		_redPanel.add(_redLabel);
+		_redPanel.add(_redValue);
 		_greenPanel.add(_greenSlider);
 		_greenPanel.add(_greenLabel);
+		_greenPanel.add(_greenValue);
 		_bluePanel.add(_blueSlider);
 		_bluePanel.add(_blueLabel);
+		_bluePanel.add(_blueValue);
 		_brightnessPanel.add(_brightnessSlider);
 		_brightnessPanel.add(_brightnessLabel);
+		_brightnessPanel.add(_brightnessValue);
 		_rgbPanel.add(_redPanel);
 		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_rgbPanel.add(_greenPanel);
@@ -151,5 +162,34 @@ public class AmbientlightPanel extends JPanel {
 		
 		this.add(_leftPanel);
 		this.add(_rgbPanel);
+	}
+	
+	private void editTable(int rowCount,int colCount){
+		
+	}
+	
+	private void fillTable(JPanel table){
+		for(int r = 0; r < _g.getRows();r++){
+			for(int c = 0; c < _g.getColumns(); c++){
+				table.add(new JButton());
+			}
+		}
+	}
+		
+	public void stateChanged(ChangeEvent e){
+		
+		if(e.getSource() == _redSlider){
+			_redValue.setText(Integer.toString(_redSlider.getValue()));
+		} else if(e.getSource() == _greenSlider){
+			_greenValue.setText(Integer.toString(_greenSlider.getValue()));
+		} else if(e.getSource() == _blueSlider){
+			_blueValue.setText(Integer.toString(_blueSlider.getValue()));
+		} else if(e.getSource() == _brightnessSlider){
+			_brightnessValue.setText(Integer.toString(_brightnessSlider.getValue()));
+		} else if(e.getSource() == _rowBox){
+			editTable((int)_rowBox.getValue(), (int) _colBox.getValue());
+		} else if(e.getSource() == _colBox){
+			editTable((int)_rowBox.getValue(), (int)_colBox.getValue());
+		}
 	}
 }

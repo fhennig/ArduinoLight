@@ -7,10 +7,12 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JTabbedPane;
@@ -35,7 +37,7 @@ public class Gui{
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
 	JSpinner _channelSpinner = new JSpinner();
-	JLabel _lblNewLabel = new JLabel("New label"); //TODO Set final Labelname
+	JLabel _lblNewLabel = new JLabel("COM-Port: "); //TODO Set final Labelname
 	JComboBox _comboBox = new JComboBox();
 	JButton _connectButton = new JButton("Connect");
 		
@@ -81,7 +83,7 @@ public class Gui{
 		_mainPanel.add(Box.createHorizontalGlue());
 		_mainPanel.add(_channelLabel);
 		_mainPanel.add(_channelSpinner);
-			_channelSpinner.setModel(new SpinnerListModel(new String[] {"1", "2","3", "4"}));
+			_channelSpinner.setModel(new SpinnerNumberModel(2, 1, 4, 1));
 		_mainPanel.add(Box.createHorizontalGlue());
 		_mainPanel.add(_lblNewLabel);
 		_mainPanel.add(_comboBox);
