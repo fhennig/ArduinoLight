@@ -43,10 +43,6 @@ public abstract class Colorprovider
 	{
 		IRGBColor color;
 		color = _colors.get(index);
-		if (color == null)
-		{
-			throw new IndexOutOfBoundsException();
-		}
 		return color;
 	}
 	
@@ -74,6 +70,8 @@ public abstract class Colorprovider
 		}
 	}
 	
+	
+	
 	public void addColorChangedListener(ColorChangedListener listener)
 	{
 		_colorChangedListeners.add(listener);
@@ -83,6 +81,8 @@ public abstract class Colorprovider
 	{
 		_colorChangedListeners.remove(listener);
 	}
+	
+	
 	
 	public void addColorsChangedListener(ColorsChangedListener listener)
 	{

@@ -5,7 +5,6 @@ import gnu.io.UnsupportedCommOperationException;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import colorprovider.Colorprovider;
 
@@ -14,12 +13,14 @@ public abstract class SerialConnection
 	protected Colorprovider _colorprovider;
 	protected SerialPort _serialPort;
 	protected BufferedOutputStream _serialOutputStream;
-	protected int _baudRate = 115200;
-	protected boolean _transmissionActive = false;
+	protected int _baudRate;
+	protected boolean _transmissionActive;
 	
 	public SerialConnection(Colorprovider c)
 	{
 		_colorprovider = c;
+		_baudRate = 115200;
+		_transmissionActive = false;
 	}
 	
 	public void connect(String portName) throws IOException
@@ -61,8 +62,21 @@ public abstract class SerialConnection
 		_colorprovider.setActive(_transmissionActive);
 	}
 	
+	protected void transmit(byte[] bytes)
+	{
+		try
+		{
+			_serialOutputStream.write(bytes);
+			_serialOutputStream.flush();
+			//TODO packagePerSecond counter (pps)
+		}
+		catch(IOException ex)
+		{
+			//TODO exceptionmanagement ... write to log / console
+		}
+	}
+	
 	protected abstract void subscribeEvents();
 	protected abstract void unsubscribeEvents();
 	
-	protected abstract void transmit();
 }
