@@ -33,6 +33,8 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
+	JPanel _customColorsPanel = new JPanel();
+	
 	JPanel _mainPanel = new JPanel();
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
@@ -76,6 +78,7 @@ public class Gui{
 			
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
+		_menuTabs.addTab("Custom Colors", _customColorsPanel);
 		
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
 		_mainPanel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
