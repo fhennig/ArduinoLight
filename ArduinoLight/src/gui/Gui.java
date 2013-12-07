@@ -10,6 +10,7 @@ import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpinnerNumberModel;
@@ -32,7 +33,8 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
-	CustomColorsPanel _customColorsPanel = new CustomColorsPanel();
+	//CustomColorsPanel _customColorsPanel = new CustomColorsPanel();
+	JColorChooser _colorChooser = new JColorChooser();
 	
 	JPanel _mainPanel = new JPanel();
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
@@ -78,7 +80,7 @@ public class Gui{
 			
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
-		_menuTabs.addTab("Custom Colors", _customColorsPanel);
+		_menuTabs.addTab("Custom Colors", _colorChooser);
 		
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
 		_mainPanel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
@@ -92,6 +94,9 @@ public class Gui{
 		_mainPanel.add(_comboBox);
 		_mainPanel.add(Box.createHorizontalGlue());
 		_mainPanel.add(_connectButton);
+		
+		_colorChooser.setBorder(new TitledBorder(null, "Color Chooser", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
+		_colorChooser.setPreviewPanel(new JPanel());
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add(_mainPanel, BorderLayout.SOUTH);
