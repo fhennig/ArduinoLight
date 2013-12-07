@@ -16,6 +16,7 @@ public abstract class Colorprovider
 	protected List<IRGBColor> _colors;
 	protected List<ColorChangedListener> _colorChangedListeners;
 	protected List<ColorsChangedListener> _colorsChangedListeners;
+	//TODO wo wird jetzt die anzahl der farben bestimmt?
 	
 	public Colorprovider()
 	{
@@ -37,6 +38,11 @@ public abstract class Colorprovider
 	public List<IRGBColor> getColors()
 	{
 		return _colors;
+	}
+	
+	public int getChannelCount()
+	{
+		return _colors.size();
 	}
 	
 	public IRGBColor getColor(int index)
