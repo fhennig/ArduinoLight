@@ -33,7 +33,6 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
-	//CustomColorsPanel _customColorsPanel = new CustomColorsPanel();
 	JColorChooser _colorChooser = new JColorChooser();
 	
 	JPanel _mainPanel = new JPanel();
@@ -95,7 +94,6 @@ public class Gui{
 		_mainPanel.add(Box.createHorizontalGlue());
 		_mainPanel.add(_connectButton);
 		
-		_colorChooser.setBorder(new TitledBorder(null, "Color Chooser", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		_colorChooser.setPreviewPanel(new JPanel());
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
