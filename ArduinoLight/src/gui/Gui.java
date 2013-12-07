@@ -20,7 +20,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
 import javax.swing.Box;
-import javax.swing.SpinnerListModel;
 import javax.swing.JComboBox;
 
 public class Gui{
@@ -33,13 +32,14 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
-	JPanel _customColorsPanel = new JPanel();
+	CustomColorsPanel _customColorsPanel = new CustomColorsPanel();
 	
 	JPanel _mainPanel = new JPanel();
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
 	JSpinner _channelSpinner = new JSpinner();
 	JLabel _lblNewLabel = new JLabel("COM-Port: "); //TODO Set final Labelname
+	@SuppressWarnings("rawtypes")
 	JComboBox _comboBox = new JComboBox();
 	JButton _connectButton = new JButton("Connect");
 		
