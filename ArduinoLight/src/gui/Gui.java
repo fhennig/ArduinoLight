@@ -24,6 +24,8 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 
 public class Gui{
+	
+	//TODO Add MenuBar and Settings etc.
 
 	JFrame _frame = new JFrame("Arduino Light");
 	
@@ -33,7 +35,7 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
-	JColorChooser _colorChooser = new JColorChooser();
+	JColorChooser _colorChooser = new JColorChooser(); //TODO Refactor to new Class and try diff. Borders
 	
 	JPanel _mainPanel = new JPanel();
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
