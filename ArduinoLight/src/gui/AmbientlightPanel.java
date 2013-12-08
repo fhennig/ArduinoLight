@@ -6,7 +6,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -17,18 +16,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerModel;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
@@ -45,6 +37,7 @@ public class AmbientlightPanel extends JPanel implements ChangeListener{
 	JLabel _colLabel = new JLabel("Coloumns: ");
 	JSpinner _colBox = new JSpinner(new SpinnerNumberModel(4, 1, 10, 1));
 	JLabel _channelLabel = new JLabel("Channel: ");
+	@SuppressWarnings("rawtypes")
 	JComboBox _channelSpinner = new JComboBox();
 	
 	JPanel _rgbPanel = new JPanel();

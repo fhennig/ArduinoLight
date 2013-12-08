@@ -10,6 +10,7 @@ import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpinnerNumberModel;
@@ -20,10 +21,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
 import javax.swing.Box;
-import javax.swing.SpinnerListModel;
 import javax.swing.JComboBox;
 
 public class Gui{
+	
+	//TODO Add MenuBar and Settings etc.
 
 	JFrame _frame = new JFrame("Arduino Light");
 	
@@ -33,11 +35,14 @@ public class Gui{
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
+	JColorChooser _colorChooser = new JColorChooser(); //TODO Refactor to new Class and try diff. Borders
+	
 	JPanel _mainPanel = new JPanel();
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
 	JSpinner _channelSpinner = new JSpinner();
 	JLabel _lblNewLabel = new JLabel("COM-Port: "); //TODO Set final Labelname
+	@SuppressWarnings("rawtypes")
 	JComboBox _comboBox = new JComboBox();
 	JButton _connectButton = new JButton("Connect");
 		
@@ -76,6 +81,7 @@ public class Gui{
 			
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
+		_menuTabs.addTab("Custom Colors", _colorChooser);
 		
 		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
 		_mainPanel.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
@@ -89,6 +95,8 @@ public class Gui{
 		_mainPanel.add(_comboBox);
 		_mainPanel.add(Box.createHorizontalGlue());
 		_mainPanel.add(_connectButton);
+		
+		_colorChooser.setPreviewPanel(new JPanel());
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add(_mainPanel, BorderLayout.SOUTH);
