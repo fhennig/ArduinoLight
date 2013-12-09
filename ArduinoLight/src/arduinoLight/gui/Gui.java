@@ -47,13 +47,7 @@ public class Gui{
 	JButton _connectButton = new JButton("Connect");
 		
 	public Gui(){
-		//initLookAndFeel();
 		initComponents();
-	}
-	
-	public static void main(String[] args){
-		//initLookAndFeel();
-		new Gui();
 	}
 		
 	/**

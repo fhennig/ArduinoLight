@@ -1,5 +1,12 @@
 package arduinoLight.colorprovider.soundToLight;
 
-public class SystemSoundGetterTest {
+import org.junit.Test;
 
+public class SystemSoundGetterTest
+{
+	@Test
+	public void testCaseTest()
+	{
+		
+	}
 }
