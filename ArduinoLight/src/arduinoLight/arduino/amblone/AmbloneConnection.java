@@ -1,11 +1,11 @@
-package arduino.amblone;
+package arduinoLight.arduino.amblone;
 
 import java.util.List;
 
-import arduino.SerialConnection;
-import colorprovider.Colorprovider;
-import colorprovider.ColorsChangedListener;
-import util.IRGBColor;
+import arduinoLight.arduino.SerialConnection;
+import arduinoLight.colorprovider.Colorprovider;
+import arduinoLight.colorprovider.ColorsChangedListener;
+import arduinoLight.util.IRGBColor;
 
 /**
  * Complete implementation of 'SerialConnection' using the Amblone-protocol

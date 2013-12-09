@@ -1,4 +1,4 @@
-package arduino;
+package arduinoLight.arduino;
 
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
@@ -6,7 +6,7 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import colorprovider.Colorprovider;
+import arduinoLight.colorprovider.Colorprovider;
 
 public abstract class SerialConnection
 {

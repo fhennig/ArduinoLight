@@ -1,4 +1,4 @@
-package util;
+package arduinoLight.util;
 
 
 public class Color implements IRGBColor

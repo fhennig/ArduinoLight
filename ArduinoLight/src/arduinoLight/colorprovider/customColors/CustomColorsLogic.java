@@ -1,6 +1,6 @@
-package colorprovider.customColors;
+package arduinoLight.colorprovider.customColors;
 
-import colorprovider.Colorprovider;
+import arduinoLight.colorprovider.Colorprovider;
 
 public class CustomColorsLogic extends Colorprovider
 {

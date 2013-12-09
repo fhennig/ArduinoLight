@@ -1,9 +1,9 @@
-package colorprovider;
+package arduinoLight.colorprovider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import util.IRGBColor;
+import arduinoLight.util.IRGBColor;
 
 /**
  * This class serves as a parent for concrete implementations of a colorprovider.

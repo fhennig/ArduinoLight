@@ -1,9 +1,9 @@
-package arduino.amblone;
+package arduinoLight.arduino.amblone;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import util.IRGBColor;
+import arduinoLight.util.IRGBColor;
 
 
 /**

@@ -3,7 +3,7 @@
  * @author Tom Hohendorf
  */
 
-package gui;
+package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -47,11 +47,12 @@ public class Gui{
 	JButton _connectButton = new JButton("Connect");
 		
 	public Gui(){
+		//initLookAndFeel();
 		initComponents();
 	}
 	
 	public static void main(String[] args){
-		initLookAndFeel();
+		//initLookAndFeel();
 		new Gui();
 	}
 		
@@ -60,7 +61,7 @@ public class Gui{
 	 * First try is "Nimbus"
 	 * Second try is the OS Standard Look and Feel
 	 */
-	private static void initLookAndFeel(){
+	public static void initLookAndFeel(){
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {

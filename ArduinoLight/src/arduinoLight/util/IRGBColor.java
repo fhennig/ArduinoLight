@@ -1,4 +1,4 @@
-package util;
+package arduinoLight.util;
 
 /**
  * This interface is used by the Amblone-Part to get colors.

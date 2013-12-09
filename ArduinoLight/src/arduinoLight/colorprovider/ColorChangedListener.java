@@ -1,4 +1,4 @@
-package colorprovider;
+package arduinoLight.colorprovider;
 
 /**
  * This interface should be implemented by the ArduinoConnection, that can then react to the colorChangedEvents and sent the color.
