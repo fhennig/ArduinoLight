@@ -7,8 +7,9 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 import arduinoLight.colorprovider.Colorprovider;
+import arduinoLight.colorprovider.ColorsUpdatedListener;
 
-public abstract class SerialConnection
+public abstract class SerialConnection implements ColorsUpdatedListener
 {
 	protected Colorprovider _colorprovider;
 	protected SerialPort _serialPort;
@@ -56,9 +57,9 @@ public abstract class SerialConnection
 	public void setColorprovider(Colorprovider cp)
 	{
 		_colorprovider.setActive(false);
-		unsubscribeEvents();
+		_colorprovider.removeColorsUpdatedListener(this);
 		_colorprovider = cp;
-		subscribeEvents();
+		_colorprovider.addColorsUpdatedListener(this);
 		_colorprovider.setActive(_transmissionActive);
 	}
 	
@@ -76,7 +77,5 @@ public abstract class SerialConnection
 		}
 	}
 	
-	protected abstract void subscribeEvents();
-	protected abstract void unsubscribeEvents();
-	
+	public abstract void colorsChanged(); //Written explicit here, as a reminder that subclasses have to implement this Interface.
 }

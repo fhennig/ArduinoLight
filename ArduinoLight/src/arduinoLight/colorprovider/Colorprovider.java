@@ -14,15 +14,13 @@ public abstract class Colorprovider
 {
 	protected boolean _active;
 	protected List<IRGBColor> _colors;
-	protected List<ColorChangedListener> _colorChangedListeners;
-	protected List<ColorsChangedListener> _colorsChangedListeners;
+	protected List<ColorsUpdatedListener> _colorsUpdatedListeners;
 	//TODO wo wird jetzt die anzahl der farben bestimmt?
 	
 	public Colorprovider()
 	{
 		_colors = new ArrayList<>();
-		_colorChangedListeners = new ArrayList<>(); 
-		_colorsChangedListeners = new ArrayList<>();
+		_colorsUpdatedListeners = new ArrayList<>();
 	}
 	
 	public boolean IsActive()
@@ -53,50 +51,24 @@ public abstract class Colorprovider
 	}
 	
 	/**
-	 * This method should be called after a color was changed (And you wish to let other objects know).
-	 * @param index The index of the color in the _colors-List.
-	 */
-	protected void raiseColorChangedEvent(int index)
-	{
-		for (ColorChangedListener l : _colorChangedListeners)
-		{
-			l.colorChanged(index);
-		}
-	}
-	
-	/**
 	 * This method should be called after multiple changes to the colors took place, not after every single color change.
 	 * Keep in mind that these events will trigger transmission and therefore should not be raised unnecessary often.
 	 */
-	protected void raiseColorsChangedEvent()
+	protected void raiseColorsUpdatedEvent()
 	{
-		for (ColorsChangedListener l : _colorsChangedListeners)
+		for (ColorsUpdatedListener l : _colorsUpdatedListeners)
 		{
 			l.colorsChanged();
 		}
 	}
 	
-	
-	
-	public void addColorChangedListener(ColorChangedListener listener)
+	public void addColorsUpdatedListener(ColorsUpdatedListener listener)
 	{
-		_colorChangedListeners.add(listener);
+		_colorsUpdatedListeners.add(listener);
 	}
 	
-	public void removeColorChangedListener(ColorChangedListener listener)
+	public void removeColorsUpdatedListener(ColorsUpdatedListener listener)
 	{
-		_colorChangedListeners.remove(listener);
-	}
-	
-	
-	
-	public void addColorsChangedListener(ColorsChangedListener listener)
-	{
-		_colorsChangedListeners.add(listener);
-	}
-	
-	public void removeColorsChangedListener(ColorsChangedListener listener)
-	{
-		_colorsChangedListeners.remove(listener);
+		_colorsUpdatedListeners.remove(listener);
 	}
 }

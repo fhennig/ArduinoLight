@@ -5,7 +5,7 @@ package arduinoLight.colorprovider;
  * This interface is part of an implementation of the "Observer Pattern".
  * @author Felix
  */
-public interface ColorsChangedListener
+public interface ColorsUpdatedListener
 {
 	public void colorsChanged();
 }
