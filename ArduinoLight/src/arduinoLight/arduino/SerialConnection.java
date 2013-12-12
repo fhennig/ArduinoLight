@@ -5,9 +5,11 @@ import gnu.io.UnsupportedCommOperationException;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import arduinoLight.colorprovider.Colorprovider;
 import arduinoLight.colorprovider.ColorsUpdatedListener;
+import arduinoLight.util.IRGBColor;
 
 public abstract class SerialConnection implements ColorsUpdatedListener
 {
@@ -77,5 +79,5 @@ public abstract class SerialConnection implements ColorsUpdatedListener
 		}
 	}
 	
-	public abstract void colorsChanged(); //Written explicit here, as a reminder that subclasses have to implement this Interface.
+	public abstract void colorsChanged(List<IRGBColor> newColors); //Written explicit here, as a reminder that subclasses have to implement this Interface.
 }
