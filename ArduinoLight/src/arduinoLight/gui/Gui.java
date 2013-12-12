@@ -51,24 +51,13 @@ public class Gui{
 	}
 		
 	/**
-	 * Initialize the Look and Feel
-	 * First try is "Nimbus"
-	 * Second try is the OS Standard Look and Feel
+	 * Sets the Look and Feel to the System L&F
 	 */
 	public static void initLookAndFeel(){
 		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
-			try{
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch(Exception e1){
 				System.out.println("Could not set a valid Look and Feel!");
-			}
 		}
 	}
 
