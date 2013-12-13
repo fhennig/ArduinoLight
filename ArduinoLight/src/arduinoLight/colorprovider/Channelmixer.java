@@ -12,7 +12,7 @@ public class Channelmixer extends Colorprovider implements ColorsUpdatedListener
 	}
 
 	@Override
-	public void colorsChanged(List<IRGBColor> newColors) {
+	public void colorsUpdated(List<IRGBColor> newColors) {
 		// TODO Auto-generated method stub
 		
 	}

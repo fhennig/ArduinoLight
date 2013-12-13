@@ -22,21 +22,26 @@ public abstract class SerialConnection implements ColorsUpdatedListener
 	public SerialConnection(Colorprovider c)
 	{
 		_colorprovider = c;
-		_baudRate = 115200;
 		_transmissionActive = false;
 	}
 	
-	public void connect(String portName) throws IOException
+	/**
+	 * Tries to establish a serialconnection with the given portName and set the _serialOutputStream.
+	 * If the connection could be established, _transmissionActive is set to true.
+	 * @param portName The port that you want to connect to.
+	 * @param baudRate recommended value: 155200.
+	 */
+	public void connect(String portName, int baudRate)
 	{
 		try
 		{
-			_serialPort.setSerialPortParams(_baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			_serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			_serialOutputStream = new BufferedOutputStream(_serialPort.getOutputStream());
 			_transmissionActive = true;
 		}
-		catch (UnsupportedCommOperationException ex)
+		catch (UnsupportedCommOperationException | IOException ex)
 		{
-			throw new IOException();		//TODO better exception management
+			throw new IllegalArgumentException(ex);
 		}
 	}
 	
@@ -46,20 +51,13 @@ public abstract class SerialConnection implements ColorsUpdatedListener
 		_transmissionActive = false;
 	}
 	
-	public int getBaudRate()
-	{
-		return _baudRate;
-	}
-	
-	public void setBaudRate(int newBaudRate)
-	{
-		_baudRate = newBaudRate;
-	}
-	
 	public void setColorprovider(Colorprovider cp)
 	{
-		_colorprovider.setActive(false);
-		_colorprovider.removeColorsUpdatedListener(this);
+		if (_colorprovider != null)
+		{
+			_colorprovider.setActive(false);
+			_colorprovider.removeColorsUpdatedListener(this);
+		}
 		_colorprovider = cp;
 		_colorprovider.addColorsUpdatedListener(this);
 		_colorprovider.setActive(_transmissionActive);
@@ -75,9 +73,9 @@ public abstract class SerialConnection implements ColorsUpdatedListener
 		}
 		catch(IOException ex)
 		{
-			//TODO exceptionmanagement ... write to log / console
+			throw new IllegalStateException(ex);
 		}
 	}
 	
-	public abstract void colorsChanged(List<IRGBColor> newColors); //Written explicit here, as a reminder that subclasses have to implement this Interface.
+	public abstract void colorsUpdated(List<IRGBColor> newColors); //Written explicit here, as a reminder that subclasses have to implement this Interface.
 }

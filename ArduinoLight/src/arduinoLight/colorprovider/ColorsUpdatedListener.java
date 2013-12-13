@@ -11,5 +11,5 @@ import arduinoLight.util.*;
  */
 public interface ColorsUpdatedListener
 {
-	public void colorsChanged(List<IRGBColor> newColors);
+	public void colorsUpdated(List<IRGBColor> newColors);
 }

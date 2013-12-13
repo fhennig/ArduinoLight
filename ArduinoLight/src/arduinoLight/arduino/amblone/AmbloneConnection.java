@@ -20,7 +20,7 @@ public class AmbloneConnection extends SerialConnection
 	}
 
 	@Override
-	public void colorsChanged(List<IRGBColor> newColors)
+	public void colorsUpdated(List<IRGBColor> newColors)
 	{
 		_colors = newColors;
 		byte[] packageAsArray = new AmblonePackage(_colors).toByteArray();

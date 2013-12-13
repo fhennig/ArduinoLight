@@ -60,7 +60,7 @@ public abstract class Colorprovider
 	{
 		for (ColorsUpdatedListener l : _colorsUpdatedListeners)
 		{
-			l.colorsChanged(_colors);
+			l.colorsUpdated(_colors);
 		}
 	}
 	
