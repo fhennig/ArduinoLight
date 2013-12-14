@@ -60,7 +60,7 @@ public class AmblonePackage
 		case 1: startFlag = AmbloneFlags.STARTFLAG1; break;
 		case 2: startFlag = AmbloneFlags.STARTFLAG2; break;
 		case 3: startFlag = AmbloneFlags.STARTFLAG3; break;
-		case 4: startFlag = AmbloneFlags.STARTFLAG2; break;
+		case 4: startFlag = AmbloneFlags.STARTFLAG4; break;
 		}
 		
 		_package.add(startFlag);
@@ -98,5 +98,15 @@ public class AmblonePackage
 	private void setEndflag()
 	{
 		_package.add(AmbloneFlags.ENDFLAG);
+	}
+	
+	private class AmbloneFlags
+	{
+		public static final byte STARTFLAG1 = 1;
+		public static final byte STARTFLAG2 = 2;
+		public static final byte STARTFLAG3 = 3;
+		public static final byte STARTFLAG4 = 4;
+		public static final byte ENDFLAG = 3;
+		public static final byte ESCFLAG = 6;
 	}
 }
