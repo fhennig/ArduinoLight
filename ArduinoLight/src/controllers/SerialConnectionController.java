@@ -12,11 +12,11 @@ public class SerialConnectionController {
 	}
 	
 	public void comboBoxValueChanged(String value){
-		throw new UnsupportedOperationException("not imlemented yet");
+		throw new UnsupportedOperationException("not implemented yet");
 	}
 	
 	public void connectButtonPressed(){
-		throw new UnsupportedOperationException("not imlemented yet");
+		throw new UnsupportedOperationException("not implemented yet");
 	}
 	
 }

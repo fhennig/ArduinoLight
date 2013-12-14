@@ -29,6 +29,7 @@ public class SerialConnectionPanel extends JPanel implements ActionListener, Cha
 	JComboBox<String> _comboBox = new JComboBox<String>(new DefaultComboBoxModel<String>());
 	JButton _connectButton = new JButton("Connect");
 	
+	
 	public SerialConnectionPanel(SerialConnectionController controller){
 		_controller = controller;
 		initComponents();

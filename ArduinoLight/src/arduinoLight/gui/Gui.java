@@ -14,24 +14,23 @@ import javax.swing.UIManager;
 import javax.swing.JTabbedPane;
 
 public class Gui{
-	
-	//TODO Add MenuBar and Settings etc.
 
 	JFrame _frame = new JFrame("Arduino Light");
 	
 	JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	
-	AmbientlightPanel _ambientlightPanel = new AmbientlightPanel();
+	AmbientlightPanel _ambientlightPanel;
 	
 	JPanel _soundToLightPanel = new JPanel();
 	
-	JColorChooser _colorChooser = new JColorChooser(); //TODO Refactor to new Class and try diff. Borders
+	JColorChooser _colorChooser = new JColorChooser();
 	
 	JPanel _serialConnectionPanel;
 		
 	
-	public Gui(SerialConnectionPanel connectionPanel){
+	public Gui(SerialConnectionPanel connectionPanel, AmbientlightPanel ambiPanel){
 		_serialConnectionPanel = connectionPanel;
+		_ambientlightPanel = ambiPanel;
 		initComponents();
 	}
 		
@@ -47,14 +46,11 @@ public class Gui{
 	}
 
 	private void initComponents() {
-			
+		_colorChooser.setPreviewPanel(new JPanel());	
+		
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
 		_menuTabs.addTab("Custom Colors", _colorChooser);
-		
-
-		
-		_colorChooser.setPreviewPanel(new JPanel());
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add(_serialConnectionPanel, BorderLayout.SOUTH);
