@@ -18,7 +18,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import controllers.ScreenSelectionController;
+import arduinoLight.controllers.ScreenSelectionController;
 
 @SuppressWarnings("serial")
 public class ScreenSelectionPanel extends JPanel implements ActionListener, ChangeListener {

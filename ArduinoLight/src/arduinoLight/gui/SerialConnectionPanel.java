@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import arduinoLight.controllers.SerialConnectionController;
 
+
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel implements ActionListener, ChangeListener{
 	
@@ -31,8 +32,8 @@ public class SerialConnectionPanel extends JPanel implements ActionListener, Cha
 	JButton _connectButton = new JButton("Connect");
 	
 	
-	public SerialConnectionPanel(SerialConnectionController controller){
-		_controller = controller;
+	public SerialConnectionPanel(SerialConnectionController connectionController){
+		_controller = connectionController;
 		initComponents();
 	}
 	
