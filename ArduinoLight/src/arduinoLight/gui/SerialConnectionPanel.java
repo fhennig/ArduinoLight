@@ -2,6 +2,7 @@ package arduinoLight.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -15,7 +16,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import controllers.SerialConnectionController;
+import arduinoLight.controllers.SerialConnectionController;
 
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel implements ActionListener, ChangeListener{

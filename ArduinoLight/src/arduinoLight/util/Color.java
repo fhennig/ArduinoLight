@@ -1,9 +1,9 @@
 package arduinoLight.util;
 
 
-public class Color implements IRGBColor
+public class Color implements RGBColor
 {
-	private int _argb = 0xff000000;
+	private int _argb = 0xff000000; //Initialize Black with 100% Alpha
 	
 	public void setARGB(int argb)
 	{
@@ -87,5 +87,31 @@ public class Color implements IRGBColor
 			i = 0;
 		
 		return i;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 47;
+		int result = 1;
+		result = prime * result + _argb;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Color)) {
+			return false;
+		}
+		Color other = (Color) obj;
+		if (_argb != other._argb) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -1,4 +1,4 @@
-package controllers;
+package arduinoLight.controllers;
 
 public class SerialConnectionController {
 

@@ -3,24 +3,24 @@ package arduinoLight.arduino.amblone;
 import java.util.ArrayList;
 import java.util.List;
 
-import arduinoLight.util.IRGBColor;
+import arduinoLight.util.RGBColor;
 
 
 /**
- * On construction, this class takes a List of IRGBColor an creates a Byte-Array from these colors.
- * These Bytes can be sent through a serial connection.
- * @author felix
+ * On construction, this class takes a List of IRGBColor and creates a Byte-Array from the first 4 colors in the list.
+ * These Bytes can then be used to send them over a serialconnection.
+ * @author Felix
  */
 public class AmblonePackage
 {	
-	private List<IRGBColor> _colors;
+	private List<RGBColor> _colors;
 	private int colorCount;
 	private List<Byte> _package;
 	
 	
-	public AmblonePackage(List<IRGBColor> colors)
+	public AmblonePackage(List<RGBColor> colors)
 	{
-		_colors = colors;
+		_colors = colors.subList(0, 4);
 		colorCount = _colors.size();
 		
 		int maxPackageSize = 2 + colorCount * (3 * 2);
@@ -57,10 +57,15 @@ public class AmblonePackage
 		
 		switch(colorCount)
 		{
-		case 1: startFlag = AmbloneFlags.STARTFLAG1; break;
-		case 2: startFlag = AmbloneFlags.STARTFLAG2; break;
-		case 3: startFlag = AmbloneFlags.STARTFLAG3; break;
-		case 4: startFlag = AmbloneFlags.STARTFLAG4; break;
+			case 1: startFlag = AmbloneFlags.STARTFLAG1; break;
+			case 2: startFlag = AmbloneFlags.STARTFLAG2; break;
+			case 3: startFlag = AmbloneFlags.STARTFLAG3; break;
+			case 4: startFlag = AmbloneFlags.STARTFLAG4; break;
+			default:
+			{
+				throw new IllegalArgumentException("Illegal value (" + colorCount + ") for 'colorCount'."
+												 + " Should be between 1 and 4.");
+			}
 		}
 		
 		_package.add(startFlag);

@@ -2,28 +2,25 @@ package arduinoLight.arduino.amblone;
 
 import java.util.List;
 
+import mixer.Colorprovider;
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.colorprovider.Colorprovider;
-import arduinoLight.util.IRGBColor;
+import arduinoLight.util.RGBColor;
 
 /**
- * Complete implementation of 'SerialConnection' using the Amblone-protocol
+ * Concrete implementation of 'SerialConnection' using the Amblone-protocol.
+ * @see AmblonePackage
  * @author Felix
  */
 public class AmbloneConnection extends SerialConnection
 {		
-	private List<IRGBColor> _colors;
-	
-	public AmbloneConnection(Colorprovider c)
+	public AmbloneConnection(Colorprovider colorprovider)
 	{
-		super(c);
+		super(colorprovider);
 	}
 
 	@Override
-	public void colorsUpdated(List<IRGBColor> newColors)
-	{
-		_colors = newColors;
-		byte[] packageAsArray = new AmblonePackage(_colors).toByteArray();
-		transmit(packageAsArray);
+	protected byte[] getBytesToTransmit(List<RGBColor> colors) {
+		byte[] bytes = new AmblonePackage(colors).toByteArray();
+		return bytes;
 	}
 }

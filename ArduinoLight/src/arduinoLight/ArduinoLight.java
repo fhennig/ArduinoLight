@@ -1,6 +1,6 @@
 package arduinoLight;
 
-import controllers.SerialConnectionController;
+import arduinoLight.controllers.SerialConnectionController;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
 

@@ -5,7 +5,7 @@ package arduinoLight.util;
  * (Gets implemented by 'Color')
  * @author felix
  */
-public interface IRGBColor
+public interface RGBColor
 {
 	public byte getCalculatedR();
 	public byte getCalculatedG();
