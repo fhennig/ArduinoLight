@@ -1,4 +1,4 @@
-package mixer;
+package arduinoLight.mixer;
 
 import java.util.ArrayList;
 import java.util.List;

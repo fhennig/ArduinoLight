@@ -2,8 +2,8 @@ package arduinoLight.arduino.amblone;
 
 import java.util.List;
 
-import mixer.Colorprovider;
 import arduinoLight.arduino.SerialConnection;
+import arduinoLight.mixer.Colorprovider;
 import arduinoLight.util.RGBColor;
 
 /**

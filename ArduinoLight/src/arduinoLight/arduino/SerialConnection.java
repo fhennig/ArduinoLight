@@ -11,8 +11,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import mixer.Colorprovider;
-import mixer.ColorsUpdatedListener;
+import arduinoLight.mixer.Colorprovider;
+import arduinoLight.mixer.ColorsUpdatedListener;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.SpeedChangeListener;
 import arduinoLight.util.SpeedCounter;

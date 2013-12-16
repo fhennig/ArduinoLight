@@ -37,8 +37,8 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="5" language="java" name="mixer.ColorsUpdatedListener" project="ArduinoLight" 
-    file="/ArduinoLight/src/mixer/ColorsUpdatedListener.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="5" language="java" name="arduinoLight.mixer.ColorsUpdatedListener" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/mixer/ColorsUpdatedListener.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="396" y="478"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -65,8 +65,8 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="mixer.SimpleMixer" project="ArduinoLight" 
-    file="/ArduinoLight/src/mixer/SimpleMixer.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="8" language="java" name="arduinoLight.mixer.SimpleMixer" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/mixer/SimpleMixer.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="562" y="681"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -74,8 +74,8 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="mixer.Colorprovider" project="ArduinoLight" 
-    file="/ArduinoLight/src/mixer/Colorprovider.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="9" language="java" name="arduinoLight.mixer.Colorprovider" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/mixer/Colorprovider.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="804" y="471"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
