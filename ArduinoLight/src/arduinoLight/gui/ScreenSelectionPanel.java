@@ -3,9 +3,6 @@ package arduinoLight.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,13 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import arduinoLight.controllers.ScreenSelectionController;
 
 @SuppressWarnings("serial")
-public class ScreenSelectionPanel extends JPanel implements ActionListener, ChangeListener {
+public class ScreenSelectionPanel extends JPanel {
 
 	ScreenSelectionController _screenSelectionController = new ScreenSelectionController();
 	
@@ -44,7 +38,6 @@ public class ScreenSelectionPanel extends JPanel implements ActionListener, Chan
 	private void initComponents() {
 		_table.setLayout(_g);
 		_screenOptionPanel.setLayout(new BoxLayout(_screenOptionPanel, BoxLayout.LINE_AXIS));
-
 		
 		this.setLayout(new BorderLayout());
 		this.setBorder(new TitledBorder(null, "Screen Selection", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
@@ -54,8 +47,6 @@ public class ScreenSelectionPanel extends JPanel implements ActionListener, Chan
 		_rowBox.getModel().setValue(4);
 		_colBox.getModel().setValue(4);
 		
-		
-		
 		_screenOptionPanel.add(_channelLabel);
 		_screenOptionPanel.add(_channelSpinner);
 		_screenOptionPanel.add(Box.createHorizontalGlue());
@@ -64,9 +55,6 @@ public class ScreenSelectionPanel extends JPanel implements ActionListener, Chan
 		_screenOptionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_screenOptionPanel.add(_colLabel);
 		_screenOptionPanel.add(_colBox);
-		
-		
-		
 
 		fillTable(_table);
 	}
@@ -78,17 +66,4 @@ public class ScreenSelectionPanel extends JPanel implements ActionListener, Chan
 			}
 		}
 	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
