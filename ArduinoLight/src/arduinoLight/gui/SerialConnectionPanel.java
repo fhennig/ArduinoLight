@@ -20,7 +20,7 @@ import arduinoLight.controllers.SerialConnectionController;
 
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements ActionListener, ChangeListener{
+public class SerialConnectionPanel extends JPanel{
 	
 	SerialConnectionController _controller;
 	
@@ -37,11 +37,34 @@ public class SerialConnectionPanel extends JPanel implements ActionListener, Cha
 		initComponents();
 	}
 	
+	class channelSpinnerHandler implements ChangeListener{
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			int value = (int)_channelSpinner.getModel().getValue();
+			_controller.spinnerValueChanged(value);
+		}
+	}
+	
+	class comboBoxHandler implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String value = (String)_comboBox.getSelectedItem();
+			_controller.comboBoxValueChanged(value);
+		}
+	}
+	
+	class connectButtonHandler implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			_controller.connectButtonPressed();
+		}
+	}
+	
 	private void initComponents() {
 		
-		_channelSpinner.addChangeListener(this);
-		_comboBox.addActionListener(this);
-		_connectButton.addActionListener(this);
+		_channelSpinner.addChangeListener(new channelSpinnerHandler());
+		_comboBox.addActionListener(new comboBoxHandler());
+		_connectButton.addActionListener(new connectButtonHandler());
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
@@ -57,26 +80,4 @@ public class SerialConnectionPanel extends JPanel implements ActionListener, Cha
 		this.add(_connectButton);
 		
 	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		if(e.getSource() == _channelSpinner){
-			int value = (int)_channelSpinner.getModel().getValue();
-			_controller.spinnerValueChanged(value);
-		}
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == _comboBox){
-			String value = (String)_comboBox.getSelectedItem();
-			_controller.comboBoxValueChanged(value);
-		} else if(e.getSource() == _connectButton){
-			_controller.connectButtonPressed();
-		}
-		
-	}
-	
-	
 }
