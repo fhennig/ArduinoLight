@@ -12,12 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
-import arduinoLight.controllers.ScreenSelectionController;
 
 @SuppressWarnings("serial")
 public class ScreenSelectionPanel extends JPanel {
 
-	ScreenSelectionController _screenSelectionController = new ScreenSelectionController();
+	//TODO add model reference
 	
 	JPanel _screenOptionPanel = new JPanel();
 	JLabel _rowLabel = new JLabel("Rows: ");
@@ -30,8 +29,7 @@ public class ScreenSelectionPanel extends JPanel {
 	JPanel _table = new JPanel();
 	GridLayout _g = new GridLayout(4, 4);
 	
-	public ScreenSelectionPanel(ScreenSelectionController selectionController){
-		_screenSelectionController = selectionController;
+	public ScreenSelectionPanel(){
 		initComponents();
 	}
 	

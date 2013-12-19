@@ -2,7 +2,6 @@ package arduinoLight.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -16,13 +15,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import arduinoLight.controllers.SerialConnectionController;
-
-
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel{
 	
-	SerialConnectionController _controller;
+	//TODO add model reference
 	
 	JLabel _connectionSpeedLabel = new JLabel("Connection Speed: 900000");
 	JLabel _channelLabel = new JLabel("Channels: ");
@@ -32,8 +28,7 @@ public class SerialConnectionPanel extends JPanel{
 	JButton _connectButton = new JButton("Connect");
 	
 	
-	public SerialConnectionPanel(SerialConnectionController connectionController){
-		_controller = connectionController;
+	public SerialConnectionPanel(){
 		initComponents();
 	}
 	
@@ -41,7 +36,7 @@ public class SerialConnectionPanel extends JPanel{
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			int value = (int)_channelSpinner.getModel().getValue();
-			_controller.spinnerValueChanged(value);
+			throw new UnsupportedOperationException("not implemented yet");
 		}
 	}
 	
@@ -49,14 +44,14 @@ public class SerialConnectionPanel extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String value = (String)_comboBox.getSelectedItem();
-			_controller.comboBoxValueChanged(value);
+			throw new UnsupportedOperationException("not implemented yet");
 		}
 	}
 	
 	class connectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			_controller.connectButtonPressed();
+			throw new UnsupportedOperationException("not implemented yet");
 		}
 	}
 	
