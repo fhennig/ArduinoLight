@@ -7,7 +7,6 @@ package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -16,21 +15,17 @@ import javax.swing.JTabbedPane;
 public class Gui{
 
 	JFrame _frame = new JFrame("Arduino Light");
-	
+	JPanel _soundToLightPanel = new JPanel();
 	JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	
 	AmbientlightPanel _ambientlightPanel;
-	
-	JPanel _soundToLightPanel = new JPanel();
-	
-	JColorChooser _colorChooser = new JColorChooser();
-	
 	JPanel _serialConnectionPanel;
-		
+	JPanel _customColorPanel;
 	
-	public Gui(SerialConnectionPanel connectionPanel, AmbientlightPanel ambiPanel){
+	public Gui(SerialConnectionPanel connectionPanel, AmbientlightPanel ambiPanel, CustomColorPanel customColorPanel){
 		_serialConnectionPanel = connectionPanel;
 		_ambientlightPanel = ambiPanel;
+		_customColorPanel = customColorPanel;
 		initComponents();
 	}
 		
@@ -46,11 +41,10 @@ public class Gui{
 	}
 
 	private void initComponents() {
-		_colorChooser.setPreviewPanel(new JPanel());	
 		
 		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
 		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
-		_menuTabs.addTab("Custom Colors", _colorChooser);
+		_menuTabs.addTab("Custom Color", _customColorPanel);
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add(_serialConnectionPanel, BorderLayout.SOUTH);
