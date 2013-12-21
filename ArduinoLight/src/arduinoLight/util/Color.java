@@ -5,6 +5,22 @@ public class Color implements RGBColor
 {
 	private int _argb = 0xff000000; //Initialize Black with 100% Alpha
 	
+	public Color()
+	{
+		
+	}
+	
+	public Color(int a, int r, int g, int b)
+	{
+		setA(a);
+		setR(r);
+		setG(g);
+		setB(b);
+	}
+	
+	
+	
+	
 	public void setARGB(int argb)
 	{
 		_argb = argb;

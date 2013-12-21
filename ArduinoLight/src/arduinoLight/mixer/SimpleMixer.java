@@ -44,7 +44,7 @@ public class SimpleMixer extends Colorprovider implements ChannelsUpdatedListene
 		
 		for (IChannel channel : refreshedChannellist)
 		{
-			colors.add(channel.getRGBColor());
+			colors.add(channel.getColor());
 		}
 		
 		fireColorsUpdatedEvent(colors);

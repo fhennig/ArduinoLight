@@ -2,8 +2,15 @@ package arduinoLight.util;
 
 public class Channel implements IChannel
 {
-	private RGBColor _color;
+	private static int _instances;
+	private Color _color;
 	private String _name;
+	
+	public Channel()
+	{
+		this("channel" + _instances);
+		_instances++;
+	}
 	
 	public Channel(String name)
 	{
@@ -17,13 +24,25 @@ public class Channel implements IChannel
 	}
 	
 	@Override
-	public RGBColor getRGBColor() {
+	public Color getColor() {
 		return _color;
+	}
+
+	@Override
+	public void setColor(Color color)
+	{
+		_color = color;
 	}
 
 	@Override
 	public String getName() {
 		return _name;
+	}
+
+	@Override
+	public void setName(String name)
+	{
+		_name = name;
 	}
 
 	@Override
