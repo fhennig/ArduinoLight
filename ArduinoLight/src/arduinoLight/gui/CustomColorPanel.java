@@ -25,12 +25,6 @@ public class CustomColorPanel extends JPanel{
 	
 	SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
-	JPanel _leftPanel = new JPanel();
-	
-	JPanel _statusPanel = new JPanel();
-	JCheckBox _activeBox = new JCheckBox("Active");
-	JComboBox _channelBox = new JComboBox();
-	
 	JPanel _sliderPanel = new JPanel();
 	JPanel _previewPanel = new JPanel();
 	JPanel _colorPanel = new JPanel();
@@ -49,16 +43,12 @@ public class CustomColorPanel extends JPanel{
 		
 		_previewPanel.setLayout(new BorderLayout());
 		_sliderPanel.setLayout(new BoxLayout(_sliderPanel, BoxLayout.LINE_AXIS));
-		_statusPanel.setLayout(new BoxLayout(_statusPanel, BoxLayout.LINE_AXIS));
-		_leftPanel.setLayout(new BoxLayout(_leftPanel, BoxLayout.PAGE_AXIS));
 		this.setLayout(new BorderLayout());
 		
 		_redSlider.addChangeListener(_panelHandler);
 		_greenSlider.addChangeListener(_panelHandler);
 		_blueSlider.addChangeListener(_panelHandler);
 		_brightnessSlider.addChangeListener(_panelHandler);
-		_activeBox.addChangeListener(new CheckBoxHandler());
-		_channelBox.addActionListener(new ComboBoxHandler());
 		
 		_sliderPanel.add(_redSlider);
 		_sliderPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -68,23 +58,16 @@ public class CustomColorPanel extends JPanel{
 		_sliderPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_sliderPanel.add(_brightnessSlider);
 		
-		_statusPanel.add(_activeBox);
-		_statusPanel.add(Box.createHorizontalStrut(15));
-		_statusPanel.add(_channelBox);
-		
 		_previewPanel.add(_colorPanel, BorderLayout.CENTER);
-		_colorPanel.setBackground(Color.white);
+		_colorPanel.setBackground(new Color(0, 0, 0));
 		
-		_statusPanel.setBorder(new TitledBorder(null, "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		_previewPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		_colorPanel.setBorder(new LineBorder(Color.black));
 		_sliderPanel.setBorder(new TitledBorder(null, "RGB-Color", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
-		_leftPanel.add(_previewPanel);
-		_leftPanel.add(_statusPanel);
 		
 		this.add(_sliderPanel, BorderLayout.EAST);
-		this.add(_leftPanel, BorderLayout.CENTER);
+		this.add(_previewPanel, BorderLayout.CENTER);
 	}
 
 	class SliderPanelHandler implements ChangeListener{
@@ -92,34 +75,14 @@ public class CustomColorPanel extends JPanel{
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			if(e.getSource() == _redSlider){
-				
+				//Here goes the method that is called when the red value changes
 			} else if(e.getSource() == _greenSlider){
-				
+				//Here goes the method that is called when the green value changes
 			} else if(e.getSource() == _blueSlider){
-				
+				//Here goes the method that is called when the blue value changes
 			} else if(e.getSource() == _brightnessSlider){
-				
+				//Here goes the method that is called when the brightness value changes
 			}
 		}
-	}
-	
-	class CheckBoxHandler implements ChangeListener{
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			boolean state = _activeBox.isSelected();
-			_provider.setActive(state);
-		}
-		
-	}
-	
-	class ComboBoxHandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
 	}
 }
