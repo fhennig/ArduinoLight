@@ -16,11 +16,7 @@ public abstract class Channelprovider
 	protected List<IChannel> _channels = new ArrayList<>();
 	
 	private List<ChannelproviderListener> _listeners = new ArrayList<>();
-	
-	//--------------------------------------------------
-	//TODO wo wird jetzt die anzahl der farben bestimmt?
-	//--------------------------------------------------
-	
+		
 	public void addChannel(IChannel channel)
 	{
 		_channels.add(channel);
