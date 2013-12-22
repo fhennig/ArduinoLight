@@ -24,6 +24,7 @@ public abstract class Channelprovider
 	public void addChannel(IChannel channel)
 	{
 		_channels.add(channel);
+		//TODO possibly add ChannelsChangedEvent
 	}
 	
 	public void removeChannel(IChannel channel)
@@ -81,7 +82,7 @@ public abstract class Channelprovider
 		fireActiveChangedEvent();
 		return true;
 	}
-	
+		
 	private void fireActiveChangedEvent()
 	{
 		for (ChannelproviderListener l : _listeners)
@@ -94,11 +95,11 @@ public abstract class Channelprovider
 	 * This method should be called after multiple changes to the colors took place, not after every single color change.
 	 * Keep in mind that this event is likely to trigger transmission.
 	 */
-	protected void fireChannelsUpdatedEvent()
+	protected void fireChannelcolorsUpdatedEvent()
 	{
 		for (ChannelproviderListener l : _listeners)
 		{
-			l.channelsUpdated(this, _channels);
+			l.channelcolorsUpdated(this, _channels);
 		}
 	}
 	

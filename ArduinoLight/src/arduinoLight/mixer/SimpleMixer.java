@@ -37,7 +37,7 @@ public class SimpleMixer extends Colorprovider implements ChannelproviderListene
 	 * The Channels are converted into colors and a ColorsChangeEvent gets fired.
 	 */
 	@Override
-	public void channelsUpdated(Object source, List<IChannel> refreshedChannellist)
+	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
 	{
 		if (source != _channelprovider)
 			return;
@@ -50,13 +50,17 @@ public class SimpleMixer extends Colorprovider implements ChannelproviderListene
 			colors.add(channel.getColor());
 		}
 		
-		fireColorsUpdatedEvent(colors);
+		fireColorsUpdatedEvent(colors); //Event firing takes place here.
 	}
 
+	/**
+	 * Gets called by the Channelprovider.
+	 * Currently does nothing, as there is no good way to react.
+	 */
 	@Override
-	public void activeStateChanged(Object source, boolean newActive) {
-		// TODO Auto-generated method stub
-		
+	public void activeStateChanged(Object source, boolean newActive)
+	{
+		// TODO maybe react to statechange.
 	}
 	
 }

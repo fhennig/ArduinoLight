@@ -11,6 +11,6 @@ import arduinoLight.util.*;
  */
 public interface ChannelproviderListener
 {
-	public void channelsUpdated(Object source, List<IChannel> refreshedChannellist);
+	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist);
 	public void activeStateChanged(Object source, boolean newActive);
 }

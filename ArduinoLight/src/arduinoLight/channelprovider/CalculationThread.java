@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * This class defines some fundamental properties of a Thread that is used to constantly recalculate values.
  * The Thread should be used as a always-running-'server'-thread (The Thread is a Daemon-Thread).
+ * It is observable by any class that implements IterationFinishedListener.
  * @author Felix
  */
 public abstract class CalculationThread extends Thread
@@ -14,7 +15,7 @@ public abstract class CalculationThread extends Thread
 	
 	public CalculationThread()
 	{
-		this.setDaemon(true);
+		this.setDaemon(true); //Set Daemon to true, so the thread gets stopped if the application closes.
 	}
 	
 	public void addIterationFinishedListener(IterationFinishedListener listener)
@@ -27,12 +28,16 @@ public abstract class CalculationThread extends Thread
 		_listeners.remove(listener);
 	}
 	
+	/**
+	 * This method should be called from the while-loop inside the run method.
+	 */
 	protected void fireIterationFinishedEvent()
 	{
 		for (IterationFinishedListener listener : _listeners)
 		{
 			listener.iterationFinished();
 		}
+		//TODO remove this and implement a better notification-mechanism.
 	}
 	
 	@Override

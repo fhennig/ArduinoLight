@@ -8,8 +8,8 @@ import arduinoLight.util.RGBColor;
 
 
 /**
- * On construction, this class takes a List of IRGBColor and creates a Byte-Array from the first 4 colors in the list.
- * These Bytes can then be used to send them over a serialconnection.
+ * On construction, this class takes a List of RGBColor and creates a Byte-Array from the first 4 colors in the list.
+ * These Bytes can then be used to send them over a serialconnection. Get the Bytes with 'toByteArray()'.
  * @author Felix
  */
 public class AmblonePackage
@@ -109,6 +109,11 @@ public class AmblonePackage
 		_package.add(AmbloneFlags.ENDFLAG);
 	}
 	
+	/**
+	 * These constants correspond to the byte-values used on the arduino.
+	 * The private class is used to encapsulate the values.
+	 * @author Felix
+	 */
 	private class AmbloneFlags
 	{
 		public static final byte STARTFLAG1 = (byte) 241;

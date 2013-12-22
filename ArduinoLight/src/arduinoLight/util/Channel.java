@@ -1,8 +1,12 @@
 package arduinoLight.util;
 
+/**
+ * A Channel holds a color and a name. the name should be unique!
+ * @author Felix
+ */
 public class Channel implements IChannel
 {
-	private static int _instances;
+	private static int _instances; //used to generate unique names.
 	private Color _color;
 	private final String _name;
 	

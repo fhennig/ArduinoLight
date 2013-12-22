@@ -22,6 +22,9 @@ public abstract class Colorprovider
 		_listeners.remove(listener);
 	}
 	
+	/**
+	 * This notifies all the listeners. Should be called if the colors changed.
+	 */
 	protected void fireColorsUpdatedEvent(List<RGBColor> newColors)
 	{
 		for (ColorsUpdatedListener listener : _listeners)

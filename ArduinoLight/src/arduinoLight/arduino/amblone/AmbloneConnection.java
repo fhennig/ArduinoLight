@@ -23,10 +23,11 @@ public class AmbloneConnection extends SerialConnection
 	protected byte[] getBytesToTransmit(List<RGBColor> colors) {
 		byte[] bytes = new AmblonePackage(colors).toByteArray();
 		
+		//Only for debugging:
 		StringBuilder builder = new StringBuilder(bytes.length * 4);
 		for (int i = 0; i < bytes.length; i++)
 		{
-			builder.append(Integer.toHexString(bytes[i]) + " ");
+			builder.append(bytes[i] + " ");
 		}
 		
 		DebugConsole.print("AmbloneConnection", "getBytesToTransmit", "calculated Bytes: " + builder);

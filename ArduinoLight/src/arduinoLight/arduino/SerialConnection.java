@@ -37,6 +37,7 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	private int _pps;
 	
 	PropertyChangeSupport _propertyChangeSupport = new PropertyChangeSupport(this);
+	//TODO remove propertychangesupport
 	
 	public SerialConnection(Colorprovider colorprovider)
 	{

@@ -8,21 +8,22 @@ public class Debugprovider extends Channelprovider implements IterationFinishedL
 
 	private TestCalculationThread _thread;
 	
-	
 	@Override
-	public boolean activate() {
+	protected boolean activate() {
 		_thread = new TestCalculationThread(_channels);
 		_thread.addIterationFinishedListener(this);
 		_thread.start();
-		return true; //return that activating was successfull //TODO make this a javadoc comment
+		return true; //return that activating was successful.
 	}
 
 	@Override
-	public boolean deactivate() {
+	protected boolean deactivate() {
+		_thread.removeIterationFinishedListener(this);
 		_thread.interrupt();
 		try {
 			_thread.join(1500);
 		} catch (InterruptedException e) {
+			//The Thread was not terminated after 1500ms!
 			// TODO InterruptedExceptions ???
 			e.printStackTrace();
 		}
@@ -31,7 +32,7 @@ public class Debugprovider extends Channelprovider implements IterationFinishedL
 
 	@Override
 	public void iterationFinished() {
-		this.fireChannelsUpdatedEvent();
+		this.fireChannelcolorsUpdatedEvent(); //Forward the event thrown by our thread.
 	}
 
 }

@@ -1,14 +1,19 @@
 package arduinoLight.util;
 
+/**
+ * Encapsulates the printing to the console for debugging-purposes.
+ * @author Felix
+ */
 public class DebugConsole
 {
-	public boolean isEnabled()
+	public static boolean isEnabled()
 	{
 		return true;
 	}
 	
 	public static void print(String containingClass, String method, String message)
 	{
-		System.out.println("+++ " + containingClass + ": " + method + ": " + message);
+		if (isEnabled())
+			System.out.println("+++ " + containingClass + ": " + method + ": " + message);
 	}
 }

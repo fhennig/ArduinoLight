@@ -4,9 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+/**
+ * This class tests the Color class.
+ * @author Felix
+ */
 public class ColorTest
 {
-
+	/**
+	 * Tests if the parameterized constructor works.
+	 */
 	@Test
 	public void colorConstructorTest()
 	{
@@ -18,6 +24,9 @@ public class ColorTest
 		assertEquals(75,  c.getB());
 	}
 	
+	/**
+	 * Tests if the default constructed color is black with full alpha.
+	 */
 	@Test
 	public void colorDefaultContructorTest()
 	{
@@ -29,6 +38,9 @@ public class ColorTest
 		assertEquals(0,   c.getB());
 	}
 	
+	/**
+	 * Tests the normal set-methods.
+	 */
 	@Test
 	public void colorSettersNormalTest()
 	{
@@ -44,7 +56,10 @@ public class ColorTest
 		assertEquals(198, c.getG());
 		assertEquals(197, c.getB());
 	}
-	
+
+	/**
+	 * Tests if too high values are handled correctly.
+	 */
 	@Test
 	public void colorSettersArgumentTooHighTest()
 	{
@@ -61,6 +76,9 @@ public class ColorTest
 		assertEquals(255, c.getB());
 	}
 	
+	/**
+	 * Tests if too low values are handled correctly.
+	 */
 	@Test
 	public void colorSettersArgumentTooLowTest()
 	{
@@ -77,7 +95,9 @@ public class ColorTest
 		assertEquals(0, c.getB());
 	}
 	
-	
+	/**
+	 * Tests if setting the ARGB directly leads to correct A, R, G, B values.
+	 */
 	@Test
 	public void colorSetGetARGBTest()
 	{
@@ -90,7 +110,11 @@ public class ColorTest
 		assertEquals(0x12, c.getG());
 		assertEquals(0x34, c.getB());
 	}
-	
+
+	/**
+	 * Tests if equals() returns true if the colors are equal.
+	 * Tests if the hashcodes are equal if the colors are equal.
+	 */
 	@Test
 	public void colorEqualsAndHashCodePositiveTest()
 	{
@@ -103,6 +127,10 @@ public class ColorTest
 		assertEquals(c1.hashCode(), c2.hashCode());
 	}
 	
+	/**
+	 * Tests if equals() returns false if the colors are not equal.
+	 * Tests if the hashcodes are not equal if the colors are not equal.
+	 */
 	@Test
 	public void colorEqualsAndHashCodeNegativeTest()
 	{
@@ -115,10 +143,10 @@ public class ColorTest
 		assertNotEquals(c1.hashCode(), c2.hashCode());
 	}
 	
-	@Test
 	/**
 	 * Tests if Color values are calculated correctly from the alpha value.
 	 */
+	@Test
 	public void colorRGBColorInterfaceTest()
 	{
 		Color c = new Color(255, 300, 12, 34);

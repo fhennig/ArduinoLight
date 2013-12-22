@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="arduinoLight.arduino.SerialConnection" project="ArduinoLight" 
     file="/ArduinoLight/src/arduinoLight/arduino/SerialConnection.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="328" width="327" x="288" y="37"/>    
+    <position height="-1" width="-1" x="449" y="180"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <interface id="5" language="java" name="arduinoLight.mixer.ColorsUpdatedListener" project="ArduinoLight" 
     file="/ArduinoLight/src/arduinoLight/mixer/ColorsUpdatedListener.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="396" y="478"/>    
+    <position height="-1" width="-1" x="400" y="471"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -49,7 +49,7 @@
   <interface id="6" language="java" name="arduinoLight.channelprovider.ChannelproviderListener" project="ArduinoLight" 
     file="/ArduinoLight/src/arduinoLight/channelprovider/ChannelproviderListener.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1051" y="875"/>    
+    <position height="-1" width="-1" x="1021" y="828"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -67,7 +67,7 @@
   </class>  
   <class id="8" language="java" name="arduinoLight.mixer.SimpleMixer" project="ArduinoLight" 
     file="/ArduinoLight/src/arduinoLight/mixer/SimpleMixer.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="562" y="681"/>    
+    <position height="-1" width="-1" x="566" y="693"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -83,55 +83,88 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="10">    
+  <class id="10" language="java" name="arduinoLight.channelprovider.debugprovider.Debugprovider" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/channelprovider/debugprovider/Debugprovider.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="155" y="984"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="false" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="arduinoLight.channelprovider.debugprovider.TestCalculationThread" 
+    project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/channelprovider/debugprovider/TestCalculationThread.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="156" y="1159"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="false" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="12">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="11" name="_colorprovider"/>      
-      <multiplicity id="12" minimum="0" maximum="1"/>    
+      <attribute id="13" name="_colorprovider"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="13">    
+  <generalization id="15">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="9"/>  
   </generalization>  
-  <realization id="14">    
+  <realization id="16">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
-  <association id="15">    
+  <association id="17">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="16" name="_channelprovider"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+      <attribute id="18" name="_channelprovider"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="18">    
+  <generalization id="20">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
-  <association id="19">    
+  <association id="21">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="22" name="_thread"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="25">    
     <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="20" name="_listeners"/>      
-      <multiplicity id="21" minimum="0" maximum="2147483647"/>    
+      <attribute id="26" name="_listeners"/>      
+      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="22">    
+  <nesting id="28">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </nesting>  
-  <association id="23">    
+  <association id="29">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="24" name="_listeners"/>      
-      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+      <attribute id="30" name="_listeners"/>      
+      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="26">    
+  <realization id="32">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="5"/>  
   </realization>  

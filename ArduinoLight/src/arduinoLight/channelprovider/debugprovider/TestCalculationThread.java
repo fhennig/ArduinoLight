@@ -6,6 +6,11 @@ import java.util.List;
 import arduinoLight.channelprovider.CalculationThread;
 import arduinoLight.util.*;
 
+/**
+ * This Thread sets every channel to red, green, blue within a 1-second-interval.
+ * @author Felix
+ *
+ */
 public class TestCalculationThread extends CalculationThread {
 
 	private static final Color RED = new Color(255, 255, 0, 0);
