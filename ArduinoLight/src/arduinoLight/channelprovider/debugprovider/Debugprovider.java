@@ -1,8 +1,9 @@
 package arduinoLight.channelprovider.debugprovider;
 
 import arduinoLight.channelprovider.Channelprovider;
+import arduinoLight.channelprovider.IterationFinishedListener;
 
-public class Debugprovider extends Channelprovider implements TestCalculationThreadListener
+public class Debugprovider extends Channelprovider implements IterationFinishedListener
 {
 
 	private TestCalculationThread _thread;
@@ -11,6 +12,8 @@ public class Debugprovider extends Channelprovider implements TestCalculationThr
 	@Override
 	public boolean activate() {
 		_thread = new TestCalculationThread(_channels);
+		_thread.addIterationFinishedListener(this);
+		_thread.start();
 		return true; //return that activating was successfull //TODO make this a javadoc comment
 	}
 
@@ -27,8 +30,8 @@ public class Debugprovider extends Channelprovider implements TestCalculationThr
 	}
 
 	@Override
-	public void channelsUpdated() {
-		fireChannelsUpdatedEvent();
+	public void iterationFinished() {
+		this.fireChannelsUpdatedEvent();
 	}
 
 }

@@ -13,6 +13,7 @@ import java.util.*;
 
 import arduinoLight.mixer.Colorprovider;
 import arduinoLight.mixer.ColorsUpdatedListener;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.SpeedChangeListener;
 import arduinoLight.util.SpeedCounter;
@@ -39,8 +40,8 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	
 	public SerialConnection(Colorprovider colorprovider)
 	{
-		setColorprovider(colorprovider);
 		_ppsCounter = new SpeedCounter();
+		setColorprovider(colorprovider);
 	}
 	/**
 	 * Gives an enum of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
@@ -105,6 +106,12 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	@Override
 	public void colorsUpdated(List<RGBColor> newColors)
 	{
+		int i = 0;
+		for (RGBColor color : newColors)
+		{
+			debugprint("colorsUpdated", "new Color from Colorprovider:" + i + ": " + newColors.get(i).toString());
+			i++;
+		}
 		byte[] bytes = getBytesToTransmit(newColors);
 		transmit(bytes);
 	}
@@ -117,8 +124,12 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	
 	protected synchronized void transmit(byte[] bytes)
 	{
+		debugprint("transmit", "transmit-method reached.");
 		if (!_connectionActive)
+		{
+			debugprint("transmit", "connectionActive = false! transmission not possible.");
 			throw new IllegalStateException("There is no connection established for transmission!");
+		}
 		
 		try
 		{
@@ -128,9 +139,11 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 		}
 		catch(IOException ex)
 		{
+			debugprint("transmit", "IOException" + ex.toString());
 			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
 			throw new IllegalStateException(ex);
 		}
+		debugprint("transmit", "transmission successfull! ###");
 	}
 	
 	public void setColorprovider(Colorprovider colorprovider)
@@ -205,5 +218,10 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	public void removePropertyChangeListener(PropertyChangeListener listener)
 	{
 		_propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+	
+	private void debugprint(String method, String message)
+	{
+		DebugConsole.print("SerialConnection", method, message);
 	}
 }

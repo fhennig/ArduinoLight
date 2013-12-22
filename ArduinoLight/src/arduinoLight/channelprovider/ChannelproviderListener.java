@@ -9,7 +9,8 @@ import arduinoLight.util.*;
  * This interface is part of an implementation of the Observerpattern, it makes a Channelprovider observable.
  * @author Felix
  */
-public interface ChannelsUpdatedListener
+public interface ChannelproviderListener
 {
-	public void channelsUpdated(List<IChannel> refreshedChannellist);
+	public void channelsUpdated(Object source, List<IChannel> refreshedChannellist);
+	public void activeStateChanged(Object source, boolean newActive);
 }

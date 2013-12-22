@@ -59,41 +59,58 @@ public class Color implements RGBColor
 		return _argb;
 	}
 	
-	public byte getA()
+	public int getA()
 	{
-		return new Integer(_argb >>> 24).byteValue();
+		return _argb >>> 24;
 }
 	
-	public byte getR()
+	public int getR()
 	{
-		return new Integer(_argb >>> 16).byteValue();
+		int mask = 0x00ff0000;
+		int red = _argb & mask;
+		return red >>> 16;
 	}
 
-	public byte getG()
+	public int getG()
 	{
-		return new Integer(_argb >>> 8).byteValue();
+		int mask = 0x0000ff00;
+		int green = _argb & mask;
+		return green >>> 8;
 	}
 	
-	public byte getB()
+	public int getB()
 	{
-		return new Integer(_argb).byteValue();
+		int mask = 0x000000ff;
+		int blue = _argb & mask;
+		return blue;
 	}
 	
 	public byte getCalculatedR()
 	{
-		return (byte) (getR() * (getA() / 255));
+		int red = getR();
+		int alpha = getA();
+		double ratio = alpha / 255.0;
+		double result = Math.round(red * ratio);
+		return (byte) result;
 	}
 	
 	public byte getCalculatedG()
 	{
-		return (byte) (getG() * (getA() / 255));
+		int green = getG();
+		int alpha = getA();
+		double ratio = alpha / 255.0;
+		double result = Math.round(green * ratio);
+		return (byte) result;
 	}
 	
 	public byte getCalculatedB()
 	{
-		return (byte) (getB() * (getA() / 255));
+		int blue = getB();
+		int alpha = getA();
+		double ratio = alpha / 255.0;
+		double result = Math.round(blue * ratio);
+		return (byte) result;
 	}
-	
 	
 	private int getNormalizedInt(int i)
 	{
@@ -129,5 +146,10 @@ public class Color implements RGBColor
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return Integer.toHexString(_argb);
 	}
 }

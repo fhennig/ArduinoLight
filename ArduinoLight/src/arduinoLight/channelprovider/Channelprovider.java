@@ -15,7 +15,7 @@ public abstract class Channelprovider
 	private boolean _active;
 	protected List<IChannel> _channels = new ArrayList<>();
 	
-	private List<ChannelsUpdatedListener> _listeners = new ArrayList<>();
+	private List<ChannelproviderListener> _listeners = new ArrayList<>();
 	
 	//--------------------------------------------------
 	//TODO wo wird jetzt die anzahl der farben bestimmt?
@@ -29,6 +29,11 @@ public abstract class Channelprovider
 	public void removeChannel(IChannel channel)
 	{
 		_channels.remove(channel);
+	}
+	
+	public List<IChannel> getChannels()
+	{
+		return _channels;
 	}
 	
 	public boolean IsActive()
@@ -73,8 +78,16 @@ public abstract class Channelprovider
 			return false;
 		
 		_active = value;
-		//TODO probably add event to show that active state changed.
+		fireActiveChangedEvent();
 		return true;
+	}
+	
+	private void fireActiveChangedEvent()
+	{
+		for (ChannelproviderListener l : _listeners)
+		{
+			l.activeStateChanged(this, _active);
+		}
 	}
 	
 	/**
@@ -83,18 +96,18 @@ public abstract class Channelprovider
 	 */
 	protected void fireChannelsUpdatedEvent()
 	{
-		for (ChannelsUpdatedListener l : _listeners)
+		for (ChannelproviderListener l : _listeners)
 		{
-			l.channelsUpdated(_channels);
+			l.channelsUpdated(this, _channels);
 		}
 	}
 	
-	public void addChannelsUpdatedListener(ChannelsUpdatedListener listener)
+	public void addChannelproviderListener(ChannelproviderListener listener)
 	{
 		_listeners.add(listener);
 	}
 	
-	public void removeChannelsUpdatedListener(ChannelsUpdatedListener listener)
+	public void removeChannelproviderListener(ChannelproviderListener listener)
 	{
 		_listeners.remove(listener);
 		//TODO add possible feature: set deactive this colorprovider if no listeners are subscribed

@@ -7,5 +7,4 @@ public interface IChannel
 	public void setColor(Color color);
 	
 	public String getName();
-	public void setName(String name);
 }

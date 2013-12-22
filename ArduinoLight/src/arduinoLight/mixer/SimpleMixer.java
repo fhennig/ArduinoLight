@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arduinoLight.channelprovider.Channelprovider;
-import arduinoLight.channelprovider.ChannelsUpdatedListener;
+import arduinoLight.channelprovider.ChannelproviderListener;
 import arduinoLight.util.*;
 
 /**
@@ -13,7 +13,7 @@ import arduinoLight.util.*;
  * It is the most basic implementation of a mixer and mainly a placeholder.
  * @author Felix
  */
-public class SimpleMixer extends Colorprovider implements ChannelsUpdatedListener
+public class SimpleMixer extends Colorprovider implements ChannelproviderListener
 {
 	private Channelprovider _channelprovider;
 	
@@ -26,10 +26,10 @@ public class SimpleMixer extends Colorprovider implements ChannelsUpdatedListene
 	{
 		if (_channelprovider != null)
 		{
-			_channelprovider.removeChannelsUpdatedListener(this);
+			_channelprovider.removeChannelproviderListener(this);
 		}
 		_channelprovider = channelprovider;
-		_channelprovider.addChannelsUpdatedListener(this);
+		_channelprovider.addChannelproviderListener(this);
 	}
 
 	/**
@@ -37,8 +37,11 @@ public class SimpleMixer extends Colorprovider implements ChannelsUpdatedListene
 	 * The Channels are converted into colors and a ColorsChangeEvent gets fired.
 	 */
 	@Override
-	public void channelsUpdated(List<IChannel> refreshedChannellist)
+	public void channelsUpdated(Object source, List<IChannel> refreshedChannellist)
 	{
+		if (source != _channelprovider)
+			return;
+		
 		int channelCount = refreshedChannellist.size();
 		List<RGBColor> colors = new ArrayList<>(channelCount);
 		
@@ -48,6 +51,12 @@ public class SimpleMixer extends Colorprovider implements ChannelsUpdatedListene
 		}
 		
 		fireColorsUpdatedEvent(colors);
+	}
+
+	@Override
+	public void activeStateChanged(Object source, boolean newActive) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

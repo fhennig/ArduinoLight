@@ -29,22 +29,30 @@ public class TestCalculationThread extends CalculationThread {
 	@Override
 	public void run()
 	{		
+		int i = 0;
+		Color currentColor = new Color(255, 255, 255, 255);
 		while(!isInterrupted())
 		{
-			int i = 0;
 			List<IChannel> channelsCopy = new ArrayList<IChannel>(_channels);
+			DebugConsole.print("TestCalculationThread", "run", "currentColor: " + currentColor.toString());
+			
+			
+			
+			switch(i)
+			{
+			case 0: currentColor = RED; break;
+			case 1: currentColor = GREEN; break;
+			case 2: currentColor = BLUE; break;
+			}
 			
 			for (IChannel ch : channelsCopy)
 			{
-				switch(i)
-				{
-				case 0: ch.setColor(RED);
-				case 1: ch.setColor(GREEN);
-				case 2: ch.setColor(BLUE);
-				}
+				ch.setColor(currentColor);
 			}
 			
-			i++;
+			i = (i + 1) % 3;
+			DebugConsole.print("TestCalculationThread", "run", "i = " + i);
+			fireIterationFinishedEvent();
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {
