@@ -5,20 +5,19 @@ import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.*;
 
 import arduinoLight.mixer.Colorprovider;
 import arduinoLight.mixer.ColorsUpdatedListener;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.SpeedChangeListener;
 import arduinoLight.util.SpeedCounter;
 /**
  * This class provides a framework to set up a serialconnection. Subclasses need to implement the transmission protocol.
- * Provides PropertyChangeSupport for: "Colorprovider", "Active", "Speed"
+ * Is observable by any class that implements SerialConnectionListener.
  * @author Felix
  */
 public abstract class SerialConnection implements SpeedChangeListener, ColorsUpdatedListener
@@ -35,13 +34,19 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	private SpeedCounter _ppsCounter;
 	private int _pps;
 	
-	PropertyChangeSupport _propertyChangeSupport = new PropertyChangeSupport(this);
+	private List<SerialConnectionListener> _listeners;
+	
+			
 	
 	public SerialConnection(Colorprovider colorprovider)
 	{
-		setColorprovider(colorprovider);
+		_listeners = new ArrayList<>();
 		_ppsCounter = new SpeedCounter();
+		setColorprovider(colorprovider);
 	}
+	
+	
+	
 	/**
 	 * Gives an enum of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
 	 */
@@ -105,6 +110,15 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	@Override
 	public void colorsUpdated(List<RGBColor> newColors)
 	{
+		if (newColors == null || newColors.size() == 0)
+			return;		//If the list is empty, there is nothing to transmit
+		
+		//int i = 0;
+		for (int i = 0; i < newColors.size(); i++)
+		{
+			debugprint("colorsUpdated", "new Color from Colorprovider:" + i + ": " + newColors.get(i).toString());
+			i++;
+		}
 		byte[] bytes = getBytesToTransmit(newColors);
 		transmit(bytes);
 	}
@@ -117,8 +131,12 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	
 	protected synchronized void transmit(byte[] bytes)
 	{
+		debugprint("transmit", "transmit-method reached.");
 		if (!_connectionActive)
+		{
+			debugprint("transmit", "connectionActive = false! transmission not possible.");
 			throw new IllegalStateException("There is no connection established for transmission!");
+		}
 		
 		try
 		{
@@ -128,9 +146,11 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 		}
 		catch(IOException ex)
 		{
+			debugprint("transmit", "IOException" + ex.toString());
 			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
 			throw new IllegalStateException(ex);
 		}
+		debugprint("transmit", "transmission successfull! ###");
 	}
 	
 	public void setColorprovider(Colorprovider colorprovider)
@@ -139,9 +159,9 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 		{
 			_colorprovider.removeColorsUpdatedListener(this);
 		}
-		_propertyChangeSupport.firePropertyChange("Colorprovider", _colorprovider, colorprovider);
 		_colorprovider = colorprovider;
 		_colorprovider.addColorsUpdatedListener(this);
+		fireColorproviderChangedEvent(_colorprovider);
 		_ppsCounter.reset();
 	}
 	
@@ -177,33 +197,63 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	{
 		if (value != _connectionActive)
 		{
-			boolean oldValue = _connectionActive;
 			_connectionActive = value;
-			_propertyChangeSupport.firePropertyChange("Active", oldValue, value);
+			fireActiveChangedEvent(_connectionActive);
 		}
 	}
 
 	/**
 	 * Gets called by the _ppsCounter if a new Speed is calculated.
-	 * The 'event' is then 'forwarded' to all PropertyChangeListeners.
+	 * The 'event' is then 'forwarded' to all Listeners.
 	 */
 	@Override
 	public void speedChanged(int newSpeed) {
-		int oldSpeed = _pps;
 		_pps = newSpeed;
-		_propertyChangeSupport.firePropertyChange("Speed", oldSpeed, _pps);
+		fireSpeedChangedEvent(_pps);
 	}
 	
+	private void fireSpeedChangedEvent(int newSpeed)
+	{
+		for (SerialConnectionListener listener : _listeners)
+		{
+			listener.speedChanged(this, newSpeed);
+		}
+	}
+	
+	public void fireActiveChangedEvent(boolean newActive)
+	{
+		for (SerialConnectionListener listener : _listeners)
+		{
+			listener.activeChanged(this, newActive);
+		}
+	}
+	
+	public void fireColorproviderChangedEvent(Colorprovider cp)
+	{
+		for (SerialConnectionListener listener : _listeners)
+		{
+			listener.colorproviderChanged(this, cp);
+		}
+	}
 	
 	
 	//PropertyChangeSupport:
-	public void addPropertyChangeListener(PropertyChangeListener listener)
+	public void addSerialConnectionListener(SerialConnectionListener listener)
 	{
-		_propertyChangeSupport.addPropertyChangeListener(listener);
+		_listeners.add(listener);
 	}
 	
-	public void removePropertyChangeListener(PropertyChangeListener listener)
+	public void removeSerialConnectionListener(SerialConnectionListener listener)
 	{
-		_propertyChangeSupport.removePropertyChangeListener(listener);
+		_listeners.remove(listener);
+	}
+	
+	/**
+	 * prints, uses the DebugConsole.
+	 * 'containingClass' is already preset.
+	 */
+	private void debugprint(String method, String message)
+	{
+		DebugConsole.print("SerialConnection", method, message);
 	}
 }

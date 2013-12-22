@@ -1,10 +1,14 @@
 package arduinoLight.util;
 
+/**
+ * A Channel holds a color and a name. the name should be unique!
+ * @author Felix
+ */
 public class Channel implements IChannel
 {
-	private static int _instances;
+	private static int _instances; //used to generate unique names.
 	private Color _color;
-	private String _name;
+	private final String _name;
 	
 	public Channel()
 	{
@@ -40,16 +44,9 @@ public class Channel implements IChannel
 	}
 
 	@Override
-	public void setName(String name)
-	{
-		_name = name;
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 37;
 		int result = 1;
-		result = prime * result + ((_color == null) ? 0 : _color.hashCode());
 		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
 		return result;
 	}
@@ -66,13 +63,8 @@ public class Channel implements IChannel
 			return false;
 		}
 		Channel other = (Channel) obj;
-		if (_color == null) {
-			if (other._color != null) {
-				return false;
-			}
-		} else if (!_color.equals(other._color)) {
-			return false;
-		}
+
+
 		if (_name == null) {
 			if (other._name != null) {
 				return false;

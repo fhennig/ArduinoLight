@@ -15,20 +15,24 @@ public abstract class Channelprovider
 	private boolean _active;
 	protected List<IChannel> _channels = new ArrayList<>();
 	
-	private List<ChannelsUpdatedListener> _listeners = new ArrayList<>();
-	
-	//--------------------------------------------------
-	//TODO wo wird jetzt die anzahl der farben bestimmt?
-	//--------------------------------------------------
-	
-	public void addChannel(IChannel channel)
+	private List<ChannelproviderListener> _listeners = new ArrayList<>();
+		
+	public void addChannel()
 	{
-		_channels.add(channel);
+		//TODO currently the channel object is created here and no name is given. think about if this is good (probably not).
+		_channels.add(new Channel());
+		fireChannelsChangedEvent();
 	}
 	
 	public void removeChannel(IChannel channel)
 	{
 		_channels.remove(channel);
+		fireChannelsChangedEvent();
+	}
+	
+	public List<IChannel> getChannels()
+	{
+		return _channels;
 	}
 	
 	public boolean IsActive()
@@ -73,28 +77,51 @@ public abstract class Channelprovider
 			return false;
 		
 		_active = value;
-		//TODO probably add event to show that active state changed.
+		fireActiveChangedEvent();
+		
+		if (IsActive())
+			fireChannelcolorsUpdatedEvent();
+		
 		return true;
+	}
+		
+	private void fireActiveChangedEvent()
+	{
+		for (ChannelproviderListener l : _listeners)
+		{
+			l.activeStateChanged(this, _active);
+		}
 	}
 	
 	/**
 	 * This method should be called after multiple changes to the colors took place, not after every single color change.
 	 * Keep in mind that this event is likely to trigger transmission.
 	 */
-	protected void fireChannelsUpdatedEvent()
+	protected void fireChannelcolorsUpdatedEvent()
 	{
-		for (ChannelsUpdatedListener l : _listeners)
+		for (ChannelproviderListener l : _listeners)
 		{
-			l.channelsUpdated(_channels);
+			l.channelcolorsUpdated(this, _channels);
 		}
 	}
 	
-	public void addChannelsUpdatedListener(ChannelsUpdatedListener listener)
+	/**
+	 * This method notifies every listener, that a channel was added or removed.
+	 */
+	private void fireChannelsChangedEvent()
+	{
+		for (ChannelproviderListener l : _listeners)
+		{
+			l.channelsChanged(this, _channels);
+		}
+	}
+	
+	public void addChannelproviderListener(ChannelproviderListener listener)
 	{
 		_listeners.add(listener);
 	}
 	
-	public void removeChannelsUpdatedListener(ChannelsUpdatedListener listener)
+	public void removeChannelproviderListener(ChannelproviderListener listener)
 	{
 		_listeners.remove(listener);
 		//TODO add possible feature: set deactive this colorprovider if no listeners are subscribed
