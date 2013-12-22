@@ -6,11 +6,11 @@ import arduinoLight.channelprovider.IterationFinishedListener;
 public class Debugprovider extends Channelprovider implements IterationFinishedListener
 {
 
-	private TestCalculationThread _thread;
+	private DebugCalculationThread _thread;
 	
 	@Override
 	protected boolean activate() {
-		_thread = new TestCalculationThread(_channels);
+		_thread = new DebugCalculationThread(_channels);
 		_thread.addIterationFinishedListener(this);
 		_thread.start();
 		return true; //return that activating was successful.

@@ -13,7 +13,6 @@ import arduinoLight.gui.Gui;
 import arduinoLight.gui.ScreenSelectionPanel;
 import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.mixer.SimpleMixer;
-import arduinoLight.util.Channel;
 
 public class ArduinoLight
 {

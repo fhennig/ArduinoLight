@@ -11,7 +11,7 @@ import arduinoLight.util.*;
  * @author Felix
  *
  */
-public class TestCalculationThread extends CalculationThread {
+public class DebugCalculationThread extends CalculationThread {
 
 	private static final Color RED = new Color(255, 255, 0, 0);
 	private static final Color GREEN = new Color(255, 0, 255, 0);
@@ -20,7 +20,7 @@ public class TestCalculationThread extends CalculationThread {
 	private volatile List<IChannel> _channels;
 	
 	
-	public TestCalculationThread(List<IChannel> channels)
+	public DebugCalculationThread(List<IChannel> channels)
 	{
 		_channels = channels;
 	}
