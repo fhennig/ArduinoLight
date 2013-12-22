@@ -110,6 +110,9 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	@Override
 	public void colorsUpdated(List<RGBColor> newColors)
 	{
+		if (newColors == null || newColors.size() == 0)
+			return;		//If the list is empty, there is nothing to transmit
+		
 		//int i = 0;
 		for (int i = 0; i < newColors.size(); i++)
 		{

@@ -17,15 +17,17 @@ public abstract class Channelprovider
 	
 	private List<ChannelproviderListener> _listeners = new ArrayList<>();
 		
-	public void addChannel(IChannel channel)
+	public void addChannel()
 	{
-		_channels.add(channel);
-		//TODO possibly add ChannelsChangedEvent
+		//TODO currently the channel object is created here and no name is given. think about if this is good (probably not).
+		_channels.add(new Channel());
+		fireChannelsChangedEvent();
 	}
 	
 	public void removeChannel(IChannel channel)
 	{
 		_channels.remove(channel);
+		fireChannelsChangedEvent();
 	}
 	
 	public List<IChannel> getChannels()
@@ -76,6 +78,10 @@ public abstract class Channelprovider
 		
 		_active = value;
 		fireActiveChangedEvent();
+		
+		if (IsActive())
+			fireChannelcolorsUpdatedEvent();
+		
 		return true;
 	}
 		
@@ -96,6 +102,17 @@ public abstract class Channelprovider
 		for (ChannelproviderListener l : _listeners)
 		{
 			l.channelcolorsUpdated(this, _channels);
+		}
+	}
+	
+	/**
+	 * This method notifies every listener, that a channel was added or removed.
+	 */
+	private void fireChannelsChangedEvent()
+	{
+		for (ChannelproviderListener l : _listeners)
+		{
+			l.channelsChanged(this, _channels);
 		}
 	}
 	

@@ -20,8 +20,8 @@ public class ArduinoLight
 	public static void main(String[] args)
 	{
 		Debugprovider provider = new Debugprovider();   //Debugprovider as a provider
-		provider.addChannel(new Channel());					
-		provider.addChannel(new Channel());
+		provider.addChannel();					
+		provider.addChannel();
 		SimpleMixer mixer = new SimpleMixer(provider);
 		AmbloneConnection connection = new AmbloneConnection(mixer);
 		

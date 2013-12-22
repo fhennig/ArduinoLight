@@ -14,7 +14,7 @@ public class ColorTest
 	 * Tests if the parameterized constructor works.
 	 */
 	@Test
-	public void colorConstructorTest()
+	public void testColorConstructor()
 	{
 		Color c = new Color(200, 20, 40, 75);
 		
@@ -28,7 +28,7 @@ public class ColorTest
 	 * Tests if the default constructed color is black with full alpha.
 	 */
 	@Test
-	public void colorDefaultContructorTest()
+	public void testColorDefaultContructor()
 	{
 		Color c = new Color();
 		
@@ -42,7 +42,7 @@ public class ColorTest
 	 * Tests the normal set-methods.
 	 */
 	@Test
-	public void colorSettersNormalTest()
+	public void testColorSettersNormal()
 	{
 		Color c = new Color();
 		
@@ -61,7 +61,7 @@ public class ColorTest
 	 * Tests if too high values are handled correctly.
 	 */
 	@Test
-	public void colorSettersArgumentTooHighTest()
+	public void testColorSettersArgumentTooHigh()
 	{
 		Color c = new Color();
 		
@@ -80,7 +80,7 @@ public class ColorTest
 	 * Tests if too low values are handled correctly.
 	 */
 	@Test
-	public void colorSettersArgumentTooLowTest()
+	public void testColorSettersArgumentTooLow()
 	{
 		Color c = new Color();
 		
@@ -99,7 +99,7 @@ public class ColorTest
 	 * Tests if setting the ARGB directly leads to correct A, R, G, B values.
 	 */
 	@Test
-	public void colorSetGetARGBTest()
+	public void testColorSetGetARGB()
 	{
 		Color c = new Color();
 		
@@ -116,7 +116,7 @@ public class ColorTest
 	 * Tests if the hashcodes are equal if the colors are equal.
 	 */
 	@Test
-	public void colorEqualsAndHashCodePositiveTest()
+	public void testColorEqualsAndHashCodePositive()
 	{
 		Color c1 = new Color(1, 2, 3, 4);
 		Color c2 = new Color(1, 2, 3, 4);
@@ -132,7 +132,7 @@ public class ColorTest
 	 * Tests if the hashcodes are not equal if the colors are not equal.
 	 */
 	@Test
-	public void colorEqualsAndHashCodeNegativeTest()
+	public void testColorEqualsAndHashCodeNegative()
 	{
 		Color c1 = new Color(1, 2, 3, 4);
 		Color c2 = new Color(1, 2, 3, 5);
@@ -147,7 +147,7 @@ public class ColorTest
 	 * Tests if Color values are calculated correctly from the alpha value.
 	 */
 	@Test
-	public void colorRGBColorInterfaceTest()
+	public void testColorRGBColorInterface()
 	{
 		Color c = new Color(255, 300, 12, 34);
 		
