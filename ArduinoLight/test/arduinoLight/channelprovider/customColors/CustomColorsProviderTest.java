@@ -18,6 +18,7 @@ public class CustomColorsProviderTest
 		_provider = new CustomColorsProvider();
 		_listener = new ChannelproviderListenerDummy();
 		_provider.addChannelproviderListener(_listener);
+		_provider.addChannellistListener(_listener);
 	}
 	
 	@Test

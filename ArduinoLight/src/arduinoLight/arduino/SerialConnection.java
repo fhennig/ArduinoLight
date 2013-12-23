@@ -88,6 +88,8 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 		{
 			throw new IllegalArgumentException(ex);
 		}
+		
+		DebugConsole.print("SerialConnection", "connect", "Connecting successful!");
 	}
 	
 	/**

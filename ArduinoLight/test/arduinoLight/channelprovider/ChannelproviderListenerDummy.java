@@ -4,7 +4,7 @@ import java.util.List;
 
 import arduinoLight.util.IChannel;
 
-public class ChannelproviderListenerDummy implements ChannelproviderListener
+public class ChannelproviderListenerDummy implements ChannelproviderListener, ChannellistListener
 {
 	private List<IChannel> _latestChannels;
 	private boolean _latestActiveState;
@@ -32,14 +32,6 @@ public class ChannelproviderListenerDummy implements ChannelproviderListener
 		_amountActiveChangedEvents++;
 	}
 
-	@Override
-	public void channelsChanged(Object source, List<IChannel> newChannellist)
-	{
-		_latestChannels = newChannellist;
-		_latestSource = source;
-		_amountChannelsChangedEvents++;
-	}
-
 	public List<IChannel> getLatestChannels()
 	{
 		return _latestChannels;
@@ -64,9 +56,15 @@ public class ChannelproviderListenerDummy implements ChannelproviderListener
 	{
 		return _amountActiveChangedEvents;
 	}
-
+	
 	public int getAmountChannelsChangedEvents()
 	{
 		return _amountChannelsChangedEvents;
+	}
+
+	@Override
+	public void channellistChanged(Object source, List<IChannel> newChannellist)
+	{
+		_amountChannelsChangedEvents++;
 	}
 }
