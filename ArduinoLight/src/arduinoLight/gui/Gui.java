@@ -17,11 +17,11 @@ import javax.swing.JTabbedPane;
 
 public class Gui{
 
-	JFrame _frame = new JFrame("Arduino Light");
-	JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
-	JPanel _connectionPanel;
+	private JFrame _frame = new JFrame("Arduino Light");
+	private JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
+	private JPanel _connectionPanel;
 	
-	Set<ModulePanel> _modulePanels = new HashSet<ModulePanel>();
+	private Set<ModulePanel> _modulePanels = new HashSet<ModulePanel>();
 	
 	public Gui(Set<ModulePanel> panels, JPanel connectionPanel){
 		_modulePanels = panels;

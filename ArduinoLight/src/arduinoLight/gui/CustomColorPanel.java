@@ -1,3 +1,8 @@
+/**
+ * The User Interface for the Custom Color Module.
+ * It is a simple Color Picker for Configuration or Testing Purposes
+ */
+
 package arduinoLight.gui;
 
 import java.awt.BorderLayout;
@@ -17,18 +22,20 @@ import arduinoLight.channelprovider.debugprovider.Debugprovider;
 @SuppressWarnings("serial")
 public class CustomColorPanel extends JPanel{
 
-	Debugprovider _provider;
+	//Model Reference
+	private Debugprovider _provider;
 	
-	SliderPanelHandler _panelHandler = new SliderPanelHandler();
+	//Controller Reference (Inner Class)
+	private SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
-	JPanel _sliderPanel = new JPanel();
-	JPanel _previewPanel = new JPanel();
-	JPanel _colorPanel = new JPanel();
+	private JPanel _sliderPanel = new JPanel();
+	private JPanel _previewPanel = new JPanel();
+	private JPanel _colorPanel = new JPanel();
 	
-	ColorSlider _redSlider = new ColorSlider("R", 0, 255, 0);
-	ColorSlider _greenSlider = new ColorSlider("G", 0, 255, 0);
-	ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
-	ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
+	private ColorSlider _redSlider = new ColorSlider("R", 0, 255, 0);
+	private ColorSlider _greenSlider = new ColorSlider("G", 0, 255, 0);
+	private ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
+	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
 	
 	public CustomColorPanel(Debugprovider provider){
 		_provider = provider;
@@ -66,6 +73,9 @@ public class CustomColorPanel extends JPanel{
 		this.add(_previewPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Inner Class that handles the ChangeEvents thrown by the Sliders
+	 */
 	class SliderPanelHandler implements ChangeListener{
 
 		@Override

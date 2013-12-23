@@ -1,6 +1,6 @@
 /**
- * This Panel holds the Controlls necessary to activate a Module and to switch between Channels
- * Every Module needs this Panel, it is automatically added by the ModulePanel Wrapper Class
+ * This Panel holds the Controls necessary to activate a Module and to switch between Channels.
+ * Every Module needs this Panel, thus it is automatically added by the ModulePanel Wrapper Class.
  */
 
 package arduinoLight.gui;
@@ -15,10 +15,10 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class StatusPanel extends JPanel{
 
-	JComboBox _channelBox = new JComboBox();
-	JLabel _channelLabel = new JLabel("Channel: ");
-	JButton _removeButton = new JButton("Remove");
-	JButton _addButton = new JButton("Add");
+	private JComboBox _channelBox = new JComboBox();
+	private JLabel _channelLabel = new JLabel("Channel: ");
+	private JButton _removeButton = new JButton("Remove");
+	private JButton _addButton = new JButton("Add");
 	
 	public StatusPanel(){
 		initComponents();

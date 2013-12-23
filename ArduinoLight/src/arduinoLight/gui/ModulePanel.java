@@ -1,6 +1,6 @@
 /**
- * A Wrapper Class to add the Status Panel and a Name-Tag to every Module
- * Every Panel that wants to be added to the TabbedPane needs to be wrapped by this
+ * A Wrapper Class to add the Status Panel and a Name-Tag to every Module.
+ * Every Panel that wants to be added to the TabbedPane needs to be wrapped by this.
  */
 
 package arduinoLight.gui;
@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 public class ModulePanel extends JPanel {
 
 	private String _name;
-	JPanel _basePanel;
-	JPanel _statusPanel = new StatusPanel();
+	private JPanel _basePanel;
+	private JPanel _statusPanel = new StatusPanel();
 	
 	public ModulePanel(JPanel panel, String name){
 		_basePanel = panel;
