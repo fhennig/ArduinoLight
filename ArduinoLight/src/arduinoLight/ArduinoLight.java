@@ -4,15 +4,17 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.swing.JPanel;
+
 import arduinoLight.arduino.amblone.AmbloneConnection;
+import arduinoLight.channelprovider.customColors.CustomColorsProvider;
 import arduinoLight.channelprovider.debugprovider.Debugprovider;
 import arduinoLight.gui.AmbientlightPanel;
 import arduinoLight.gui.CustomColorPanel;
 import arduinoLight.gui.Gui;
-import arduinoLight.gui.ModulePanel;
 import arduinoLight.gui.ScreenSelectionPanel;
 import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.mixer.SimpleMixer;
@@ -21,7 +23,7 @@ public class ArduinoLight
 {
 	public static void main(String[] args)
 	{
-		Debugprovider provider = new Debugprovider();   //Debugprovider as a provider
+		/*Debugprovider provider = new Debugprovider();   //Debugprovider as a provider
 		provider.addChannel();					
 		provider.addChannel();
 		SimpleMixer mixer = new SimpleMixer(provider);
@@ -51,21 +53,21 @@ public class ArduinoLight
 			
 			provider.setActive(true);
 			
-		}
+		}*/
 		
+		CustomColorsProvider provider = new CustomColorsProvider();
+		SimpleMixer mixer = new SimpleMixer(provider);
+		AmbloneConnection connection = new AmbloneConnection(mixer);
 		
 		Gui.initLookAndFeel();
-		SerialConnectionPanel connectionPanel = new SerialConnectionPanel();
+		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
 		ScreenSelectionPanel selectionPanel = new ScreenSelectionPanel();
-		AmbientlightPanel ambiPanel = new AmbientlightPanel(selectionPanel);
-		CustomColorPanel colorPanel = new CustomColorPanel(provider);
+		JPanel ambiPanel = new AmbientlightPanel("AmbientLight");
+		JPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
 		
-		ModulePanel ambiLight = new ModulePanel(ambiPanel, "AmbientLight");
-		ModulePanel customColor = new ModulePanel(colorPanel, "Custom Color");
-		
-		Set<ModulePanel> panels = new HashSet<ModulePanel>();
-		panels.add(ambiLight);
-		panels.add(customColor);
+		Set<JPanel> panels = new LinkedHashSet<JPanel>();
+		panels.add(ambiPanel);
+		panels.add(colorPanel);
 		
 		new Gui(panels, connectionPanel);
 	}

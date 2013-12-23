@@ -7,7 +7,6 @@ package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -21,9 +20,9 @@ public class Gui{
 	private JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel _connectionPanel;
 	
-	private Set<ModulePanel> _modulePanels = new HashSet<ModulePanel>();
+	private Set<JPanel> _modulePanels;
 	
-	public Gui(Set<ModulePanel> panels, JPanel connectionPanel){
+	public Gui(Set<JPanel> panels, JPanel connectionPanel){
 		_modulePanels = panels;
 		_connectionPanel = connectionPanel;
 		initComponents();
@@ -54,10 +53,10 @@ public class Gui{
 	
 	/**
 	 * Adds the Module Panels to the TabbedPane.
-	 * @param panels The Panels that should be added to the TabbedPane
+	 * @param panels The List of panels that should be added to the TabbedPane
 	 */
-	private void buildModuleTabs(Set<ModulePanel> panels){
-		for(ModulePanel panel : panels){
+	private void buildModuleTabs(Set<JPanel> panels){
+		for(JPanel panel : panels){
 			_menuTabs.addTab(panel.getName(), panel);
 		}
 	}
