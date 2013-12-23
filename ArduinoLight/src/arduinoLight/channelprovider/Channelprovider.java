@@ -10,14 +10,15 @@ import arduinoLight.util.*;
  * It implements some basic functionality and defines some abstract methods that need to be implemented.
  * @author Felix
  */
-public abstract class Channelprovider implements ChannellistProvider
+public abstract class Channelprovider implements ChannellistProvider, Activatable
 {
 
 	private boolean _active;
 	protected List<IChannel> _channels = new ArrayList<>();
 	
 	private List<ChannellistListener> _channellistListeners = new ArrayList<>();
-	private List<ChannelproviderListener> _listeners = new ArrayList<>();
+	private List<ActiveStateListener> _activeStateListeners = new ArrayList<>();
+	private List<ChannelcolorsListener> _listeners = new ArrayList<>();
 		
 	public void addChannel()
 	{
@@ -28,6 +29,16 @@ public abstract class Channelprovider implements ChannellistProvider
 	
 	public void removeChannel(IChannel channel)
 	{
+		if (!_channels.contains(channel))
+		{
+			DebugConsole.print("Channelprovider", "removeChannel", "The Channel that should be removed does not exist.");
+			throw new IllegalArgumentException("The Channel that should be removed does not exist.");
+		}
+		
+		//Set Channel to Black, notify the listeners, then remove the channel:
+		channel.setColor(new Color(0, 0, 0, 0));
+		fireChannelcolorsUpdatedEvent();
+		
 		_channels.remove(channel);
 		fireChannelsChangedEvent();
 	}
@@ -43,22 +54,9 @@ public abstract class Channelprovider implements ChannellistProvider
 	}
 	
 	/**
-	 * Tries to activate the Colorprovider.
-	 * Is abstract, so that Subclasses are forced to react.
-	 * @return true, if the change succeeded, else false
-	 */
-	protected abstract boolean activate();
-	
-	/**
-	 * Tries to deactivate the Colorprovider.
-	 * Is abstract, so that Subclasses are forced to react.
-	 * @return true, if the change succeeded, else false
-	 */
-	protected abstract boolean deactivate();
-	
-	/**
 	 * Tries to change the active Value and returns true if setting it succeeded.
 	 */
+	@Override
 	public boolean setActive(boolean value)
 	{
 		boolean successfull = false;
@@ -86,24 +84,29 @@ public abstract class Channelprovider implements ChannellistProvider
 		
 		return true;
 	}
-		
-	private void fireActiveChangedEvent()
-	{
-		for (ChannelproviderListener l : _listeners)
-		{
-			l.activeStateChanged(this, _active);
-		}
-	}
 	
 	/**
-	 * This method should be called after multiple changes to the colors took place, not after every single color change.
-	 * Keep in mind that this event is likely to trigger transmission.
+	 * Tries to activate the Colorprovider.
+	 * Is abstract, so that Subclasses are forced to react.
+	 * @return true, if the change succeeded, else false
 	 */
-	protected void fireChannelcolorsUpdatedEvent()
+	protected abstract boolean activate();
+	
+	/**
+	 * Tries to deactivate the Colorprovider.
+	 * Is abstract, so that Subclasses are forced to react.
+	 * @return true, if the change succeeded, else false
+	 */
+	protected abstract boolean deactivate();
+	
+	/**
+	 * Notifies listeners that the active state of this channelprovider has changed.
+	 */
+	private void fireActiveChangedEvent()
 	{
-		for (ChannelproviderListener l : _listeners)
+		for (ActiveStateListener l : _activeStateListeners)
 		{
-			l.channelcolorsUpdated(this, _channels);
+			l.activeStateChanged(this, _active);
 		}
 	}
 	
@@ -118,15 +121,26 @@ public abstract class Channelprovider implements ChannellistProvider
 		}
 	}
 	
-	public void addChannelproviderListener(ChannelproviderListener listener)
+	/**
+	 * This method should be called after multiple changes to the colors took place, not after every single color change.
+	 * Keep in mind that this event is likely to trigger transmission.
+	 */
+	protected void fireChannelcolorsUpdatedEvent()
+	{
+		for (ChannelcolorsListener l : _listeners)
+		{
+			l.channelcolorsUpdated(this, _channels);
+		}
+	}
+	
+	public void addChannelcolorsListener(ChannelcolorsListener listener)
 	{
 		_listeners.add(listener);
 	}
 	
-	public void removeChannelproviderListener(ChannelproviderListener listener)
+	public void removeChannelcolorsListener(ChannelcolorsListener listener)
 	{
 		_listeners.remove(listener);
-		//TODO add possible feature: set deactive this colorprovider if no listeners are subscribed
 	}
 	
 	@Override
@@ -139,5 +153,17 @@ public abstract class Channelprovider implements ChannellistProvider
 	public void removeChannellistListener(ChannellistListener listener)
 	{
 		_channellistListeners.remove(listener);
+	}
+
+	@Override
+	public void addActiveStateListener(ActiveStateListener listener)
+	{
+		_activeStateListeners.add(listener);
+	}
+
+	@Override
+	public void removeActiveStateListener(ActiveStateListener listener)
+	{
+		_activeStateListeners.remove(listener);
 	}
 }

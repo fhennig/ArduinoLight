@@ -9,13 +9,10 @@ import arduinoLight.util.*;
  * This interface is part of an implementation of the Observerpattern, it makes a Channelprovider observable.
  * @author Felix
  */
-public interface ChannelproviderListener
+public interface ChannelcolorsListener
 {
 	/**
 	 * Gets called if the colors are refreshed. Does not get called if a channel is added or removed.
 	 */
 	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist);
-	
-	
-	public void activeStateChanged(Object source, boolean newActive);
 }

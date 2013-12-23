@@ -46,8 +46,8 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="6" language="java" name="arduinoLight.channelprovider.ChannelproviderListener" project="ArduinoLight" 
-    file="/ArduinoLight/src/arduinoLight/channelprovider/ChannelproviderListener.java" binary="false" 
+  <interface id="6" language="java" name="arduinoLight.channelprovider.ChannelcolorsListener" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/channelprovider/ChannelcolorsListener.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1021" y="828"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arduinoLight.channelprovider.Channelprovider;
-import arduinoLight.channelprovider.ChannelproviderListener;
+import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.util.*;
 
 /**
@@ -13,7 +13,7 @@ import arduinoLight.util.*;
  * It is the most basic implementation of a mixer and mainly a placeholder.
  * @author Felix
  */
-public class SimpleMixer extends Colorprovider implements ChannelproviderListener
+public class SimpleMixer extends Colorprovider implements ChannelcolorsListener
 {
 	private Channelprovider _channelprovider;
 	
@@ -26,15 +26,15 @@ public class SimpleMixer extends Colorprovider implements ChannelproviderListene
 	{
 		if (_channelprovider != null)
 		{
-			_channelprovider.removeChannelproviderListener(this);
+			_channelprovider.removeChannelcolorsListener(this);
 		}
 		_channelprovider = channelprovider;
-		_channelprovider.addChannelproviderListener(this);
+		_channelprovider.addChannelcolorsListener(this);
 	}
 
 	/**
 	 * This method gets called by the Channelprovider that is subscribed.
-	 * The Channels are converted into colors and a ColorsChangeEvent gets fired.
+	 * The Channels are converted into colors and a ColorsChangeEvent gets fired (Event gets 'forwarded').
 	 */
 	@Override
 	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
@@ -50,16 +50,6 @@ public class SimpleMixer extends Colorprovider implements ChannelproviderListene
 			colors.add(channel.getColor());
 		}
 		
-		fireColorsUpdatedEvent(colors); //Event firing takes place here.
-	}
-
-	/**
-	 * Gets called by the Channelprovider.
-	 * Currently does nothing, as there is no good way to react.
-	 */
-	@Override
-	public void activeStateChanged(Object source, boolean newActive)
-	{
-		// TODO maybe react to statechange.
+		fireColorsUpdatedEvent(colors); //Event 'forwarding' takes place here.
 	}
 }

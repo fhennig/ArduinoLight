@@ -17,8 +17,9 @@ public class CustomColorsProviderTest
 	{
 		_provider = new CustomColorsProvider();
 		_listener = new ChannelproviderListenerDummy();
-		_provider.addChannelproviderListener(_listener);
+		_provider.addChannelcolorsListener(_listener);
 		_provider.addChannellistListener(_listener);
+		_provider.addActiveStateListener(_listener);
 	}
 	
 	@Test
@@ -36,6 +37,7 @@ public class CustomColorsProviderTest
 		
 		assertEquals(0, _provider.getChannels().size());
 		assertEquals(2, _listener.getAmountChannelsChangedEvents());
+		assertEquals("ColorsChangedEvent should fire if a channel is removed", 1, _listener.getAmountColorChangedEvents());
 	}
 	
 	@Test
