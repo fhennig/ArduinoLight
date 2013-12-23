@@ -62,11 +62,4 @@ public class SimpleMixer extends Colorprovider implements ChannelproviderListene
 	{
 		// TODO maybe react to statechange.
 	}
-
-	@Override
-	public void channelsChanged(Object source, List<IChannel> newChannellist)
-	{
-		//Do nothing.
-	}
-	
 }

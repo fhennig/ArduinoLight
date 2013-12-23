@@ -6,6 +6,7 @@
 package arduinoLight.gui;
 
 import java.awt.Dimension;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -14,12 +15,21 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
+import arduinoLight.channelprovider.Channelprovider;
+import arduinoLight.channelprovider.debugprovider.Debugprovider;
+
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends JPanel{
 	
+	String _name;
+	
+	Channelprovider _provider = new Debugprovider();
+	
+	JPanel _mainPanel = new JPanel();
 	JPanel _leftPanel = new JPanel();
 	
-	JPanel _screenSelectionPanel;
+	StatusPanel _statusPanel = new StatusPanel(_provider);
+	JPanel _screenSelectionPanel = new ScreenSelectionPanel();
 
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
 	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
@@ -33,8 +43,8 @@ public class AmbientlightPanel extends JPanel{
 	JSlider _fpsSlider = new JSlider();
 	
 	
-	public AmbientlightPanel(ScreenSelectionPanel selectionPanel){
-		_screenSelectionPanel = selectionPanel;
+	public AmbientlightPanel(String name){
+		_name = name;
 		initComponents();
 	}
 	
@@ -46,7 +56,8 @@ public class AmbientlightPanel extends JPanel{
 		_performancePanel.setLayout(new BoxLayout(_performancePanel, BoxLayout.LINE_AXIS));
 
 		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		//
 		// Borders
@@ -72,7 +83,15 @@ public class AmbientlightPanel extends JPanel{
 		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_rgbPanel.add(_brightnessSlider);
 		
-		this.add(_leftPanel);
-		this.add(_rgbPanel);
+		_mainPanel.add(_leftPanel);
+		_mainPanel.add(_rgbPanel);
+		
+		this.add(_mainPanel);
+		this.add(_statusPanel);
+	}
+	
+	@Override
+	public String getName() {
+		return _name;
 	}
 }

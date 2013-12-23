@@ -17,17 +17,21 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import arduinoLight.channelprovider.debugprovider.Debugprovider;
+import arduinoLight.channelprovider.customColors.CustomColorsProvider;
 
 @SuppressWarnings("serial")
 public class CustomColorPanel extends JPanel{
 
+	String _name;
+	
 	//Model Reference
-	private Debugprovider _provider;
+	private CustomColorsProvider _colorProvider;
 	
 	//Controller Reference (Inner Class)
 	private SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
+	private JPanel _mainPanel = new JPanel();
+	private StatusPanel _statusPanel;
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
 	private JPanel _colorPanel = new JPanel();
@@ -37,8 +41,10 @@ public class CustomColorPanel extends JPanel{
 	private ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
 	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
 	
-	public CustomColorPanel(Debugprovider provider){
-		_provider = provider;
+	public CustomColorPanel(CustomColorsProvider colorProvider, String name){
+		_colorProvider = colorProvider;
+		 _statusPanel = new StatusPanel(_colorProvider);
+		_name = name;
 		initComponents();
 	}
 
@@ -46,7 +52,8 @@ public class CustomColorPanel extends JPanel{
 		
 		_previewPanel.setLayout(new BorderLayout());
 		_sliderPanel.setLayout(new BoxLayout(_sliderPanel, BoxLayout.LINE_AXIS));
-		this.setLayout(new BorderLayout());
+		_mainPanel.setLayout(new BorderLayout());
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		_redSlider.addChangeListener(_panelHandler);
 		_greenSlider.addChangeListener(_panelHandler);
@@ -69,8 +76,12 @@ public class CustomColorPanel extends JPanel{
 		_sliderPanel.setBorder(new TitledBorder(null, "RGB-Color", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
 		
-		this.add(_sliderPanel, BorderLayout.EAST);
-		this.add(_previewPanel, BorderLayout.CENTER);
+		_mainPanel.add(_sliderPanel, BorderLayout.EAST);
+		_mainPanel.add(_previewPanel, BorderLayout.CENTER);
+		
+		this.add(_mainPanel);
+		this.add(_statusPanel);
+		
 	}
 
 	/**
@@ -80,15 +91,15 @@ public class CustomColorPanel extends JPanel{
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			if(e.getSource() == _redSlider){
-				//Here goes the method that is called when the red value changes
-			} else if(e.getSource() == _greenSlider){
-				//Here goes the method that is called when the green value changes
-			} else if(e.getSource() == _blueSlider){
-				//Here goes the method that is called when the blue value changes
-			} else if(e.getSource() == _brightnessSlider){
-				//Here goes the method that is called when the brightness value changes
-			}
+			arduinoLight.util.Color color = new arduinoLight.util.Color(_brightnessSlider.getValue(), _redSlider.getValue(), _greenSlider.getValue(), _blueSlider.getValue());
+				_colorProvider.setChannelcolor(_statusPanel.getSelectedChannel(), color);
+
 		}
 	}
+	
+	@Override
+	public String getName() {
+		return _name;
+	}
+	
 }
