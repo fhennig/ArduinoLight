@@ -7,6 +7,9 @@ package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -14,23 +17,20 @@ import javax.swing.JTabbedPane;
 
 public class Gui{
 
-	JFrame _frame = new JFrame("Arduino Light");
-	JPanel _soundToLightPanel = new JPanel();
-	JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
+	private JFrame _frame = new JFrame("Arduino Light");
+	private JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
+	private JPanel _connectionPanel;
 	
-	AmbientlightPanel _ambientlightPanel;
-	JPanel _serialConnectionPanel;
-	JPanel _customColorPanel;
+	private Set<ModulePanel> _modulePanels = new HashSet<ModulePanel>();
 	
-	public Gui(SerialConnectionPanel connectionPanel, AmbientlightPanel ambiPanel, CustomColorPanel customColorPanel){
-		_serialConnectionPanel = connectionPanel;
-		_ambientlightPanel = ambiPanel;
-		_customColorPanel = customColorPanel;
+	public Gui(Set<ModulePanel> panels, JPanel connectionPanel){
+		_modulePanels = panels;
+		_connectionPanel = connectionPanel;
 		initComponents();
 	}
 		
 	/**
-	 * Sets the Look and Feel to the System L&F
+	 * Tries to set the Look and Feel to Nimbus.
 	 */
 	public static void initLookAndFeel(){
 		try {
@@ -42,16 +42,24 @@ public class Gui{
 
 	private void initComponents() {
 		
-		_menuTabs.addTab("AmbiLight", _ambientlightPanel);		//TODO Add third tab for blank Color Settings / Testing
-		_menuTabs.addTab("SoundToLight", _soundToLightPanel);
-		_menuTabs.addTab("Custom Color", _customColorPanel);
+		buildModuleTabs(_modulePanels);
 		
 		_frame.add(_menuTabs, BorderLayout.CENTER);
-		_frame.add(_serialConnectionPanel, BorderLayout.SOUTH);
+		_frame.add(_connectionPanel, BorderLayout.SOUTH);
 		_frame.setMinimumSize(new Dimension(600, 450));
 		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		_frame.setVisible(true);
 		_frame.pack();
+	}
+	
+	/**
+	 * Adds the Module Panels to the TabbedPane.
+	 * @param panels The Panels that should be added to the TabbedPane
+	 */
+	private void buildModuleTabs(Set<ModulePanel> panels){
+		for(ModulePanel panel : panels){
+			_menuTabs.addTab(panel.getName(), panel);
+		}
 	}
 }
 
