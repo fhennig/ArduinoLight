@@ -13,8 +13,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -33,8 +35,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
 	JComboBox<ComboBoxPortItem> _comboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
-	JButton _connectButton = new JButton("Connect");
-	JButton _disconnectButton = new JButton("Disconnect");
+	JToggleButton _connectButton = new JToggleButton("Connect");
 	
 	
 	public SerialConnectionPanel(SerialConnection connection){
@@ -48,8 +49,12 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 			try {
 				ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
 				_connection.connect(selectedItem.getPort(), 256000);
-			} catch (PortInUseException e1) {
-				e1.printStackTrace();
+			} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
+				_connectButton.setSelected(false);
+				JOptionPane.showMessageDialog(null,
+					    "Could not establish a Connection!\nIs the Connection already in use?",
+					    "Connection failed",
+					    JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -82,11 +87,9 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	@Override
 	public void activeChanged(Object source, boolean newActive) { //TODO Change replacement of Buttons to something better
 		if(newActive){
-			SerialConnectionPanel.this.remove(_connectButton);
-			SerialConnectionPanel.this.add(_disconnectButton);
+			_connectButton.setText("Disconnect");
 		} else {
-			SerialConnectionPanel.this.remove(_disconnectButton);
-			SerialConnectionPanel.this.add(_connectButton);
+			_connectButton.setText("Connect");
 		}
 	}
 

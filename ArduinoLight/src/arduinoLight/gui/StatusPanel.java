@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -37,6 +38,7 @@ public class StatusPanel extends JPanel implements ChannellistListener{
 	
 	public StatusPanel(ChannellistProvider provider){
 		_provider = provider;
+		_provider.addChannellistListener(this);
 		initComponents();
 	}
 	
@@ -85,13 +87,24 @@ public class StatusPanel extends JPanel implements ChannellistListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			_provider.removeChannel(getSelectedChannel());
+			try{
+				_provider.removeChannel(getSelectedChannel());
+			} catch(IllegalArgumentException e1){
+				 JOptionPane.showMessageDialog(null,
+						    "There are no more Channels left!",
+						    "Error!",
+						    JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
 	public IChannel getSelectedChannel() {
+		if(_channelBox.getItemCount() <= 0){
+			throw new IllegalArgumentException();
+		}
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
+		
 	}
 
 	@Override

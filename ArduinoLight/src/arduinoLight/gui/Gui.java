@@ -7,6 +7,7 @@ package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -47,6 +48,7 @@ public class Gui{
 		_frame.add(_connectionPanel, BorderLayout.SOUTH);
 		_frame.setMinimumSize(new Dimension(600, 450));
 		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		_frame.setLocationRelativeTo(null);
 		_frame.setVisible(true);
 		_frame.pack();
 	}
