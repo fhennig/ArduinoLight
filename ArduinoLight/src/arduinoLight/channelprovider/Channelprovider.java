@@ -12,6 +12,7 @@ import arduinoLight.util.*;
  */
 public abstract class Channelprovider implements ChannellistProvider
 {
+
 	private boolean _active;
 	protected List<IChannel> _channels = new ArrayList<>();
 	
@@ -126,5 +127,17 @@ public abstract class Channelprovider implements ChannellistProvider
 	{
 		_listeners.remove(listener);
 		//TODO add possible feature: set deactive this colorprovider if no listeners are subscribed
+	}
+	
+	@Override
+	public void addChannellistListener(ChannellistListener listener)
+	{
+		_channellistListeners.add(listener);
+	}
+	
+	@Override
+	public void removeChannellistListener(ChannellistListener listener)
+	{
+		_channellistListeners.remove(listener);
 	}
 }
