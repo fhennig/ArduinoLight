@@ -114,8 +114,9 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="arduinoLight.channelprovider.CalculationThread" project="ArduinoLight" 
-    file="/ArduinoLight/src/arduinoLight/channelprovider/CalculationThread.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="13" language="java" name="arduinoLight.channelprovider.threading.CalculationThread" project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/channelprovider/threading/CalculationThread.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="45" y="1469"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -123,9 +124,10 @@
       <operations public="true" package="false" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="14" language="java" name="arduinoLight.channelprovider.IterationFinishedListener" 
-    project="ArduinoLight" file="/ArduinoLight/src/arduinoLight/channelprovider/IterationFinishedListener.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="14" language="java" name="arduinoLight.channelprovider.threading.IterationFinishedListener" 
+    project="ArduinoLight" 
+    file="/ArduinoLight/src/arduinoLight/channelprovider/threading/IterationFinishedListener.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="42" y="1277"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

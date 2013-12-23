@@ -2,7 +2,7 @@ package arduinoLight.channelprovider.ambientlight;
 
 import java.util.List;
 
-import arduinoLight.channelprovider.CalculationThread;
+import arduinoLight.channelprovider.threading.CalculationThread;
 import arduinoLight.util.IChannel;
 
 public class AmbientlightCalculationThread extends CalculationThread

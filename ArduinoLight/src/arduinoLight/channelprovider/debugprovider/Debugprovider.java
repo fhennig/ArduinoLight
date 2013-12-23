@@ -1,7 +1,7 @@
 package arduinoLight.channelprovider.debugprovider;
 
 import arduinoLight.channelprovider.Channelprovider;
-import arduinoLight.channelprovider.IterationFinishedListener;
+import arduinoLight.channelprovider.threading.IterationFinishedListener;
 
 public class Debugprovider extends Channelprovider implements IterationFinishedListener
 {
