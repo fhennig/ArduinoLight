@@ -10,11 +10,12 @@ import arduinoLight.util.*;
  * It implements some basic functionality and defines some abstract methods that need to be implemented.
  * @author Felix
  */
-public abstract class Channelprovider
+public abstract class Channelprovider implements ChannellistProvider
 {
 	private boolean _active;
 	protected List<IChannel> _channels = new ArrayList<>();
 	
+	private List<ChannellistListener> _channellistListeners = new ArrayList<>();
 	private List<ChannelproviderListener> _listeners = new ArrayList<>();
 		
 	public void addChannel()
@@ -110,9 +111,9 @@ public abstract class Channelprovider
 	 */
 	private void fireChannelsChangedEvent()
 	{
-		for (ChannelproviderListener l : _listeners)
+		for (ChannellistListener l : _channellistListeners)
 		{
-			l.channelsChanged(this, _channels);
+			l.channellistChanged(this, _channels);
 		}
 	}
 	

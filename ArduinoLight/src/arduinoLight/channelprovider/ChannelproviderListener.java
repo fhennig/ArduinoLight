@@ -12,15 +12,10 @@ import arduinoLight.util.*;
 public interface ChannelproviderListener
 {
 	/**
-	 * Gets called if the colors are refreshed. Does not get called if a channel is added or removed. For that, see: 'channelsChanged'.
+	 * Gets called if the colors are refreshed. Does not get called if a channel is added or removed.
 	 */
 	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist);
 	
 	
 	public void activeStateChanged(Object source, boolean newActive);
-	
-	/**
-	 * Gets called if a channel is added or removed. 
-	 */
-	public void channelsChanged(Object source, List<IChannel> newChannellist);
 }
