@@ -30,7 +30,7 @@ public class Gui{
 	}
 		
 	/**
-	 * Sets the Look and Feel to the System L&F
+	 * Tries to set the Look and Feel to Nimbus.
 	 */
 	public static void initLookAndFeel(){
 		try {
@@ -52,6 +52,10 @@ public class Gui{
 		_frame.pack();
 	}
 	
+	/**
+	 * Adds the Module Panels to the TabbedPane.
+	 * @param panels The Panels that should be added to the TabbedPane
+	 */
 	private void buildModuleTabs(Set<ModulePanel> panels){
 		for(ModulePanel panel : panels){
 			_menuTabs.addTab(panel.getName(), panel);
