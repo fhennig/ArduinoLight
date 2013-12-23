@@ -150,6 +150,6 @@ public class Color implements RGBColor
 	
 	@Override
 	public String toString() {
-		return Integer.toHexString(_argb);
+		return "#" + Integer.toHexString(_argb);
 	}
 }
