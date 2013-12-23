@@ -11,6 +11,10 @@ import arduinoLight.util.DebugConsole;
 
 public class AmbientlightLogic// extends Colorprovider
 {
+	/**
+	 * Used to get a Screenshot of the Main Screen of the user.
+	 * @return
+	 */
 	private BufferedImage getScreenshot()
 	{
 		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());

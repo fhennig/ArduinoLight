@@ -22,7 +22,6 @@ import arduinoLight.util.SpeedCounter;
  */
 public abstract class SerialConnection implements SpeedChangeListener, ColorsUpdatedListener
 {
-	
 	protected Colorprovider _colorprovider;
 	
 	private static final int TIME_OUT = 2000; //TODO Understand this ...
@@ -48,7 +47,7 @@ public abstract class SerialConnection implements SpeedChangeListener, ColorsUpd
 	
 	
 	/**
-	 * Gives an enum of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
+	 * Gives an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
 	 */
 	public Enumeration<CommPortIdentifier> getAvailablePorts()
 	{

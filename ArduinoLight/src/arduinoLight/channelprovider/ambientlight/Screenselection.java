@@ -2,16 +2,16 @@ package arduinoLight.channelprovider.ambientlight;
 
 /**
  * Represents a relative Screenpart (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
- * 
  * @author Felix
- *
  */
 public class Screenselection
 {
 	private boolean[][] _matrix;
 	
 	
-	
+	/**
+	 * Creates a new Screenselection with the specified Amount of Rows and Columns.
+	 */
 	public Screenselection(int columns, int rows)
 	{
 		if (columns < 1 || rows < 1)
@@ -22,8 +22,11 @@ public class Screenselection
 		_matrix = new boolean[columns][rows];
 	}
 
-	
-	
+	/**
+	 * Sets a cell to the given 'flag'-value.
+	 * @param x the Column of the cell
+	 * @param y the Row of the cell
+	 */
 	public void setCell(int x, int y, boolean flag)
 	{
 		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
@@ -34,6 +37,11 @@ public class Screenselection
 		_matrix[x][y] = flag;
 	}
 	
+	/**
+	 * Returns the value of a cell.
+	 * @param x the Column of the cell
+	 * @param y the Row of the cell
+	 */
 	public boolean getCell(int x, int y)
 	{
 		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
@@ -44,6 +52,13 @@ public class Screenselection
 		return _matrix[x][y];
 	}
 
+	/**
+	 * Creates a new matrix that contains the old matrix as good as possible.
+	 * If the new one is bigger, the old one is copied into the new one.
+	 * If the new one is smaller, the new one is a subsection of the old one.
+	 * @param newColCount new Amount of Columns
+	 * @param newRowCount new Amount of Rows
+	 */
 	public void changeMatrixsize(int newColCount, int newRowCount)
 	{
 		if (newColCount < 1 || newRowCount < 1)
@@ -65,17 +80,25 @@ public class Screenselection
 		_matrix = newMatrix;
 	}
 
+	/**
+	 * Sets every cell of the matrix to false.
+	 */
 	public void clearMatrix()
 	{
 		_matrix = new boolean[_matrix.length][_matrix[0].length];
 	}
 	
+	/**
+	 * Returns the Amount of Columns.
+	 */
 	public int getColumns()
 	{
 		return _matrix[0].length;
 	}
 	
-	
+	/**
+	 * Returns the Amount of Rows.
+	 */
 	public int getRows()
 	{
 		return _matrix.length;
