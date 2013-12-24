@@ -25,7 +25,7 @@ import arduinoLight.channelprovider.ChannellistProvider;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class StatusPanel extends JPanel implements ChannellistListener{
+public class ChannelPanel extends JPanel implements ChannellistListener{
 
 	ChannellistProvider _provider;
 	
@@ -36,7 +36,7 @@ public class StatusPanel extends JPanel implements ChannellistListener{
 	private JButton _removeButton = new JButton("Remove");
 	private JButton _addButton = new JButton("Add");
 	
-	public StatusPanel(ChannellistProvider provider){
+	public ChannelPanel(ChannellistProvider provider){
 		_provider = provider;
 		_provider.addChannellistListener(this);
 		initComponents();

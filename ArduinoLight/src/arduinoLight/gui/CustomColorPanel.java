@@ -31,7 +31,7 @@ public class CustomColorPanel extends JPanel{
 	private SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
 	private JPanel _mainPanel = new JPanel();
-	private StatusPanel _statusPanel;
+	private ChannelPanel _statusPanel;
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
 	private JPanel _colorPanel = new JPanel();
@@ -43,7 +43,7 @@ public class CustomColorPanel extends JPanel{
 	
 	public CustomColorPanel(CustomColorsProvider colorProvider, String name){
 		_colorProvider = colorProvider;
-		 _statusPanel = new StatusPanel(_colorProvider);
+		 _statusPanel = new ChannelPanel(_colorProvider);
 		_name = name;
 		initComponents();
 	}
