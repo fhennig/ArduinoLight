@@ -20,10 +20,8 @@ import javax.swing.event.ChangeListener;
 import arduinoLight.channelprovider.customColors.CustomColorsProvider;
 
 @SuppressWarnings("serial")
-public class CustomColorPanel extends JPanel{
+public class CustomColorPanel extends TabPanel{
 
-	String _name;
-	
 	//Model Reference
 	private CustomColorsProvider _colorProvider;
 	
@@ -31,7 +29,7 @@ public class CustomColorPanel extends JPanel{
 	private SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
 	private JPanel _mainPanel = new JPanel();
-	private ChannelPanel _statusPanel;
+	private StatusPanel _statusPanel;
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
 	private JPanel _colorPanel = new JPanel();
@@ -41,10 +39,10 @@ public class CustomColorPanel extends JPanel{
 	private ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
 	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
 	
-	public CustomColorPanel(CustomColorsProvider colorProvider, String name){
+	public CustomColorPanel(CustomColorsProvider colorProvider){
 		_colorProvider = colorProvider;
-		 _statusPanel = new ChannelPanel(_colorProvider);
-		_name = name;
+		_title = "Custom Color";
+		 _statusPanel = new StatusPanel(_colorProvider);
 		initComponents();
 	}
 
@@ -96,10 +94,4 @@ public class CustomColorPanel extends JPanel{
 
 		}
 	}
-	
-	@Override
-	public String getName() {
-		return _name;
-	}
-	
 }

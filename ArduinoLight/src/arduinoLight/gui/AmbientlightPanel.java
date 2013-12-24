@@ -19,16 +19,14 @@ import arduinoLight.channelprovider.Channelprovider;
 import arduinoLight.channelprovider.debugprovider.Debugprovider;
 
 @SuppressWarnings("serial")
-public class AmbientlightPanel extends JPanel{
-	
-	String _name;
+public class AmbientlightPanel extends TabPanel{
 	
 	Channelprovider _provider = new Debugprovider();
 	
 	JPanel _mainPanel = new JPanel();
 	JPanel _leftPanel = new JPanel();
 	
-	ChannelPanel _statusPanel = new ChannelPanel(_provider);
+	StatusPanel _statusPanel = new StatusPanel(_provider);
 	JPanel _screenSelectionPanel = new ScreenSelectionPanel();
 
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
@@ -43,9 +41,9 @@ public class AmbientlightPanel extends JPanel{
 	JSlider _fpsSlider = new JSlider();
 	
 	
-	public AmbientlightPanel(String name){
-		_name = name;
+	public AmbientlightPanel(){
 		initComponents();
+		_title = "AmbientLight";
 	}
 	
 	private void initComponents(){
@@ -88,10 +86,5 @@ public class AmbientlightPanel extends JPanel{
 		
 		this.add(_mainPanel);
 		this.add(_statusPanel);
-	}
-	
-	@Override
-	public String getName() {
-		return _name;
 	}
 }

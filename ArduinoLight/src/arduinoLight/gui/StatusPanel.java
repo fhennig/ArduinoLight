@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
 import arduinoLight.channelprovider.ChannellistListener;
@@ -25,18 +26,18 @@ import arduinoLight.channelprovider.ChannellistProvider;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class ChannelPanel extends JPanel implements ChannellistListener{
+public class StatusPanel extends JPanel implements ChannellistListener{
 
 	ChannellistProvider _provider;
 	
-	JCheckBox _activeBox = new JCheckBox("Active");
+	private JToggleButton _activeButton = new JToggleButton("Activate");
 	private DefaultComboBoxModel<ComboBoxChannelItem> _channelBoxModel = new DefaultComboBoxModel<ComboBoxChannelItem>();
 	private JComboBox<ComboBoxChannelItem> _channelBox = new JComboBox<ComboBoxChannelItem>(_channelBoxModel);
 	private JLabel _channelLabel = new JLabel("Channel: ");
 	private JButton _removeButton = new JButton("Remove");
 	private JButton _addButton = new JButton("Add");
 	
-	public ChannelPanel(ChannellistProvider provider){
+	public StatusPanel(ChannellistProvider provider){
 		_provider = provider;
 		_provider.addChannellistListener(this);
 		initComponents();
@@ -45,11 +46,12 @@ public class ChannelPanel extends JPanel implements ChannellistListener{
 	private void initComponents() {
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		
+
+		_removeButton.setEnabled(false);
 		_addButton.addActionListener(new AddButtonHandler());
 		_removeButton.addActionListener(new RemoveButtonHandler());
 		
-		this.add(_activeBox);
+		this.add(_activeButton);
 		this.add(Box.createHorizontalStrut(15));
 		this.add(_channelLabel);
 		this.add(_channelBox);
@@ -80,6 +82,7 @@ public class ChannelPanel extends JPanel implements ChannellistListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			_provider.addChannel();
+			_removeButton.setEnabled(true);
 		}
 	}
 	
@@ -87,27 +90,19 @@ public class ChannelPanel extends JPanel implements ChannellistListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try{
-				_provider.removeChannel(getSelectedChannel());
-			} catch(IllegalArgumentException e1){
-				 JOptionPane.showMessageDialog(null,
-						    "There are no more Channels left!",
-						    "Error!",
-						    JOptionPane.ERROR_MESSAGE);
+			_provider.removeChannel(getSelectedChannel());
+			if(_channelBox.getItemCount() < 1){
+				_removeButton.setEnabled(false);
 			}
 		}
 	}
 	
 	public IChannel getSelectedChannel() {
-		if(_channelBox.getItemCount() <= 0){
-			throw new IllegalArgumentException();
-		}
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		
 	}
 
-	@Override
 	public void channellistChanged(Object source, List<IChannel> newChannellist) {
 		_channelBoxModel.removeAllElements();
 		for(IChannel channel : newChannellist){

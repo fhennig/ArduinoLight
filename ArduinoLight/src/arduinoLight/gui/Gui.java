@@ -20,10 +20,10 @@ public class Gui{
 	private JFrame _frame = new JFrame("Arduino Light");
 	private JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel _connectionPanel;
+	private Set<TabPanel> _modulePanels;
 	
-	private Set<JPanel> _modulePanels;
 	
-	public Gui(Set<JPanel> panels, JPanel connectionPanel){
+	public Gui(Set<TabPanel> panels, JPanel connectionPanel){
 		_modulePanels = panels;
 		_connectionPanel = connectionPanel;
 		initComponents();
@@ -57,9 +57,9 @@ public class Gui{
 	 * Adds the Module Panels to the TabbedPane.
 	 * @param panels The List of panels that should be added to the TabbedPane
 	 */
-	private void buildModuleTabs(Set<JPanel> panels){
-		for(JPanel panel : panels){
-			_menuTabs.addTab(panel.getName(), panel);
+	private void buildModuleTabs(Set<TabPanel> panels){
+		for(TabPanel panel : panels){
+			_menuTabs.addTab(panel.getTitle(), panel);
 		}
 	}
 }

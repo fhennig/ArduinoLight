@@ -17,6 +17,7 @@ import arduinoLight.gui.CustomColorPanel;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.ScreenSelectionPanel;
 import arduinoLight.gui.SerialConnectionPanel;
+import arduinoLight.gui.TabPanel;
 import arduinoLight.mixer.SimpleMixer;
 
 public class ArduinoLight
@@ -62,10 +63,10 @@ public class ArduinoLight
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
 		ScreenSelectionPanel selectionPanel = new ScreenSelectionPanel();
-		JPanel ambiPanel = new AmbientlightPanel("AmbientLight");
-		JPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
+		TabPanel ambiPanel = new AmbientlightPanel();
+		TabPanel colorPanel = new CustomColorPanel(provider);
 		
-		Set<JPanel> panels = new LinkedHashSet<JPanel>();
+		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 		panels.add(ambiPanel);
 		panels.add(colorPanel);
 		
