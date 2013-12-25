@@ -48,12 +48,15 @@ public class ArduinoLight
 		}*/
 		
 		CustomColorsProvider provider = new CustomColorsProvider();
+		
 		AmbloneConnection connection = new AmbloneConnection(provider);
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
 		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
 		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
+		
+		provider.addChannelcolorsListener((arduinoLight.channelprovider.ChannelcolorsListener)colorPanel);
 		
 		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 		panels.add(ambiPanel);
