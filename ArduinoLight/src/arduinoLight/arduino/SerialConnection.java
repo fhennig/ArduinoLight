@@ -46,6 +46,7 @@ public abstract class SerialConnection implements SpeedListener, ChannelcolorsLi
 	
 	public SerialConnection(Channelgenerator channelprovider)
 	{
+		_ppsCounter.addSpeedChangeListener(this);
 		setColorprovider(channelprovider);
 	}
 	

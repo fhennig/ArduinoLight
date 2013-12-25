@@ -81,15 +81,15 @@ public class AmblonePackage
 	{
 		for (int i = 0; i < colorCount; i++)
 		{
-			if (_colors.get(i).getCalculatedR() == AmbloneFlags.ENDFLAG)
+			if (AmbloneFlags.isReservedValue(_colors.get(i).getCalculatedR()))
 				setEscapeflag();
 			_package.add(_colors.get(i).getCalculatedR());
 			
-			if (_colors.get(i).getCalculatedG() == AmbloneFlags.ENDFLAG)
+			if (AmbloneFlags.isReservedValue(_colors.get(i).getCalculatedG()))
 				setEscapeflag();
 			_package.add(_colors.get(i).getCalculatedG());
 		
-			if (_colors.get(i).getCalculatedB() == AmbloneFlags.ENDFLAG)
+			if (AmbloneFlags.isReservedValue(_colors.get(i).getCalculatedB()))
 				setEscapeflag();
 			_package.add(_colors.get(i).getCalculatedB());
 		}
@@ -114,13 +114,24 @@ public class AmblonePackage
 	 * The private class is used to encapsulate the values.
 	 * @author Felix
 	 */
-	private class AmbloneFlags
+	private static class AmbloneFlags
 	{
 		public static final byte STARTFLAG1 = (byte) 241;
 		public static final byte STARTFLAG2 = (byte) 242;
 		public static final byte STARTFLAG3 = (byte) 243;
 		public static final byte STARTFLAG4 = (byte) 244;
 		public static final byte ENDFLAG = 51;
-		public static final byte ESCFLAG = (byte) 153;
+		public static final byte ESCFLAG = (byte) 0x99;
+		public static final byte[] RESERVED_FLAGS = {STARTFLAG1, STARTFLAG2, STARTFLAG3, STARTFLAG4, ENDFLAG};
+		
+		public static final boolean isReservedValue(byte b)
+		{
+			for(int i = 0; i < RESERVED_FLAGS.length; i++)
+			{
+				if (b == RESERVED_FLAGS[i])
+					return true;
+			}
+			return false;
+		}
 	}
 }

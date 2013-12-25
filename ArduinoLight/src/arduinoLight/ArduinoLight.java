@@ -53,6 +53,7 @@ public class ArduinoLight
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
+		connection.addSpeedListener(connectionPanel);
 		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
 		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
 		
