@@ -35,6 +35,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	
 	public SerialConnectionPanel(SerialConnection connection){
 		_connection = connection;
+		_connection.addSerialConnectionListener(this);
 		initComponents();
 	}
 	
