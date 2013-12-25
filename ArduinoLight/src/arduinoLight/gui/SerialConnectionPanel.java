@@ -12,6 +12,7 @@ import java.util.Enumeration;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,13 +30,13 @@ import arduinoLight.interfaces.propertyListeners.SpeedListener;
 public class SerialConnectionPanel extends JPanel implements ActiveListener, SpeedListener, ConnectionPanel{
 	
 	SerialConnection _connection;
-	PortComboBoxHandler _portBoxHandler = new PortComboBoxHandler();
 	
 	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0");
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
 	JComboBox<ComboBoxPortItem> _portComboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
 	JToggleButton _connectButton = new JToggleButton("Connect");
+	JButton _refreshButton = new JButton("R");
 	
 	
 	public SerialConnectionPanel(SerialConnection connection){
@@ -64,22 +65,23 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		}
 	}
 	
-	class PortComboBoxHandler implements ActionListener{
 
-		public void refreshComboBox(){
-			_comboBoxModel.removeAllElements();
-			Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
-			
-			while(ports.hasMoreElements()){
-				_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
-			}
-			
-			if(_comboBoxModel.getSize() == 0){
-				_connectButton.setEnabled(false);
-			} else {
-				_connectButton.setEnabled(true);
-			}
+	private void refreshComboBox(){
+		_comboBoxModel.removeAllElements();
+		Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
+		
+		while(ports.hasMoreElements()){
+			_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
 		}
+		
+		if(_comboBoxModel.getSize() == 0){
+			_connectButton.setEnabled(false);
+		} else {
+			_connectButton.setEnabled(true);
+		}
+	}
+	
+	class RefreshButtonHandler implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -90,10 +92,10 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 	
 	private void initComponents() {
 		
-		_portBoxHandler.refreshComboBox();
+		refreshComboBox();
 		
 		_connectButton.addActionListener(new connectButtonHandler());
-		_portComboBox.addActionListener(_portBoxHandler);
+		_refreshButton.addActionListener(new RefreshButtonHandler());
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
@@ -101,6 +103,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		this.add(Box.createHorizontalGlue());
 		this.add(_lblNewLabel);
 		this.add(_portComboBox);
+		this.add(_refreshButton);
 		this.add(Box.createHorizontalGlue());
 		this.add(_connectButton);
 		
