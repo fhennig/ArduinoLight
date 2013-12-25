@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.ChannelcompositionListener;
+
+
 import arduinoLight.channelprovider.ChannellistProvider;
-import arduinoLight.interfaces.Activatable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class StatusPanel extends JPanel implements ChannelcompositionListener, ActiveListener{
+public class StatusPanel extends JPanel implements ActiveListener{
 
 	ChannellistProvider _provider;
 	
@@ -39,7 +39,6 @@ public class StatusPanel extends JPanel implements ChannelcompositionListener, A
 	
 	public StatusPanel(ChannellistProvider provider){
 		_provider = provider;
-		_provider.addChannellistListener(this);
 		initComponents();
 	}
 	
@@ -58,6 +57,15 @@ public class StatusPanel extends JPanel implements ChannelcompositionListener, A
 		this.add(_channelBox);
 		this.add(_addButton);
 		this.add(_removeButton);
+	}
+	
+	private void refreshComboBoxModel(){
+		_channelBoxModel.removeAllElements();
+		List<IChannel> newChannellist = _provider.getChannels();
+		for(IChannel channel : newChannellist){
+			ComboBoxChannelItem channelItem = new ComboBoxChannelItem(channel);
+			_channelBoxModel.addElement(channelItem);
+		}
 	}
 	
 	class ComboBoxChannelItem{
@@ -83,6 +91,7 @@ public class StatusPanel extends JPanel implements ChannelcompositionListener, A
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			_provider.addChannel();
+			refreshComboBoxModel();
 			_removeButton.setEnabled(true);
 		}
 	}
@@ -92,6 +101,7 @@ public class StatusPanel extends JPanel implements ChannelcompositionListener, A
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			_provider.removeChannel(getSelectedChannel());
+			refreshComboBoxModel();
 			if(_channelBox.getItemCount() < 1){
 				_removeButton.setEnabled(false);
 			}
@@ -113,15 +123,6 @@ public class StatusPanel extends JPanel implements ChannelcompositionListener, A
 	public IChannel getSelectedChannel() {
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
-		
-	}
-
-	public void channellistChanged(Object source, List<IChannel> newChannellist) {
-		_channelBoxModel.removeAllElements();
-		for(IChannel channel : newChannellist){
-			ComboBoxChannelItem channelItem = new ComboBoxChannelItem(channel);
-			_channelBoxModel.addElement(channelItem);
-		}
 		
 	}
 

@@ -63,6 +63,11 @@ public class ColorcorrectionDecorator extends ProviderDecorator
 		for (IChannel channel : newChannels)
 		{
 			newA = (int) Math.round(channel.getColor().getA() * _a);
+			newR = (int) Math.round(channel.getColor().getR() * _r);
+			newG = (int) Math.round(channel.getColor().getG() * _g);
+			newB = (int) Math.round(channel.getColor().getB() * _b);
+			
+			
 		}
 		
 	}
