@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
+import arduinoLight.channelprovider.Activatable;
 import arduinoLight.channelprovider.ActiveStateListener;
 import arduinoLight.channelprovider.ChannellistListener;
 import arduinoLight.channelprovider.ChannellistProvider;
@@ -102,9 +103,9 @@ public class StatusPanel extends JPanel implements ChannellistListener, ActiveSt
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(_activeButton.isSelected()){
-				_activeButton.setText("Deactivate");
+				
 			} else {
-				_activeButton.setText("Activate");
+				
 			}
 		}
 	}
