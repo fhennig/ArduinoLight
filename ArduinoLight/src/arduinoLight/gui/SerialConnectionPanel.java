@@ -64,7 +64,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		}
 	}
 	
-	class PortComboBoxHandler implements ItemListener{
+	class PortComboBoxHandler implements ActionListener{
 
 		public void refreshComboBox(){
 			_comboBoxModel.removeAllElements();
@@ -82,7 +82,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		}
 
 		@Override
-		public void itemStateChanged(ItemEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			refreshComboBox();
 		}
 		
@@ -93,7 +93,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		_portBoxHandler.refreshComboBox();
 		
 		_connectButton.addActionListener(new connectButtonHandler());
-		_portComboBox.addItemListener(_portBoxHandler);
+		_portComboBox.addActionListener(_portBoxHandler);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
