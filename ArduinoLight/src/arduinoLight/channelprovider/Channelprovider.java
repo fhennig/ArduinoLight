@@ -11,6 +11,11 @@ public abstract class Channelprovider
 	protected final List<IChannel> _channels = new ArrayList<IChannel>();
 	private final List<ChannelsListener> _channelsListeners = new ArrayList<ChannelsListener>();
 	
+	public List<IChannel> getChannels()
+	{
+		return new ArrayList<IChannel>(_channels);
+	}
+	
 	//---------- Event-Firing ----------------------------------
 	/**
 	 * This method should be called after multiple changes to the colors took place, not after every single color change.
@@ -20,7 +25,7 @@ public abstract class Channelprovider
 	{
 		for (ChannelsListener l : _channelsListeners)
 		{
-			l.channelsChanged(this, _channels);
+			l.channelsChanged(this, new ArrayList<IChannel>(_channels));
 		}
 	}
 	

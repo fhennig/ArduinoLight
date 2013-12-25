@@ -6,5 +6,5 @@ public interface IChannel
 	public Color getColor();
 	public void setColor(Color color);
 	
-	public String getName();
+	public int getId();
 }

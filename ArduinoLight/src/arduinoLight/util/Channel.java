@@ -6,31 +6,21 @@ package arduinoLight.util;
  */
 public class Channel implements IChannel
 {
-	private static int _instances; //used to generate unique names.
+	private static int _instances = 0; //used to generate unique names.
+	private final int _id;
 	private Color _color;
-	private final String _name;
 	
 	public Channel()
 	{
-		this("channel" + _instances);
+		_id = _instances;
 		_instances++;
+		
 	}
 	
 	public Channel(Color color)
 	{
-		this("channel" + _instances, color);
-		_instances++;
-	}
-	
-	public Channel(String name)
-	{
-		this(name, new Color());
-	}
-	
-	public Channel(String name, Color color)
-	{
-		_name = name;
-		_color = color;
+		this();
+		setColor(color);
 	}
 	
 	@Override
@@ -45,16 +35,13 @@ public class Channel implements IChannel
 	}
 
 	@Override
-	public String getName() {
-		return _name;
+	public int getId() {
+		return _id;
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 37;
-		int result = 1;
-		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-		return result;
+		return _id;
 	}
 
 	@Override
@@ -71,11 +58,7 @@ public class Channel implements IChannel
 		Channel other = (Channel) obj;
 
 
-		if (_name == null) {
-			if (other._name != null) {
-				return false;
-			}
-		} else if (!_name.equals(other._name)) {
+		if (this._id != other._id) {
 			return false;
 		}
 		return true;
