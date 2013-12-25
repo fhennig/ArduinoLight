@@ -3,7 +3,7 @@
  * It is a simple Color Picker for Configuration or Testing Purposes
  */
 
-package arduinoLight.gui;
+package arduinoLight.gui.customColor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,12 +18,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import arduinoLight.channelprovider.customColors.CustomColorsProvider;
+import arduinoLight.gui.ColorSlider;
+import arduinoLight.gui.StatusPanel;
+import arduinoLight.gui.TabPanel;
 
 @SuppressWarnings("serial")
-public class CustomColorPanel extends JPanel{
+public class CustomColorPanel extends TabPanel{
 
-	String _name;
-	
 	//Model Reference
 	private CustomColorsProvider _colorProvider;
 	
@@ -41,10 +42,10 @@ public class CustomColorPanel extends JPanel{
 	private ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
 	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
 	
-	public CustomColorPanel(CustomColorsProvider colorProvider, String name){
+	public CustomColorPanel(CustomColorsProvider colorProvider, String title){
 		_colorProvider = colorProvider;
+		_title = title;
 		 _statusPanel = new StatusPanel(_colorProvider);
-		_name = name;
 		initComponents();
 	}
 
@@ -96,10 +97,4 @@ public class CustomColorPanel extends JPanel{
 
 		}
 	}
-	
-	@Override
-	public String getName() {
-		return _name;
-	}
-	
 }

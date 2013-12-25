@@ -3,25 +3,25 @@
  * @author Tom Hohendorf
  */
 
-package arduinoLight.gui;
+package arduinoLight.gui.ambientLight;
 
 import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
 import arduinoLight.channelprovider.Channelprovider;
 import arduinoLight.channelprovider.debugprovider.Debugprovider;
+import arduinoLight.gui.ColorSlider;
+import arduinoLight.gui.StatusPanel;
+import arduinoLight.gui.TabPanel;
 
 @SuppressWarnings("serial")
-public class AmbientlightPanel extends JPanel{
-	
-	String _name;
+public class AmbientlightPanel extends TabPanel{
 	
 	Channelprovider _provider = new Debugprovider();
 	
@@ -43,9 +43,9 @@ public class AmbientlightPanel extends JPanel{
 	JSlider _fpsSlider = new JSlider();
 	
 	
-	public AmbientlightPanel(String name){
-		_name = name;
+	public AmbientlightPanel(String title){
 		initComponents();
+		_title = title;
 	}
 	
 	private void initComponents(){
@@ -88,10 +88,5 @@ public class AmbientlightPanel extends JPanel{
 		
 		this.add(_mainPanel);
 		this.add(_statusPanel);
-	}
-	
-	@Override
-	public String getName() {
-		return _name;
 	}
 }

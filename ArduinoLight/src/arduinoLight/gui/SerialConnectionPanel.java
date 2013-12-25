@@ -10,22 +10,19 @@ import java.util.Enumeration;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.SerialConnectionListener;
 import arduinoLight.mixer.Colorprovider;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements SerialConnectionListener{
+public class SerialConnectionPanel extends JPanel implements SerialConnectionListener, ConnectionPanel{
 	
 	SerialConnection _connection;
 	
@@ -33,8 +30,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
 	JComboBox<ComboBoxPortItem> _comboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
-	JButton _connectButton = new JButton("Connect");
-	JButton _disconnectButton = new JButton("Disconnect");
+	JToggleButton _connectButton = new JToggleButton("Connect");
 	
 	
 	public SerialConnectionPanel(SerialConnection connection){
@@ -45,11 +41,19 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	class connectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
-				ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
-				_connection.connect(selectedItem.getPort(), 256000);
-			} catch (PortInUseException e1) {
-				e1.printStackTrace();
+			if(_connectButton.isSelected()){
+				try {
+					ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
+					_connection.connect(selectedItem.getPort(), 256000);
+				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
+					_connectButton.setSelected(false);
+					JOptionPane.showMessageDialog(null,
+							"Could not establish a Connection!\nIs the Connection already in use?",
+							"Connection failed!",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				_connection.disconnect();
 			}
 		}
 	}
@@ -71,6 +75,25 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 		
 	}
 	
+	class ComboBoxPortItem {
+
+		CommPortIdentifier _port;
+		
+		public ComboBoxPortItem(CommPortIdentifier port){
+			_port = port;
+		}
+		
+		@Override
+		public String toString() {
+			return _port.getName();
+		}
+		
+		public CommPortIdentifier getPort(){
+			return _port;
+		}
+		
+	}
+	
 	private void initComboBox(){
 		Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
 		
@@ -82,11 +105,9 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	@Override
 	public void activeChanged(Object source, boolean newActive) { //TODO Change replacement of Buttons to something better
 		if(newActive){
-			SerialConnectionPanel.this.remove(_connectButton);
-			SerialConnectionPanel.this.add(_disconnectButton);
+			_connectButton.setText("Disconnect");
 		} else {
-			SerialConnectionPanel.this.remove(_disconnectButton);
-			SerialConnectionPanel.this.add(_connectButton);
+			_connectButton.setText("Connect");
 		}
 	}
 
@@ -100,5 +121,9 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 			Colorprovider newColorprovider) {
 		// TODO DO SOMETHING
 		
+	}
+	
+	public void disconnect(){
+		_connection.disconnect();
 	}
 }
