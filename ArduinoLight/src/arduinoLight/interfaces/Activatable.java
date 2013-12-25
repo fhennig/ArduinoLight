@@ -1,4 +1,7 @@
-package arduinoLight.channelprovider;
+package arduinoLight.interfaces;
+
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
+
 
 /**
  * Gets implemented by the Channelprovider.
@@ -11,6 +14,6 @@ package arduinoLight.channelprovider;
 public interface Activatable
 {
 	public boolean setActive(boolean newActive);
-	public void addActiveStateListener(ActiveStateListener listener);
-	public void removeActiveStateListener(ActiveStateListener listener);
+	public void addActiveStateListener(ActiveListener listener);
+	public void removeActiveStateListener(ActiveListener listener);
 }

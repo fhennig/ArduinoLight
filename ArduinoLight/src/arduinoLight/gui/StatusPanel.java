@@ -19,13 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.ActiveStateListener;
 import arduinoLight.channelprovider.ChannellistListener;
 import arduinoLight.channelprovider.ChannellistProvider;
+import arduinoLight.interfaces.Activatable;
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class StatusPanel extends JPanel implements ChannellistListener, ActiveStateListener{
+public class StatusPanel extends JPanel implements ChannellistListener, ActiveListener{
 
 	ChannellistProvider _provider;
 	
@@ -125,7 +126,7 @@ public class StatusPanel extends JPanel implements ChannellistListener, ActiveSt
 	}
 
 	@Override
-	public void activeStateChanged(Object source, boolean newActive)
+	public void activeChanged(Object source, boolean newActive)
 	{
 		if(newActive){
 			_activeButton.setText("Deactivate");

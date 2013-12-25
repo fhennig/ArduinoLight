@@ -3,6 +3,8 @@ package arduinoLight.channelprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.interfaces.Activatable;
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.*;
 
 /**
@@ -17,7 +19,7 @@ public abstract class Channelprovider implements ChannellistProvider, Activatabl
 	protected List<IChannel> _channels = new ArrayList<>();
 	
 	private List<ChannellistListener> _channellistListeners = new ArrayList<>();
-	private List<ActiveStateListener> _activeStateListeners = new ArrayList<>();
+	private List<ActiveListener> _activeStateListeners = new ArrayList<>();
 	private List<ChannelcolorsListener> _listeners = new ArrayList<>();
 		
 	public void addChannel()
@@ -104,9 +106,9 @@ public abstract class Channelprovider implements ChannellistProvider, Activatabl
 	 */
 	private void fireActiveChangedEvent()
 	{
-		for (ActiveStateListener l : _activeStateListeners)
+		for (ActiveListener l : _activeStateListeners)
 		{
-			l.activeStateChanged(this, _active);
+			l.activeChanged(this, _active);
 		}
 	}
 	
@@ -156,13 +158,13 @@ public abstract class Channelprovider implements ChannellistProvider, Activatabl
 	}
 
 	@Override
-	public void addActiveStateListener(ActiveStateListener listener)
+	public void addActiveStateListener(ActiveListener listener)
 	{
 		_activeStateListeners.add(listener);
 	}
 
 	@Override
-	public void removeActiveStateListener(ActiveStateListener listener)
+	public void removeActiveStateListener(ActiveListener listener)
 	{
 		_activeStateListeners.remove(listener);
 	}
