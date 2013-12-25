@@ -196,6 +196,8 @@ public abstract class SerialConnection implements SpeedListener, ChannelcolorsLi
 	@Override
 	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
 	{
+		if (!_connectionActive)
+			return; //if the connection is not active, take no action.
 		if (source != _channelprovider)
 			return; //if the event was called by someone else than our subscribed channelprovider --> do nothing.
 		if (refreshedChannellist == null || refreshedChannellist.size() == 0)
