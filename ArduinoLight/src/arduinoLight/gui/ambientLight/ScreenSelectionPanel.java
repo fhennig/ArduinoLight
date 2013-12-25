@@ -1,4 +1,4 @@
-package arduinoLight.gui;
+package arduinoLight.gui.ambientLight;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

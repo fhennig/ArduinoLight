@@ -3,7 +3,7 @@
  * @author Tom Hohendorf
  */
 
-package arduinoLight.gui;
+package arduinoLight.gui.ambientLight;
 
 import java.awt.Dimension;
 
@@ -17,6 +17,9 @@ import javax.swing.border.TitledBorder;
 
 import arduinoLight.channelprovider.Channelprovider;
 import arduinoLight.channelprovider.debugprovider.Debugprovider;
+import arduinoLight.gui.ColorSlider;
+import arduinoLight.gui.StatusPanel;
+import arduinoLight.gui.TabPanel;
 
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends TabPanel{
