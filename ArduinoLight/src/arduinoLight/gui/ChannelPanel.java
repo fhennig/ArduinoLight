@@ -74,7 +74,7 @@ public class ChannelPanel extends JPanel{
 		
 		@Override
 		public String toString() {
-			return _channel.getName();
+			return Integer.toString(_channel.getId());
 		}
 		
 		public IChannel getChannel(){
