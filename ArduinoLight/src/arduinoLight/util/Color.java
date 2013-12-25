@@ -1,6 +1,9 @@
 package arduinoLight.util;
 
-
+/**
+ * Immutable!
+ * @author Felix
+ */
 public class Color implements RGBColor
 {
 	private int _argb = 0xff000000; //Initialize Black with 100% Alpha
@@ -8,6 +11,11 @@ public class Color implements RGBColor
 	public Color()
 	{
 		
+	}
+	
+	public Color(int argb)
+	{
+		_argb = argb;
 	}
 	
 	public Color(int a, int r, int g, int b)
@@ -21,33 +29,29 @@ public class Color implements RGBColor
 	
 	
 	
-	public void setARGB(int argb)
-	{
-		_argb = argb;
-	}
 	
-	public void setA(int alpha)
+	private void setA(int alpha)
 	{
 		alpha = getNormalizedInt(alpha);
 		
 		_argb = (_argb & 0x00ffffff) | (alpha << 24);
 	}
 	
-	public void setR(int red)
+	private void setR(int red)
 	{
 		red = getNormalizedInt(red);
 		
 		_argb = (_argb & 0xff00ffff) | (red << 16);
 	}
 	
-	public void setG(int green)
+	private void setG(int green)
 	{
 		green = getNormalizedInt(green);
 		
 		_argb = (_argb & 0xffff00ff) | (green << 8);
 	}
 	
-	public void setB(int blue)
+	private void setB(int blue)
 	{
 		blue = getNormalizedInt(blue);
 		

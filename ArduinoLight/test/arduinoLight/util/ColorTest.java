@@ -44,12 +44,7 @@ public class ColorTest
 	@Test
 	public void testColorSettersNormal()
 	{
-		Color c = new Color();
-		
-		c.setA(200);
-		c.setR(199);
-		c.setG(198);
-		c.setB(197);
+		Color c = new Color(200, 199, 198, 197);
 		
 		assertEquals(200, c.getA());
 		assertEquals(199, c.getR());
@@ -63,12 +58,7 @@ public class ColorTest
 	@Test
 	public void testColorSettersArgumentTooHigh()
 	{
-		Color c = new Color();
-		
-		c.setA(300);
-		c.setR(300);
-		c.setG(300);
-		c.setB(300);
+		Color c = new Color(300, 300, 300, 300);
 		
 		assertEquals(255, c.getA());
 		assertEquals(255, c.getR());
@@ -82,12 +72,7 @@ public class ColorTest
 	@Test
 	public void testColorSettersArgumentTooLow()
 	{
-		Color c = new Color();
-		
-		c.setA(-1);
-		c.setR(-1);
-		c.setG(-1);
-		c.setB(-1);
+		Color c = new Color(-1, -1, -1, -1);
 		
 		assertEquals(0, c.getA());
 		assertEquals(0, c.getR());
@@ -101,9 +86,7 @@ public class ColorTest
 	@Test
 	public void testColorSetGetARGB()
 	{
-		Color c = new Color();
-		
-		c.setARGB(0xabcd1234);
+		Color c = new Color(0xabcd1234);
 		
 		assertEquals(0xab, c.getA());
 		assertEquals(0xcd, c.getR());
@@ -149,13 +132,7 @@ public class ColorTest
 	@Test
 	public void testColorRGBColorInterface()
 	{
-		Color c = new Color(255, 300, 12, 34);
-		
-		assertEquals((byte) 255, c.getCalculatedR());
-		assertEquals((byte) 12, c.getCalculatedG());
-		assertEquals((byte) 34, c.getCalculatedB());
-		
-		c.setA(100);
+		Color c = new Color(100, 300, 12, 34);
 		
 		byte calculatedR = (byte) Math.round((100 / 255.0) * 255);
 		byte calculatedG = (byte) Math.round((100 / 255.0) * 12);
