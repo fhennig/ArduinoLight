@@ -5,6 +5,8 @@ import gnu.io.PortInUseException;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Enumeration;
 
 import javax.swing.Box;
@@ -16,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
@@ -25,11 +29,12 @@ import arduinoLight.interfaces.propertyListeners.SpeedListener;
 public class SerialConnectionPanel extends JPanel implements ActiveListener, SpeedListener, ConnectionPanel{
 	
 	SerialConnection _connection;
+	PortComboBoxHandler _portBoxHandler = new PortComboBoxHandler();
 	
 	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0");
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
-	JComboBox<ComboBoxPortItem> _comboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
+	JComboBox<ComboBoxPortItem> _portComboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
 	JToggleButton _connectButton = new JToggleButton("Connect");
 	
 	
@@ -59,18 +64,43 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		}
 	}
 	
+	class PortComboBoxHandler implements ItemListener{
+
+		public void refreshComboBox(){
+			_comboBoxModel.removeAllElements();
+			Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
+			
+			while(ports.hasMoreElements()){
+				_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
+			}
+			
+			if(_comboBoxModel.getSize() == 0){
+				_connectButton.setEnabled(false);
+			} else {
+				_connectButton.setEnabled(true);
+			}
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			refreshComboBox();
+		}
+		
+	}
+	
 	private void initComponents() {
 		
-		initComboBox();
+		_portBoxHandler.refreshComboBox();
 		
 		_connectButton.addActionListener(new connectButtonHandler());
+		_portComboBox.addItemListener(_portBoxHandler);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
 		this.add(_connectionSpeedLabel);
 		this.add(Box.createHorizontalGlue());
 		this.add(_lblNewLabel);
-		this.add(_comboBox);
+		this.add(_portComboBox);
 		this.add(Box.createHorizontalGlue());
 		this.add(_connectButton);
 		
@@ -91,15 +121,6 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		
 		public CommPortIdentifier getPort(){
 			return _port;
-		}
-		
-	}
-	
-	private void initComboBox(){
-		Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
-		
-		while(ports.hasMoreElements()){
-			_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
 		}
 	}
 

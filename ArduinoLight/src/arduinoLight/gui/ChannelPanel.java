@@ -26,18 +26,17 @@ import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class StatusPanel extends JPanel implements ActiveListener{
+public class ChannelPanel extends JPanel{
 
 	ChannellistProvider _provider;
 	
-	private JToggleButton _activeButton = new JToggleButton("Activate");
 	private DefaultComboBoxModel<ComboBoxChannelItem> _channelBoxModel = new DefaultComboBoxModel<ComboBoxChannelItem>();
 	private JComboBox<ComboBoxChannelItem> _channelBox = new JComboBox<ComboBoxChannelItem>(_channelBoxModel);
 	private JLabel _channelLabel = new JLabel("Channel: ");
 	private JButton _removeButton = new JButton("Remove");
 	private JButton _addButton = new JButton("Add");
 	
-	public StatusPanel(ChannellistProvider provider){
+	public ChannelPanel(ChannellistProvider provider){
 		_provider = provider;
 		initComponents();
 	}
@@ -49,10 +48,7 @@ public class StatusPanel extends JPanel implements ActiveListener{
 		_removeButton.setEnabled(false);
 		_addButton.addActionListener(new AddButtonHandler());
 		_removeButton.addActionListener(new RemoveButtonHandler());
-		_activeButton.addActionListener(new ActiveButtonHandler());
 		
-		this.add(_activeButton);
-		this.add(Box.createHorizontalStrut(15));
 		this.add(_channelLabel);
 		this.add(_channelBox);
 		this.add(_addButton);
@@ -108,32 +104,9 @@ public class StatusPanel extends JPanel implements ActiveListener{
 		}
 	}
 	
-	class ActiveButtonHandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(_activeButton.isSelected()){
-				
-			} else {
-				
-			}
-		}
-	}
-	
 	public IChannel getSelectedChannel() {
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		
 	}
-
-	@Override
-	public void activeChanged(Object source, boolean newActive)
-	{
-		if(newActive){
-			_activeButton.setText("Deactivate");
-		} else {
-			_activeButton.setText("Activate");
-		}
-	}
-	
 }
