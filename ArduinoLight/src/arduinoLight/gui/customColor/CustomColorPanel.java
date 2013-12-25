@@ -18,8 +18,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
+import arduinoLight.gui.ActivatePanel;
 import arduinoLight.gui.ColorSlider;
-import arduinoLight.gui.StatusPanel;
+import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
 
 @SuppressWarnings("serial")
@@ -32,7 +33,9 @@ public class CustomColorPanel extends TabPanel{
 	private SliderPanelHandler _panelHandler = new SliderPanelHandler();
 	
 	private JPanel _mainPanel = new JPanel();
-	private StatusPanel _statusPanel;
+	private ChannelPanel _channelPanel;
+	private ActivatePanel _activatePanel;
+	private JPanel _statusPanel = new JPanel();
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
 	private JPanel _colorPanel = new JPanel();
@@ -45,7 +48,8 @@ public class CustomColorPanel extends TabPanel{
 	public CustomColorPanel(CustomColorsProvider colorProvider, String title){
 		_colorProvider = colorProvider;
 		_title = title;
-		 _statusPanel = new StatusPanel(_colorProvider);
+		 _channelPanel = new ChannelPanel(_colorProvider);
+		 _activatePanel = new ActivatePanel(_colorProvider);
 		initComponents();
 	}
 
@@ -54,6 +58,7 @@ public class CustomColorPanel extends TabPanel{
 		_previewPanel.setLayout(new BorderLayout());
 		_sliderPanel.setLayout(new BoxLayout(_sliderPanel, BoxLayout.LINE_AXIS));
 		_mainPanel.setLayout(new BorderLayout());
+		_statusPanel.setLayout(new BoxLayout(_statusPanel, BoxLayout.LINE_AXIS));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		_redSlider.addChangeListener(_panelHandler);
@@ -76,9 +81,11 @@ public class CustomColorPanel extends TabPanel{
 		_colorPanel.setBorder(new LineBorder(Color.black));
 		_sliderPanel.setBorder(new TitledBorder(null, "RGB-Color", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
-		
 		_mainPanel.add(_sliderPanel, BorderLayout.EAST);
 		_mainPanel.add(_previewPanel, BorderLayout.CENTER);
+		
+		_statusPanel.add(_activatePanel);
+		_statusPanel.add(_channelPanel);
 		
 		this.add(_mainPanel);
 		this.add(_statusPanel);
@@ -93,7 +100,7 @@ public class CustomColorPanel extends TabPanel{
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			arduinoLight.util.Color color = new arduinoLight.util.Color(_brightnessSlider.getValue(), _redSlider.getValue(), _greenSlider.getValue(), _blueSlider.getValue());
-				_colorProvider.setChannelcolor(_statusPanel.getSelectedChannel(), color);
+				_colorProvider.setChannelcolor(_channelPanel.getSelectedChannel(), color);
 
 		}
 	}
