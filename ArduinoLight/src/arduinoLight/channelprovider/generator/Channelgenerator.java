@@ -20,7 +20,6 @@ public abstract class Channelgenerator extends Channelprovider implements Channe
 {
 
 	private boolean _active;
-	protected List<IChannel> _channels = new ArrayList<>();
 	
 	private List<ChannelcompositionListener> _channellistListeners = new ArrayList<>();
 	private List<ActiveListener> _activeStateListeners = new ArrayList<>();

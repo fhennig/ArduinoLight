@@ -12,15 +12,14 @@ public class Channel implements IChannel
 	
 	public Channel()
 	{
-		_id = _instances;
-		_instances++;
-		
+		this(new Color());		
 	}
 	
 	public Channel(Color color)
 	{
-		this();
 		setColor(color);
+		_id = _instances;
+		_instances++;
 	}
 	
 	@Override
