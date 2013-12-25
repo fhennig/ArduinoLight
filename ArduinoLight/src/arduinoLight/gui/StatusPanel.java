@@ -48,6 +48,7 @@ public class StatusPanel extends JPanel implements ChannellistListener{
 		_removeButton.setEnabled(false);
 		_addButton.addActionListener(new AddButtonHandler());
 		_removeButton.addActionListener(new RemoveButtonHandler());
+		_activeButton.addActionListener(new ActiveButtonHandler());
 		
 		this.add(_activeButton);
 		this.add(Box.createHorizontalStrut(15));
@@ -91,6 +92,18 @@ public class StatusPanel extends JPanel implements ChannellistListener{
 			_provider.removeChannel(getSelectedChannel());
 			if(_channelBox.getItemCount() < 1){
 				_removeButton.setEnabled(false);
+			}
+		}
+	}
+	
+	class ActiveButtonHandler implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(_activeButton.isSelected()){
+				_activeButton.setText("Deactivate");
+			} else {
+				_activeButton.setText("Activate");
 			}
 		}
 	}

@@ -103,7 +103,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	}
 
 	@Override
-	public void activeChanged(Object source, boolean newActive) { //TODO Change replacement of Buttons to something better
+	public void activeChanged(Object source, boolean newActive) {
 		if(newActive){
 			_connectButton.setText("Disconnect");
 		} else {
