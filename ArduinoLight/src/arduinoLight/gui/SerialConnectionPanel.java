@@ -22,7 +22,7 @@ import arduinoLight.arduino.SerialConnectionListener;
 import arduinoLight.mixer.Colorprovider;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements SerialConnectionListener{
+public class SerialConnectionPanel extends JPanel implements SerialConnectionListener, ConnectionPanel{
 	
 	SerialConnection _connection;
 	
@@ -49,7 +49,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 					_connectButton.setSelected(false);
 					JOptionPane.showMessageDialog(null,
 							"Could not establish a Connection!\nIs the Connection already in use?",
-							"Connection failed",
+							"Connection failed!",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
@@ -121,5 +121,9 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 			Colorprovider newColorprovider) {
 		// TODO DO SOMETHING
 		
+	}
+	
+	public void disconnect(){
+		_connection.disconnect();
 	}
 }
