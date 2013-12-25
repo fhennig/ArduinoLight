@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.Activatable;
 import arduinoLight.channelprovider.ActiveStateListener;
 import arduinoLight.channelprovider.ChannellistListener;
 import arduinoLight.channelprovider.ChannellistProvider;
