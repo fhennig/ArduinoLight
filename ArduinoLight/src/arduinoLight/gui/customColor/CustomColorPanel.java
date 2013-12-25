@@ -116,7 +116,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_greenSlider.setValueLabel(newColor.getG());
 		_blueSlider.setValueLabel(newColor.getB());
 		_brightnessSlider.setValueLabel(newColor.getA());
-		Color color = new Color(newColor.getR(), newColor.getB(), newColor.getB(), newColor.getA());
-		_previewPanel.setBackground(color);
+		Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
+		_colorPanel.setBackground(color);
 	}
 }
