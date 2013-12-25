@@ -18,11 +18,11 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.SerialConnectionListener;
-import arduinoLight.mixer.Colorprovider;
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
+import arduinoLight.interfaces.propertyListeners.SpeedListener;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements SerialConnectionListener, ConnectionPanel{
+public class SerialConnectionPanel extends JPanel implements ActiveListener, SpeedListener, ConnectionPanel{
 	
 	SerialConnection _connection;
 	
@@ -35,7 +35,7 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	
 	public SerialConnectionPanel(SerialConnection connection){
 		_connection = connection;
-		_connection.addSerialConnectionListener(this);
+		_connection.addActiveListener(this);
 		initComponents();
 	}
 	
@@ -115,13 +115,6 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	@Override
 	public void speedChanged(Object source, int newSpeed) {
 		_connectionSpeedLabel.setText("Packages per Second: " + newSpeed );
-	}
-
-	@Override
-	public void colorproviderChanged(Object source,
-			Colorprovider newColorprovider) {
-		// TODO DO SOMETHING
-		
 	}
 	
 	public void disconnect(){

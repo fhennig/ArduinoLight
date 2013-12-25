@@ -2,9 +2,10 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
-public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannellistListener, ActiveStateListener
+public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannellistListener, ActiveListener
 {
 	private List<IChannel> _latestChannels;
 	private boolean _latestActiveState;
@@ -25,7 +26,7 @@ public class ChannelproviderListenerDummy implements ChannelcolorsListener, Chan
 	}
 
 	@Override
-	public void activeStateChanged(Object source, boolean newActive)
+	public void activeChanged(Object source, boolean newActive)
 	{
 		_latestActiveState = newActive;
 		_latestSource = source;

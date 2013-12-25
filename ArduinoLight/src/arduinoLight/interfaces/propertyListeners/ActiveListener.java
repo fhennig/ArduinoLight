@@ -1,6 +1,6 @@
-package arduinoLight.channelprovider;
+package arduinoLight.interfaces.propertyListeners;
 
-public interface ActiveStateListener
+public interface ActiveListener
 {
-	public void activeStateChanged(Object source, boolean newActive);
+	public void activeChanged(Object source, boolean newActive);
 }

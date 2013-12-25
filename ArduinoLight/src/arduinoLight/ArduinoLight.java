@@ -1,22 +1,14 @@
 package arduinoLight;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.PortInUseException;
-
-import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.swing.JPanel;
-
 import arduinoLight.arduino.amblone.AmbloneConnection;
 import arduinoLight.channelprovider.customColors.CustomColorsProvider;
-import arduinoLight.channelprovider.debugprovider.Debugprovider;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
-import arduinoLight.gui.ambientLight.ScreenSelectionPanel;
 import arduinoLight.gui.customColor.CustomColorPanel;
 import arduinoLight.mixer.SimpleMixer;
 

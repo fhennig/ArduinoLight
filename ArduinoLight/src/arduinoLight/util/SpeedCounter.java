@@ -2,6 +2,8 @@ package arduinoLight.util;
 
 import java.util.*;
 
+import arduinoLight.interfaces.propertyListeners.SpeedListener;
+
 /**
  * This is a simple class that aids in measuring the packages per second currently transmitted.
  * @author Felix
@@ -12,7 +14,7 @@ public class SpeedCounter
 	private int _speed = 0;
 	private long _startTime = System.currentTimeMillis();
 	
-	private List<SpeedChangeListener> _listeners = new ArrayList<>();
+	private List<SpeedListener> _listeners = new ArrayList<>();
 	
 	
 	
@@ -46,18 +48,18 @@ public class SpeedCounter
 	
 	private void fireSpeedChangeEvent(int newSpeed)
 	{
-		for (SpeedChangeListener listener : _listeners)
+		for (SpeedListener listener : _listeners)
 		{
-			listener.speedChanged(newSpeed);
+			listener.speedChanged(this, newSpeed);
 		}
 	}
 	
-	public void addSpeedChangeListener(SpeedChangeListener listener)
+	public void addSpeedChangeListener(SpeedListener listener)
 	{
 		_listeners.add(listener);
 	}
 	
-	public void removeSpeedChangeListener(SpeedChangeListener listener)
+	public void removeSpeedChangeListener(SpeedListener listener)
 	{
 		_listeners.remove(listener);
 	}
