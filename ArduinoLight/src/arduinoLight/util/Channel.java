@@ -16,6 +16,12 @@ public class Channel implements IChannel
 		_instances++;
 	}
 	
+	public Channel(Color color)
+	{
+		this("channel" + _instances, color);
+		_instances++;
+	}
+	
 	public Channel(String name)
 	{
 		this(name, new Color());
