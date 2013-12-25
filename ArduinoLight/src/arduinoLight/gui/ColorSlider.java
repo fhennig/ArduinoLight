@@ -16,12 +16,12 @@ public class ColorSlider extends JPanel{
 	Set<ChangeListener> _listener = new HashSet<ChangeListener>();
 	
 	JSlider _slider;
-	JLabel _valueLabel;
 	JLabel _nameLabel;
+	JLabel _valueLabel;
 	
 	public ColorSlider(String name, int min, int max, int value){
-		_valueLabel = new JLabel(name);
-		_nameLabel = new JLabel(Integer.toString(value));
+		_nameLabel = new JLabel(name);
+		_valueLabel = new JLabel(Integer.toString(value));
 		_slider = new JSlider(JSlider.VERTICAL, min, max, value);
 		initComponents();
 	}
@@ -31,14 +31,18 @@ public class ColorSlider extends JPanel{
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		_slider.setAlignmentX(CENTER_ALIGNMENT);
-		_valueLabel.setAlignmentX(CENTER_ALIGNMENT);
 		_nameLabel.setAlignmentX(CENTER_ALIGNMENT);
+		_valueLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		_slider.addChangeListener(new SliderHandler());
 		
 		this.add(_slider);
-		this.add(_valueLabel);
 		this.add(_nameLabel);
+		this.add(_valueLabel);
+	}
+	
+	public void setValueLabel(int newValue){
+		_valueLabel.setText(Integer.toString(newValue));
 	}
 	
 	public int getValue(){

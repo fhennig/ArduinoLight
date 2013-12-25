@@ -3,15 +3,18 @@ package arduinoLight.gui;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
 import java.util.Enumeration;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,18 +34,29 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 	
 	SerialConnection _connection;
 	
+	java.net.URL _imageURL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
+	ImageIcon _icon = new ImageIcon(_imageURL, "refresh");
+	
 	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0");
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
 	JComboBox<ComboBoxPortItem> _portComboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
 	JToggleButton _connectButton = new JToggleButton("Connect");
-	JButton _refreshButton = new JButton("R");
+	JButton _refreshButton;
 	
 	
 	public SerialConnectionPanel(SerialConnection connection){
+		initImageIcon();
+		_refreshButton = new JButton(_icon);
 		_connection = connection;
 		_connection.addActiveListener(this);
 		initComponents();
+	}
+	
+	private void initImageIcon(){
+		Image icon = _icon.getImage();
+		Image newIcon = icon.getScaledInstance(20, 17, Image.SCALE_DEFAULT);
+		_icon = new ImageIcon(newIcon);
 	}
 	
 	class connectButtonHandler implements ActionListener{

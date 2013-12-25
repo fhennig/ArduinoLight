@@ -8,6 +8,7 @@ package arduinoLight.gui.customColor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,14 +18,16 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
+import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class CustomColorPanel extends TabPanel{
+public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 
 	//Model Reference
 	private CustomColorsProvider _colorProvider;
@@ -103,5 +106,17 @@ public class CustomColorPanel extends TabPanel{
 				_colorProvider.setChannelcolor(_channelPanel.getSelectedChannel(), color);
 
 		}
+	}
+
+	@Override
+	public void channelcolorsUpdated(Object source,
+			List<IChannel> refreshedChannellist) {
+		arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
+		_redSlider.setValueLabel(newColor.getR());
+		_greenSlider.setValueLabel(newColor.getG());
+		_blueSlider.setValueLabel(newColor.getB());
+		_brightnessSlider.setValueLabel(newColor.getA());
+		Color color = new Color(newColor.getR(), newColor.getB(), newColor.getB(), newColor.getA());
+		_previewPanel.setBackground(color);
 	}
 }
