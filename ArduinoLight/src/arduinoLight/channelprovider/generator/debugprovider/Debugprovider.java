@@ -1,9 +1,9 @@
-package arduinoLight.channelprovider.debugprovider;
+package arduinoLight.channelprovider.generator.debugprovider;
 
-import arduinoLight.channelprovider.Channelprovider;
-import arduinoLight.channelprovider.threading.IterationFinishedListener;
+import arduinoLight.channelprovider.generator.Channelgenerator;
+import arduinoLight.channelprovider.generator.threading.IterationFinishedListener;
 
-public class Debugprovider extends Channelprovider implements IterationFinishedListener
+public class Debugprovider extends Channelgenerator implements IterationFinishedListener
 {
 
 	private DebugCalculationThread _thread;

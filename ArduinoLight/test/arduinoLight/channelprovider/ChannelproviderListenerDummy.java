@@ -5,7 +5,7 @@ import java.util.List;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
-public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannellistListener, ActiveListener
+public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannelcompositionListener, ActiveListener
 {
 	private List<IChannel> _latestChannels;
 	private boolean _latestActiveState;

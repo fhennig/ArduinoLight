@@ -17,7 +17,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import arduinoLight.channelprovider.customColors.CustomColorsProvider;
+import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.StatusPanel;
 import arduinoLight.gui.TabPanel;

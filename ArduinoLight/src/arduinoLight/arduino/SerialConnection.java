@@ -9,12 +9,13 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import arduinoLight.channelprovider.ChannelcolorsListener;
+import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.interfaces.Closeable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.interfaces.propertyListeners.SpeedListener;
-import arduinoLight.mixer.Colorprovider;
-import arduinoLight.mixer.ColorsUpdatedListener;
 import arduinoLight.util.DebugConsole;
+import arduinoLight.util.IChannel;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.SpeedCounter;
 /**
@@ -23,11 +24,11 @@ import arduinoLight.util.SpeedCounter;
  * Is observable by any class that implements SerialConnectionListener.
  * @author Felix
  */
-public abstract class SerialConnection implements SpeedListener, ColorsUpdatedListener, Closeable
+public abstract class SerialConnection implements SpeedListener, ChannelcolorsListener, Closeable
 {
 	private static final int TIME_OUT = 2000; //TODO Understand this ...
 	
-	protected Colorprovider _colorprovider;
+	protected Channelgenerator _channelprovider;
 	protected SerialPort _serialPort;
 	protected BufferedOutputStream _serialOutputStream;
 	
@@ -43,9 +44,9 @@ public abstract class SerialConnection implements SpeedListener, ColorsUpdatedLi
 	
 			
 	
-	public SerialConnection(Colorprovider colorprovider)
+	public SerialConnection(Channelgenerator channelprovider)
 	{
-		setColorprovider(colorprovider);
+		setColorprovider(channelprovider);
 	}
 	
 	
@@ -122,17 +123,17 @@ public abstract class SerialConnection implements SpeedListener, ColorsUpdatedLi
 		}
 	}
 	
-	public void setColorprovider(Colorprovider colorprovider)
+	public void setColorprovider(Channelgenerator channelprovider)
 	{
-		if (colorprovider == null)
+		if (channelprovider == null)
 			throw new IllegalArgumentException();
 		
-		if (_colorprovider != null)
+		if (_channelprovider != null)
 		{
-			_colorprovider.removeColorsUpdatedListener(this);
+			_channelprovider.removeChannelcolorsListener(this);
 		}
-		_colorprovider = colorprovider;
-		_colorprovider.addColorsUpdatedListener(this);
+		_channelprovider = channelprovider;
+		_channelprovider.addChannelcolorsListener(this);
 		_ppsCounter.reset();
 	}
 	
@@ -189,23 +190,26 @@ public abstract class SerialConnection implements SpeedListener, ColorsUpdatedLi
 
 	//---------- Event-Notify-Methods --------------------------
 	/**
-	 * Gets called by the Colorprovider that is subscribed.
-	 * As a reaction, the new colors are transmitted.
+	 * Gets called by the Channelprovider that is subscribed.
+	 * The colors of the channels that get passed are then transmitted.
 	 */
 	@Override
-	public void colorsUpdated(List<RGBColor> newColors)
+	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
 	{
-		if (newColors == null || newColors.size() == 0)
-			return;		//If the list is empty, there is nothing to transmit
+		if (source != _channelprovider)
+			return; //if the event was called by someone else than our subscribed channelprovider --> do nothing.
+		if (refreshedChannellist == null || refreshedChannellist.size() == 0)
+			return; //If the list is empty, there is nothing to transmit.
 		
-		//Only for debugging:
-		for (int i = 0; i < newColors.size(); i++)
+		int channelCount = refreshedChannellist.size();
+		List<RGBColor> colors = new ArrayList<>(channelCount);
+		
+		for (IChannel channel : refreshedChannellist)
 		{
-			debugprint("colorsUpdated", "new Color from Colorprovider:" + i + ": " + newColors.get(i).toString());
-			i++;
+			colors.add(channel.getColor());
 		}
 		
-		byte[] bytes = getBytesToTransmit(newColors);
+		byte[] bytes = getBytesToTransmit(colors);
 		transmit(bytes);
 	}
 

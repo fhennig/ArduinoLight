@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.ambientlight;
+package arduinoLight.channelprovider.generator.ambientlight;
 
 import arduinoLight.util.Channel;
 

@@ -3,7 +3,7 @@ package arduinoLight.arduino.amblone;
 import java.util.List;
 
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.mixer.Colorprovider;
+import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 
@@ -14,9 +14,9 @@ import arduinoLight.util.RGBColor;
  */
 public class AmbloneConnection extends SerialConnection
 {		
-	public AmbloneConnection(Colorprovider colorprovider)
+	public AmbloneConnection(Channelgenerator channelprovider)
 	{
-		super(colorprovider);
+		super(channelprovider);
 	}
 
 	@Override

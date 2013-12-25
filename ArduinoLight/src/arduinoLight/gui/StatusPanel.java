@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.ChannellistListener;
+import arduinoLight.channelprovider.ChannelcompositionListener;
 import arduinoLight.channelprovider.ChannellistProvider;
 import arduinoLight.interfaces.Activatable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
-public class StatusPanel extends JPanel implements ChannellistListener, ActiveListener{
+public class StatusPanel extends JPanel implements ChannelcompositionListener, ActiveListener{
 
 	ChannellistProvider _provider;
 	

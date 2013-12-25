@@ -4,7 +4,7 @@ import java.util.List;
 
 import arduinoLight.util.IChannel;
 
-public interface ChannellistListener
+public interface ChannelcompositionListener
 {
 	public void channellistChanged(Object source, List<IChannel> newChannellist);
 }

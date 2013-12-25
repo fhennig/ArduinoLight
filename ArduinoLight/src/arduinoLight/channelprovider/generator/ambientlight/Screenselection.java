@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.ambientlight;
+package arduinoLight.channelprovider.generator.ambientlight;
 
 /**
  * Represents a relative Screenpart (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).

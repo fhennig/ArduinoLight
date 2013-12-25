@@ -1,10 +1,10 @@
-package arduinoLight.channelprovider.customColors;
+package arduinoLight.channelprovider.generator.customColors;
 
-import arduinoLight.channelprovider.Channelprovider;
+import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.util.IChannel;
 import arduinoLight.util.Color;
 
-public class CustomColorsProvider extends Channelprovider
+public class CustomColorsProvider extends Channelgenerator
 {
 	@Override
 	protected boolean activate()

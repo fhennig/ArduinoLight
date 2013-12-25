@@ -4,13 +4,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import arduinoLight.arduino.amblone.AmbloneConnection;
-import arduinoLight.channelprovider.customColors.CustomColorsProvider;
+import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
 import arduinoLight.gui.customColor.CustomColorPanel;
-import arduinoLight.mixer.SimpleMixer;
 
 public class ArduinoLight
 {
@@ -49,8 +48,7 @@ public class ArduinoLight
 		}*/
 		
 		CustomColorsProvider provider = new CustomColorsProvider();
-		SimpleMixer mixer = new SimpleMixer(provider);
-		AmbloneConnection connection = new AmbloneConnection(mixer);
+		AmbloneConnection connection = new AmbloneConnection(provider);
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);

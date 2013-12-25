@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.ambientlight;
+package arduinoLight.channelprovider.generator.ambientlight;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;

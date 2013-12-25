@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import arduinoLight.channelprovider.ChannelproviderListenerDummy;
+import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.util.Color;
 
 public class CustomColorsProviderTest

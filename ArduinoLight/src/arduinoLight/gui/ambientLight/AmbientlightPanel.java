@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.Channelprovider;
-import arduinoLight.channelprovider.debugprovider.Debugprovider;
+import arduinoLight.channelprovider.generator.Channelgenerator;
+import arduinoLight.channelprovider.generator.debugprovider.Debugprovider;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.StatusPanel;
 import arduinoLight.gui.TabPanel;
@@ -23,7 +23,7 @@ import arduinoLight.gui.TabPanel;
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends TabPanel{
 	
-	Channelprovider _provider = new Debugprovider();
+	Channelgenerator _provider = new Debugprovider();
 	
 	JPanel _mainPanel = new JPanel();
 	JPanel _leftPanel = new JPanel();

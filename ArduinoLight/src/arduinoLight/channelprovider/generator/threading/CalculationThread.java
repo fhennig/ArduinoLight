@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.threading;
+package arduinoLight.channelprovider.generator.threading;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
-package arduinoLight.channelprovider.ambientlight;
+package arduinoLight.channelprovider.generator.ambientlight;
 
 import java.util.List;
 
-import arduinoLight.channelprovider.threading.CalculationThread;
+import arduinoLight.channelprovider.generator.threading.CalculationThread;
 import arduinoLight.util.IChannel;
 
 public class AmbientlightCalculationThread extends CalculationThread

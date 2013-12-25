@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.threading;
+package arduinoLight.channelprovider.generator.threading;
 
 /**
  * The CalculationThread uses this Interface.
