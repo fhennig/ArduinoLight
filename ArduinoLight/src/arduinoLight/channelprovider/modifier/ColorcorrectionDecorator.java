@@ -3,6 +3,7 @@ package arduinoLight.channelprovider.modifier;
 import java.util.List;
 
 import arduinoLight.channelprovider.Channelprovider;
+import arduinoLight.util.Channel;
 import arduinoLight.util.Color;
 import arduinoLight.util.IChannel;
 
@@ -67,9 +68,8 @@ public class ColorcorrectionDecorator extends ProviderDecorator
 			newG = (int) Math.round(channel.getColor().getG() * _g);
 			newB = (int) Math.round(channel.getColor().getB() * _b);
 			
-			
+			_channels.add(new Channel(new Color(newA, newR, newG, newB)));
 		}
-		
 	}
 
 }
