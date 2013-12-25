@@ -10,17 +10,12 @@ import java.util.Enumeration;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.SerialConnectionListener;
@@ -46,15 +41,19 @@ public class SerialConnectionPanel extends JPanel implements SerialConnectionLis
 	class connectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
-				ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
-				_connection.connect(selectedItem.getPort(), 256000);
-			} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
-				_connectButton.setSelected(false);
-				JOptionPane.showMessageDialog(null,
-					    "Could not establish a Connection!\nIs the Connection already in use?",
-					    "Connection failed",
-					    JOptionPane.ERROR_MESSAGE);
+			if(_connectButton.isSelected()){
+				try {
+					ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
+					_connection.connect(selectedItem.getPort(), 256000);
+				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
+					_connectButton.setSelected(false);
+					JOptionPane.showMessageDialog(null,
+							"Could not establish a Connection!\nIs the Connection already in use?",
+							"Connection failed",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				_connection.disconnect();
 			}
 		}
 	}

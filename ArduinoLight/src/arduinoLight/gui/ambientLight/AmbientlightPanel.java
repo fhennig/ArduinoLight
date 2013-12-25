@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
@@ -44,9 +43,9 @@ public class AmbientlightPanel extends TabPanel{
 	JSlider _fpsSlider = new JSlider();
 	
 	
-	public AmbientlightPanel(){
+	public AmbientlightPanel(String title){
 		initComponents();
-		_title = "AmbientLight";
+		_title = title;
 	}
 	
 	private void initComponents(){

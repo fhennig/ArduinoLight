@@ -62,9 +62,8 @@ public class ArduinoLight
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
-		ScreenSelectionPanel selectionPanel = new ScreenSelectionPanel();
-		TabPanel ambiPanel = new AmbientlightPanel();
-		TabPanel colorPanel = new CustomColorPanel(provider);
+		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
+		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
 		
 		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 		panels.add(ambiPanel);

@@ -42,9 +42,9 @@ public class CustomColorPanel extends TabPanel{
 	private ColorSlider _blueSlider = new ColorSlider("B", 0, 255, 0);
 	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 255, 255);
 	
-	public CustomColorPanel(CustomColorsProvider colorProvider){
+	public CustomColorPanel(CustomColorsProvider colorProvider, String title){
 		_colorProvider = colorProvider;
-		_title = "Custom Color";
+		_title = title;
 		 _statusPanel = new StatusPanel(_colorProvider);
 		initComponents();
 	}
