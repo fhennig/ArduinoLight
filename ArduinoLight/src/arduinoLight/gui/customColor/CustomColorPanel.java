@@ -121,10 +121,9 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			if(e.getStateChange() == ItemEvent.SELECTED){
-				System.out.println("Test");
 				arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
 				_redSlider.setAll(newColor.getR());
-				_greenSlider.setAll(newColor.getB());
+				_greenSlider.setAll(newColor.getG());
 				_blueSlider.setAll(newColor.getB());
 				_brightnessSlider.setAll(newColor.getA());
 				Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
