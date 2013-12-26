@@ -3,6 +3,7 @@ package arduinoLight.gui;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -111,6 +112,9 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		_connectButton.addActionListener(new connectButtonHandler());
 		_refreshButton.addActionListener(new RefreshButtonHandler());
 		
+		_refreshButton.setPreferredSize(new Dimension(30, 10));
+		_connectButton.setPreferredSize(new Dimension(100, 25));
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
 		this.add(_connectionSpeedLabel);
@@ -118,7 +122,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		this.add(_lblNewLabel);
 		this.add(_portComboBox);
 		this.add(_refreshButton);
-		this.add(Box.createHorizontalGlue());
+		this.add(Box.createHorizontalStrut(20));
 		this.add(_connectButton);
 		
 	}
