@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -49,7 +50,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	private JPanel _statusPanel = new JPanel();
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
-	private JPanel _colorPanel = new JPanel();
+	private List<JPanel> _colorPanels = new ArrayList<JPanel>();
 	
 	private ColorSlider _redSlider = new ColorSlider("R", 0, 255, 0);
 	private ColorSlider _greenSlider = new ColorSlider("G", 0, 255, 0);
@@ -86,11 +87,10 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_sliderPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_sliderPanel.add(_brightnessSlider);
 		
-		_previewPanel.add(_colorPanel, BorderLayout.CENTER);
-		_colorPanel.setBackground(new Color(0, 0, 0));
+		_previewPanel.setLayout(new BoxLayout(_previewPanel, BoxLayout.LINE_AXIS));
+		refreshPreviewPanel();
 		
 		_previewPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		_colorPanel.setBorder(new LineBorder(Color.black));
 		_sliderPanel.setBorder(new TitledBorder(null, "RGB-Color", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
 		_mainPanel.add(_sliderPanel, BorderLayout.EAST);
@@ -101,7 +101,16 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		
 		this.add(_mainPanel);
 		this.add(_statusPanel);
-		
+	}
+	
+	private void refreshPreviewPanel(){
+		_previewPanel.removeAll();
+		for(IChannel channel : _channelPanel.getChannels()){
+			JPanel newPanel = new JPanel();
+			newPanel.setBackground(new Color(channel.getColor().getR(), channel.getColor().getG(), channel.getColor().getB(), 255));
+			newPanel.setBorder(new LineBorder(Color.black));
+			_previewPanel.add(newPanel);
+		}
 	}
 	
 	/**
@@ -135,7 +144,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_brightnessSlider.setAll(newColor.getA());
 		if(_activatePanel.isActive()){
 			Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
-			_colorPanel.setBackground(color);
+			refreshPreviewPanel();
 		}
 	}
 	
