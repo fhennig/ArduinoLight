@@ -45,6 +45,11 @@ public class ColorSlider extends JPanel{
 		_valueLabel.setText(Integer.toString(newValue));
 	}
 	
+	public void setAll(int newValue){
+		_valueLabel.setText(Integer.toString(newValue));
+		_slider.setValue(newValue);
+	}
+	
 	public int getValue(){
 		return  _slider.getValue();
 	}

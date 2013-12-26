@@ -8,6 +8,10 @@ package arduinoLight.gui.customColor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -18,9 +22,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.omg.CORBA._PolicyStub;
+
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
+import arduinoLight.gui.ChannelPanel.ComboBoxChannelItem;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
@@ -68,6 +75,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_greenSlider.addChangeListener(_panelHandler);
 		_blueSlider.addChangeListener(_panelHandler);
 		_brightnessSlider.addChangeListener(_panelHandler);
+		_channelPanel.addComboBoxListener(new ComboBoxHandler());
 		
 		_sliderPanel.add(_redSlider);
 		_sliderPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -107,7 +115,25 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 
 		}
 	}
+	
+	class ComboBoxHandler implements ItemListener{
 
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				System.out.println("Test");
+				arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
+				_redSlider.setAll(newColor.getR());
+				_greenSlider.setAll(newColor.getB());
+				_blueSlider.setAll(newColor.getB());
+				_brightnessSlider.setAll(newColor.getA());
+				Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
+				_colorPanel.setBackground(color);
+			}
+		}
+		
+	}
+	
 	@Override
 	public void channelcolorsUpdated(Object source,
 			List<IChannel> refreshedChannellist) {

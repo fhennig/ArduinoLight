@@ -7,6 +7,7 @@ package arduinoLight.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -18,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
+
 
 
 
@@ -45,6 +47,9 @@ public class ChannelPanel extends JPanel{
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 
+		_provider.addChannel();
+		refreshComboBoxModel();
+		
 		_removeButton.setEnabled(false);
 		_addButton.addActionListener(new AddButtonHandler());
 		_removeButton.addActionListener(new RemoveButtonHandler());
@@ -53,6 +58,10 @@ public class ChannelPanel extends JPanel{
 		this.add(_channelBox);
 		this.add(_addButton);
 		this.add(_removeButton);
+	}
+	
+	public void addComboBoxListener(ItemListener listener){
+		_channelBox.addItemListener(listener);
 	}
 	
 	private void refreshComboBoxModel(){
@@ -64,7 +73,7 @@ public class ChannelPanel extends JPanel{
 		}
 	}
 	
-	class ComboBoxChannelItem{
+	public class ComboBoxChannelItem{
 		
 		IChannel _channel;
 		
@@ -98,7 +107,7 @@ public class ChannelPanel extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			_provider.removeChannel(getSelectedChannel());
 			refreshComboBoxModel();
-			if(_channelBox.getItemCount() < 1){
+			if(_channelBox.getItemCount() < 2){
 				_removeButton.setEnabled(false);
 			}
 		}
