@@ -136,8 +136,23 @@ public class Color implements RGBColor
 		return true;
 	}
 	
+	/**
+	 * returns the color in a format like this: #aarrggbb
+	 */
 	@Override
 	public String toString() {
-		return "#" + Integer.toHexString(_argb);
+		String hex = Integer.toHexString(_argb);
+		if (hex.length() < 8)
+		{
+			int amountMissing = 8 - hex.length();
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < amountMissing; i++)
+			{
+				builder.append("0");
+			}
+			builder.append(hex);
+			hex = builder.toString();
+		}
+		return "#" + hex;
 	}
 }

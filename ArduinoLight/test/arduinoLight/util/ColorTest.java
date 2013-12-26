@@ -14,7 +14,7 @@ public class ColorTest
 	 * Tests if the parameterized constructor works.
 	 */
 	@Test
-	public void testColorConstructor()
+	public void testColorConstructorSingleArguments()
 	{
 		Color c = new Color(200, 20, 40, 75);
 		
@@ -37,26 +37,12 @@ public class ColorTest
 		assertEquals(0,   c.getG());
 		assertEquals(0,   c.getB());
 	}
-	
-	/**
-	 * Tests the normal set-methods.
-	 */
-	@Test
-	public void testColorSettersNormal()
-	{
-		Color c = new Color(200, 199, 198, 197);
-		
-		assertEquals(200, c.getA());
-		assertEquals(199, c.getR());
-		assertEquals(198, c.getG());
-		assertEquals(197, c.getB());
-	}
 
 	/**
 	 * Tests if too high values are handled correctly.
 	 */
 	@Test
-	public void testColorSettersArgumentTooHigh()
+	public void testConstructorArgumentsTooHigh()
 	{
 		Color c = new Color(300, 300, 300, 300);
 		
@@ -70,7 +56,7 @@ public class ColorTest
 	 * Tests if too low values are handled correctly.
 	 */
 	@Test
-	public void testColorSettersArgumentTooLow()
+	public void testConstructorArgumentsTooLow()
 	{
 		Color c = new Color(-1, -1, -1, -1);
 		
@@ -84,7 +70,7 @@ public class ColorTest
 	 * Tests if setting the ARGB directly leads to correct A, R, G, B values.
 	 */
 	@Test
-	public void testColorSetGetARGB()
+	public void testConstructorARGB()
 	{
 		Color c = new Color(0xabcd1234);
 		
@@ -141,5 +127,18 @@ public class ColorTest
 		assertEquals(calculatedR, c.getCalculatedR());
 		assertEquals(calculatedG, c.getCalculatedG());
 		assertEquals(calculatedB, c.getCalculatedB());
+	}
+	
+	/**
+	 * Tests if the toString-method returns the expected value.
+	 */
+	@Test
+	public void testToString()
+	{
+		Color c1 = new Color(255, 0, 0, 0);
+		Color c2 = new Color(0,0,0,0);
+		
+		assertEquals("#ff000000", c1.toString());
+		assertEquals("#00000000", c2.toString());
 	}
 }
