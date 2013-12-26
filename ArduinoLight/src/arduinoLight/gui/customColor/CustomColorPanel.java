@@ -31,6 +31,7 @@ import arduinoLight.gui.ChannelPanel.ComboBoxChannelItem;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
@@ -102,7 +103,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		this.add(_statusPanel);
 		
 	}
-
+	
 	/**
 	 * Inner Class that handles the ChangeEvents thrown by the Sliders
 	 */
@@ -121,27 +122,26 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			if(e.getStateChange() == ItemEvent.SELECTED){
-				arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
-				_redSlider.setAll(newColor.getR());
-				_greenSlider.setAll(newColor.getG());
-				_blueSlider.setAll(newColor.getB());
-				_brightnessSlider.setAll(newColor.getA());
-				Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
-				_colorPanel.setBackground(color);
+				updateColors();
 			}
 		}
-		
+	}
+	
+	private void updateColors(){
+		arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
+		_redSlider.setAll(newColor.getR());
+		_greenSlider.setAll(newColor.getG());
+		_blueSlider.setAll(newColor.getB());
+		_brightnessSlider.setAll(newColor.getA());
+		if(_activatePanel.isActive()){
+			Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
+			_colorPanel.setBackground(color);
+		}
 	}
 	
 	@Override
 	public void channelcolorsUpdated(Object source,
 			List<IChannel> refreshedChannellist) {
-		arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
-		_redSlider.setValueLabel(newColor.getR());
-		_greenSlider.setValueLabel(newColor.getG());
-		_blueSlider.setValueLabel(newColor.getB());
-		_brightnessSlider.setValueLabel(newColor.getA());
-		Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
-		_colorPanel.setBackground(color);
+		updateColors();
 	}
 }

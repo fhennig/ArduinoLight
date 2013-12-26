@@ -49,7 +49,9 @@ public class ActivatePanel extends JPanel{
 				_activateButton.setText("Activate");
 			}
 		}
-		
 	}
 	
+	public boolean isActive(){
+		return _activateButton.isSelected();
+	}
 }
