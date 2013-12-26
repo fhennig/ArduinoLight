@@ -8,11 +8,8 @@ package arduinoLight.gui.customColor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -23,16 +20,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.omg.CORBA._PolicyStub;
-
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
-import arduinoLight.gui.ChannelPanel.ComboBoxChannelItem;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
-import arduinoLight.util.DebugConsole;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
@@ -50,7 +43,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	private JPanel _statusPanel = new JPanel();
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
-	private List<JPanel> _colorPanels = new ArrayList<JPanel>();
 	
 	private ColorSlider _redSlider = new ColorSlider("R", 0, 255, 0);
 	private ColorSlider _greenSlider = new ColorSlider("G", 0, 255, 0);
@@ -122,7 +114,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		public void stateChanged(ChangeEvent e) {
 			arduinoLight.util.Color color = new arduinoLight.util.Color(_brightnessSlider.getValue(), _redSlider.getValue(), _greenSlider.getValue(), _blueSlider.getValue());
 				_colorProvider.setChannelcolor(_channelPanel.getSelectedChannel(), color);
-
 		}
 	}
 	
@@ -143,7 +134,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_blueSlider.setAll(newColor.getB());
 		_brightnessSlider.setAll(newColor.getA());
 		if(_activatePanel.isActive()){
-			Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
 			refreshPreviewPanel();
 		}
 	}
