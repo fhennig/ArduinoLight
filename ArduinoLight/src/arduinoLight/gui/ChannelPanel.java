@@ -50,6 +50,8 @@ public class ChannelPanel extends JPanel{
 		_provider.addChannel();
 		refreshComboBoxModel();
 		
+		//_channelBox.setEditable(true);
+		
 		_removeButton.setEnabled(false);
 		_addButton.addActionListener(new AddButtonHandler());
 		_removeButton.addActionListener(new RemoveButtonHandler());

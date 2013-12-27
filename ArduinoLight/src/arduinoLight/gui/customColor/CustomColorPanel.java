@@ -130,7 +130,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 				_colorPanel.setBackground(color);
 			}
 		}
-		
 	}
 	
 	@Override
