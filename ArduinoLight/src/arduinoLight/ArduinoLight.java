@@ -14,39 +14,7 @@ import arduinoLight.gui.customColor.CustomColorPanel;
 public class ArduinoLight
 {
 	public static void main(String[] args)
-	{
-		/*Debugprovider provider = new Debugprovider();   //Debugprovider as a provider
-		provider.addChannel();					
-		provider.addChannel();
-		SimpleMixer mixer = new SimpleMixer(provider);
-		AmbloneConnection connection = new AmbloneConnection(mixer);
-		
-		Enumeration<CommPortIdentifier> ports = connection.getAvailablePorts();
-		CommPortIdentifier resultPort = null;
-		CommPortIdentifier port;
-		
-		while (ports.hasMoreElements())
-		{
-			port = ports.nextElement();
-			if (port.getName().equals("COM4"))
-			{
-				resultPort = port;
-				break;
-			}
-		}
-		
-		if (resultPort != null)
-		{
-			try {
-				connection.connect(resultPort, 256000);
-			} catch (PortInUseException e) {
-				System.out.println("PortInUseException");
-			}
-			
-			provider.setActive(true);
-			
-		}*/
-		
+	{		
 		CustomColorsProvider provider = new CustomColorsProvider();
 		
 		AmbloneConnection connection = new AmbloneConnection(provider);

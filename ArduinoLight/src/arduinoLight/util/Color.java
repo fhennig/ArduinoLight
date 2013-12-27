@@ -6,11 +6,11 @@ package arduinoLight.util;
  */
 public class Color implements RGBColor
 {
-	private int _argb = 0xff000000; //Initialize Black with 100% Alpha
+	private final int _argb; 
 	
 	public Color()
 	{
-		
+		_argb = 0xff000000; //Initialize Black with 100% Alpha
 	}
 	
 	public Color(int argb)
@@ -20,44 +20,22 @@ public class Color implements RGBColor
 	
 	public Color(int a, int r, int g, int b)
 	{
-		setA(a);
-		setR(r);
-		setG(g);
-		setB(b);
-	}
-	
-	
-	
-	
-	
-	private void setA(int alpha)
-	{
-		alpha = getNormalizedInt(alpha);
+		a = getNormalizedInt(a);
+		r = getNormalizedInt(r);
+		g = getNormalizedInt(g);
+		b = getNormalizedInt(b);
 		
-		_argb = (_argb & 0x00ffffff) | (alpha << 24);
+		int argb = 0;
+		argb = (argb & 0x00ffffff) | (a << 24);
+		argb = (argb & 0xff00ffff) | (r << 16);
+		argb = (argb & 0xffff00ff) | (g << 8);
+		argb = (argb & 0xffffff00) | b;
+
+		_argb = argb;
 	}
 	
-	private void setR(int red)
-	{
-		red = getNormalizedInt(red);
-		
-		_argb = (_argb & 0xff00ffff) | (red << 16);
-	}
 	
-	private void setG(int green)
-	{
-		green = getNormalizedInt(green);
-		
-		_argb = (_argb & 0xffff00ff) | (green << 8);
-	}
-	
-	private void setB(int blue)
-	{
-		blue = getNormalizedInt(blue);
-		
-		_argb = (_argb & 0xffffff00) | blue;
-	}
-	
+	//---------- Getters ---------------------------------------
 	public int getARGB()
 	{
 		return _argb;
@@ -89,34 +67,39 @@ public class Color implements RGBColor
 		return blue;
 	}
 	
+	//---------- RGBColor-Interface ----------------------------
 	public byte getCalculatedR()
 	{
-		int red = getR();
-		int alpha = getA();
-		double ratio = alpha / 255.0;
-		double result = Math.round(red * ratio);
-		return (byte) result;
+
+		return getAdjustedColor(getA(), getR());
 	}
 	
 	public byte getCalculatedG()
 	{
-		int green = getG();
-		int alpha = getA();
-		double ratio = alpha / 255.0;
-		double result = Math.round(green * ratio);
-		return (byte) result;
+		return getAdjustedColor(getA(), getG());
 	}
 	
 	public byte getCalculatedB()
 	{
-		int blue = getB();
-		int alpha = getA();
-		double ratio = alpha / 255.0;
-		double result = Math.round(blue * ratio);
-		return (byte) result;
+		return getAdjustedColor(getA(), getB());
 	}
 	
-	private int getNormalizedInt(int i)
+	
+	
+	//---------- static-helper-methods -------------------------
+	/**
+	 * Directly calculates the alpha-value into the color and returns the color as a byte.
+	 */
+	private static byte getAdjustedColor(int alpha, int color)
+	{
+		double ratio = alpha / 255.0;
+		return (byte) Math.round(color * ratio);
+	}
+	
+	/**
+	 * Returns a value between 0 and 255. 
+	 */
+	private static int getNormalizedInt(int i)
 	{
 		if (i > 255)
 			i = 255;
@@ -126,6 +109,7 @@ public class Color implements RGBColor
 		return i;
 	}
 
+	//---------- overridden from object ------------------------
 	@Override
 	public int hashCode() {
 		final int prime = 47;
@@ -152,8 +136,23 @@ public class Color implements RGBColor
 		return true;
 	}
 	
+	/**
+	 * returns the color in a format like this: #aarrggbb
+	 */
 	@Override
 	public String toString() {
-		return "#" + Integer.toHexString(_argb);
+		String hex = Integer.toHexString(_argb);
+		if (hex.length() < 8)
+		{
+			int amountMissing = 8 - hex.length();
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < amountMissing; i++)
+			{
+				builder.append("0");
+			}
+			builder.append(hex);
+			hex = builder.toString();
+		}
+		return "#" + hex;
 	}
 }

@@ -1,9 +1,10 @@
 package arduinoLight.gui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -27,8 +28,10 @@ public class ActivatePanel extends JPanel{
 		
 		_activateButton.addActionListener(new ButtonHandler());
 		
+		_activateButton.setPreferredSize(new Dimension(10, 25));
+		
 		this.setBorder(new TitledBorder(null, "Activate", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		this.setLayout(new GridLayout(1, 1));
 		
 		this.add(_activateButton);
 	}
@@ -49,7 +52,9 @@ public class ActivatePanel extends JPanel{
 				_activateButton.setText("Activate");
 			}
 		}
-		
 	}
 	
+	public boolean isActive(){
+		return _activateButton.isSelected();
+	}
 }

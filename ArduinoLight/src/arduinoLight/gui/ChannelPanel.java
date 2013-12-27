@@ -8,23 +8,18 @@ package arduinoLight.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-
-
-
 import arduinoLight.channelprovider.ChannellistProvider;
-import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
@@ -119,5 +114,14 @@ public class ChannelPanel extends JPanel{
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		
+	}
+	
+	public List<IChannel> getChannels(){
+		List<IChannel> channel = new ArrayList<IChannel>();
+		for(int i = 0; i < _channelBox.getItemCount(); i++){
+			ComboBoxChannelItem item = (ComboBoxChannelItem) _channelBox.getItemAt(i);
+			channel.add(item.getChannel());
+		}
+		return channel;
 	}
 }

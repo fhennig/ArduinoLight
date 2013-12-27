@@ -3,12 +3,10 @@ package arduinoLight.gui;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
 import java.util.Enumeration;
 
 import javax.swing.Box;
@@ -22,8 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
@@ -111,6 +107,9 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		_connectButton.addActionListener(new connectButtonHandler());
 		_refreshButton.addActionListener(new RefreshButtonHandler());
 		
+		_refreshButton.setPreferredSize(new Dimension(30, 10));
+		_connectButton.setPreferredSize(new Dimension(100, 25));
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
 		this.add(_connectionSpeedLabel);
@@ -118,7 +117,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		this.add(_lblNewLabel);
 		this.add(_portComboBox);
 		this.add(_refreshButton);
-		this.add(Box.createHorizontalGlue());
+		this.add(Box.createHorizontalStrut(20));
 		this.add(_connectButton);
 		
 	}
