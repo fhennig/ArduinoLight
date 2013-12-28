@@ -8,8 +8,6 @@ package arduinoLight.gui.customColor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
@@ -22,12 +20,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.omg.CORBA._PolicyStub;
-
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
-import arduinoLight.gui.ChannelPanel.ComboBoxChannelItem;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
@@ -48,7 +43,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	private JPanel _statusPanel = new JPanel();
 	private JPanel _sliderPanel = new JPanel();
 	private JPanel _previewPanel = new JPanel();
-	private JPanel _colorPanel = new JPanel();
 	
 	private ColorSlider _redSlider = new ColorSlider("R", 0, 255, 0);
 	private ColorSlider _greenSlider = new ColorSlider("G", 0, 255, 0);
@@ -85,11 +79,10 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		_sliderPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_sliderPanel.add(_brightnessSlider);
 		
-		_previewPanel.add(_colorPanel, BorderLayout.CENTER);
-		_colorPanel.setBackground(new Color(0, 0, 0));
+		_previewPanel.setLayout(new BoxLayout(_previewPanel, BoxLayout.LINE_AXIS));
+		refreshPreviewPanel();
 		
 		_previewPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		_colorPanel.setBorder(new LineBorder(Color.black));
 		_sliderPanel.setBorder(new TitledBorder(null, "RGB-Color", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 		
 		_mainPanel.add(_sliderPanel, BorderLayout.EAST);
@@ -100,9 +93,18 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		
 		this.add(_mainPanel);
 		this.add(_statusPanel);
-		
 	}
-
+	
+	private void refreshPreviewPanel(){
+		_previewPanel.removeAll();
+		for(IChannel channel : _channelPanel.getChannels()){
+			JPanel newPanel = new JPanel();
+			newPanel.setBackground(new Color(channel.getColor().getR(), channel.getColor().getG(), channel.getColor().getB(), 255));
+			newPanel.setBorder(new LineBorder(Color.black));
+			_previewPanel.add(newPanel);
+		}
+	}
+	
 	/**
 	 * Inner Class that handles the ChangeEvents thrown by the Sliders
 	 */
@@ -112,7 +114,6 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		public void stateChanged(ChangeEvent e) {
 			arduinoLight.util.Color color = new arduinoLight.util.Color(_brightnessSlider.getValue(), _redSlider.getValue(), _greenSlider.getValue(), _blueSlider.getValue());
 				_colorProvider.setChannelcolor(_channelPanel.getSelectedChannel(), color);
-
 		}
 	}
 	
@@ -121,27 +122,25 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			if(e.getStateChange() == ItemEvent.SELECTED){
-				arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
-				_redSlider.setAll(newColor.getR());
-				_greenSlider.setAll(newColor.getG());
-				_blueSlider.setAll(newColor.getB());
-				_brightnessSlider.setAll(newColor.getA());
-				Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
-				_colorPanel.setBackground(color);
+				updateColors();
 			}
 		}
-		
+	}
+	
+	private void updateColors(){
+		arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
+		_redSlider.setAll(newColor.getR());
+		_greenSlider.setAll(newColor.getG());
+		_blueSlider.setAll(newColor.getB());
+		_brightnessSlider.setAll(newColor.getA());
+		if(_activatePanel.isActive()){
+			refreshPreviewPanel();
+		}
 	}
 	
 	@Override
 	public void channelcolorsUpdated(Object source,
 			List<IChannel> refreshedChannellist) {
-		arduinoLight.util.Color newColor = _channelPanel.getSelectedChannel().getColor();
-		_redSlider.setValueLabel(newColor.getR());
-		_greenSlider.setValueLabel(newColor.getG());
-		_blueSlider.setValueLabel(newColor.getB());
-		_brightnessSlider.setValueLabel(newColor.getA());
-		Color color = new Color(newColor.getR(), newColor.getG(), newColor.getB(), 255);
-		_colorPanel.setBackground(color);
+		updateColors();
 	}
 }
