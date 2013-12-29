@@ -43,7 +43,7 @@ public class ChannelPanel extends JPanel{
 		this.setBorder(new TitledBorder(null, "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 
 		_provider.addChannel();
-		refreshComboBoxModel();
+		updateComboBoxModel();
 		
 		//_channelBox.setEditable(true);
 		
@@ -61,7 +61,7 @@ public class ChannelPanel extends JPanel{
 		_channelBox.addItemListener(listener);
 	}
 	
-	private void refreshComboBoxModel(){
+	private void updateComboBoxModel(){
 		_channelBoxModel.removeAllElements();
 		List<IChannel> newChannellist = _provider.getChannels();
 		for(IChannel channel : newChannellist){
@@ -93,7 +93,8 @@ public class ChannelPanel extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			_provider.addChannel();
-			refreshComboBoxModel();
+			updateComboBoxModel();
+			_channelBox.setSelectedIndex(_channelBoxModel.getSize() - 1);
 			_removeButton.setEnabled(true);
 		}
 	}
@@ -103,7 +104,7 @@ public class ChannelPanel extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			_provider.removeChannel(getSelectedChannel());
-			refreshComboBoxModel();
+			updateComboBoxModel();
 			if(_channelBox.getItemCount() < 2){
 				_removeButton.setEnabled(false);
 			}
@@ -114,14 +115,5 @@ public class ChannelPanel extends JPanel{
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		
-	}
-	
-	public List<IChannel> getChannels(){
-		List<IChannel> channel = new ArrayList<IChannel>();
-		for(int i = 0; i < _channelBox.getItemCount(); i++){
-			ComboBoxChannelItem item = (ComboBoxChannelItem) _channelBox.getItemAt(i);
-			channel.add(item.getChannel());
-		}
-		return channel;
 	}
 }

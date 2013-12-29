@@ -97,7 +97,8 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	
 	private void refreshPreviewPanel(){
 		_previewPanel.removeAll();
-		for(IChannel channel : _channelPanel.getChannels()){
+		List<IChannel> newChannels = _colorProvider.getChannels();
+		for(IChannel channel : newChannels){
 			JPanel newPanel = new JPanel();
 			newPanel.setBackground(new Color(channel.getColor().getR(), channel.getColor().getG(), channel.getColor().getB(), 255));
 			newPanel.setBorder(new LineBorder(Color.black));
