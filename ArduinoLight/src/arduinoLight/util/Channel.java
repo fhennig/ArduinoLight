@@ -12,7 +12,14 @@ public class Channel implements IChannel
 	private final int _id;
 	private Color _color;
 	
-	
+	/**
+	 * returns a clone of the given channel.
+	 */
+	public Channel(Channel channel)
+	{
+		this._color = channel.getColor();
+		this._id = channel._id;
+	}
 	
 	public Channel()
 	{
@@ -52,6 +59,9 @@ public class Channel implements IChannel
 		return _id * 137;
 	}
 
+	/**
+	 * Two channels  are equal if their IDs are equal.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
