@@ -1,4 +1,4 @@
-package arduinoLight.threading;
+package arduinoLight.interfaces;
 
 public interface Refreshable
 {

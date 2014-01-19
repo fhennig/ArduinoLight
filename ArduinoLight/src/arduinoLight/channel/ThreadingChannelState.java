@@ -14,8 +14,8 @@ import arduinoLight.util.Color;
 public class ThreadingChannelState
 {
 	private Set<String> _changedProperties = new HashSet<>();
-	private Color _color;
-	private String _name;
+	private Color _color = new Color();
+	private String _name = "";
 	
 	
 	

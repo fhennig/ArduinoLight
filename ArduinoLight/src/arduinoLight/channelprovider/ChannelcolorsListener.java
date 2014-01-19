@@ -3,7 +3,6 @@ package arduinoLight.channelprovider;
 import java.util.List;
 
 import arduinoLight.channel.IChannel;
-import arduinoLight.util.*;
 
 /**
  * This interface should be implemented by a Mixer, that can then react to the channelsUpdatedEvent and sent the colors via an Arduinoconnection

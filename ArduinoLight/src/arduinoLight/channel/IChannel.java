@@ -3,10 +3,8 @@ package arduinoLight.channel;
 import arduinoLight.util.Color;
 
 
-public interface IChannel
+public interface IChannel extends ReadonlyChannel
 {
-	public Color getColor();
 	public void setColor(Color color);
-	
-	public int getId();
+	public void setName(String name);
 }
