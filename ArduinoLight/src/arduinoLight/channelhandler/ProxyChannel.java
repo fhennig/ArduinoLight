@@ -34,6 +34,7 @@ public class ProxyChannel implements IChannel
 	public void setColor(Color color)
 	{
 		_color = color;
+		//TODO encapsule in state object
 	}
 
 	@Override
