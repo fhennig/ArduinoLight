@@ -2,6 +2,7 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.util.*;
 
 /**

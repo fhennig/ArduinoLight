@@ -3,6 +3,7 @@ package arduinoLight.channelprovider.generator.debugprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.generator.threading.CalculationThread;
 import arduinoLight.util.*;
 

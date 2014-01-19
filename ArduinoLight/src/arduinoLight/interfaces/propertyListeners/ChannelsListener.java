@@ -2,7 +2,7 @@ package arduinoLight.interfaces.propertyListeners;
 
 import java.util.List;
 
-import arduinoLight.util.IChannel;
+import arduinoLight.channel.IChannel;
 
 public interface ChannelsListener
 {

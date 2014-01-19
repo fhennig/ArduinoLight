@@ -2,9 +2,9 @@ package arduinoLight.channelprovider.modifier;
 
 import java.util.List;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.Channelprovider;
 import arduinoLight.interfaces.propertyListeners.ChannelsListener;
-import arduinoLight.util.IChannel;
 
 public abstract class ProviderDecorator extends Channelprovider implements ChannelsListener
 {

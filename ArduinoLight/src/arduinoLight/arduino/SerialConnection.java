@@ -9,13 +9,13 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.interfaces.Closeable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.interfaces.propertyListeners.SpeedListener;
 import arduinoLight.util.DebugConsole;
-import arduinoLight.util.IChannel;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.SpeedCounter;
 /**

@@ -19,8 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.ChannellistProvider;
-import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
 public class ChannelPanel extends JPanel{

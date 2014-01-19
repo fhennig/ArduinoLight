@@ -3,8 +3,8 @@ package arduinoLight.channelprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.interfaces.propertyListeners.ChannelsListener;
-import arduinoLight.util.IChannel;
 
 public abstract class Channelprovider
 {

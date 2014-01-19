@@ -1,4 +1,6 @@
-package arduinoLight.util;
+package arduinoLight.channel;
+
+import arduinoLight.util.Color;
 
 
 public interface IChannel
