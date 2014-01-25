@@ -1,7 +1,7 @@
 package arduinoLight.events;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import arduinoLight.util.DebugConsole;
 
@@ -15,19 +15,21 @@ import arduinoLight.util.DebugConsole;
 public class EventDispatchHandler
 {
 	private static EventDispatchHandler _instance;
-	private static Queue<Event> _queuedEvents = new ConcurrentLinkedQueue<>();
+	/** BlockingQueue used here, this is important for performance! */
+	private BlockingQueue<Event> _queuedEvents = new LinkedBlockingQueue<>();
 	private EventFiringThread _workerThread = new EventFiringThread();
 	
-	private EventDispatchHandler()
-	{
-		_workerThread.start();
-	}
+	/**
+	 * private constructor because this is a singleton.
+	 */
+	private EventDispatchHandler() { }
 	
 	public static EventDispatchHandler getInstance()
 	{
 		if (_instance == null) //Lazy Initialize.
 		{
 			_instance = new EventDispatchHandler();
+			_instance._workerThread.start();
 		}
 		return _instance;
 	}
@@ -50,18 +52,27 @@ public class EventDispatchHandler
 		public EventFiringThread()
 		{
 			this.setDaemon(true); //daemon thread. Is killed if the application is closed.
+			//this.setPriority(MIN_PRIORITY);
 		}
 		
 		public void run()
 		{		
 			while(true) //while(true) is viable here, as this is a daemon thread.
 			{
-				Event nextEvent = _queuedEvents.poll();
+				Event nextEvent = null;
+				try
+				{
+					nextEvent = _queuedEvents.take(); //take() blocks if no elements are available
+				} catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (nextEvent != null)
 				{
 					nextEvent.notifyListeners();
-					DebugConsole.print("EventFiringThread", "run", "Item refreshed.");
-					DebugConsole.print("EventFiringThread", "run", "Remaining Items: " + _queuedEvents.size());
+					DebugConsole.print("EventFiringThread", "run\t", "Item refreshed.");
+					DebugConsole.print("EventFiringThread", "run\t", "Remaining Items: " + _queuedEvents.size());
 				}
 			}
 		}
