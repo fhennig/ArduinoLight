@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import arduinoLight.ArduinoLight;
 import arduinoLight.channel.IChannel;
 import arduinoLight.channel.ThreadingChannel;
 
 /**
- * This has also some kind of "blackboard" functionality
+ * This has also some kind of "blackboard" functionality (Needs a lot of work).
+ * Could probably be a singleton (Or should we be able to have multiple factories? Think of the ids!). TODO
  * @author Felix
- *
  */
 public class ChannelFactory
 {
@@ -20,7 +19,7 @@ public class ChannelFactory
 	
 	public IChannel getChannel()
 	{
-		IChannel newChannel = new ThreadingChannel(_instances.getAndIncrement(), ArduinoLight.getRefreshQueue());
+		IChannel newChannel = new ThreadingChannel(_instances.getAndIncrement());
 		_registeredChannels.add(newChannel);
 		return newChannel;
 	}

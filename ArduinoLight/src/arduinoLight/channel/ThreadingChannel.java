@@ -2,53 +2,56 @@ package arduinoLight.channel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
-import arduinoLight.interfaces.Refreshable;
 import arduinoLight.interfaces.propertyListeners.ColorListener;
 import arduinoLight.interfaces.propertyListeners.NameListener;
+import arduinoLight.threading.Event;
+import arduinoLight.threading.EventDispatchHandler;
 import arduinoLight.util.Color;
 
-public class ThreadingChannel implements IChannel, Refreshable
+/**
+ * This implementation of the IChannel interface uses a queue in a special thread to fire its events.
+ * This way, the swing-thread is blocked for shorter amount of times.
+ * @author Felix
+ */
+public class ThreadingChannel implements IChannel
 {
-	private Queue<Refreshable> _queue;
 	private final int _id;
+	private Color _color = new Color();
+	private String _name = "";
 	
-	private ThreadingChannelState _currentState = new ThreadingChannelState();
-	private ThreadingChannelState _futureState = new ThreadingChannelState();
 	private List<ColorListener> _colorListeners = new ArrayList<>();
 	private List<NameListener> _nameListeners = new ArrayList<>();
 	
-	public ThreadingChannel(int id, Queue<Refreshable> refreshQueue)
+	public ThreadingChannel(int id)
 	{
 		_id = id;
-		_queue = refreshQueue;
 	}
 	
 	@Override
 	public Color getColor()
 	{
-		return _currentState.getColor();
+		return _color;
 	}
 
 	@Override
 	public void setColor(Color color)
 	{
-		_futureState.setColor(color);
-		queue();
+		_color = color;
+		raiseColorChangedEvent();
 	}
 	
 	@Override
 	public String getName()
 	{
-		return _currentState.getName();
+		return _name;
 	}
 	
 	@Override
 	public void setName(String name)
 	{
-		_futureState.setName(name);
-		queue();
+		_name = name;
+		raiseNameChangedEvent();
 	}
 
 	@Override
@@ -57,47 +60,32 @@ public class ThreadingChannel implements IChannel, Refreshable
 		return _id;
 	}
 	
-	private void queue()
-	{
-		_queue.add(this);
-	}
-	
-	/**
-	 * This method applies every change made to the current state.
-	 * This leads to event-firing.
-	 * This method is intended to get called from a special change-handling-thread.
-	 */
-	public void refresh()
-	{
-		if (!_futureState.hasChanged())
-			return; //If nothing changed, we do nothing.
-		
-		synchronized (_futureState) //Copying and afterward cleaning the futureState is an atomic action.
-		{
-			_currentState = new ThreadingChannelState(_futureState);
-			_futureState.clearChangetrack();
-		}
-		raiseEvents(_currentState);
-	}
-	
-	private void raiseEvents(ThreadingChannelState state)
-	{
-		if (state.getChangedProperties().contains("Color"))
-			raiseColorChangedEvent();
-		if (state.getChangedProperties().contains("Name"))
-			raiseNameChangedEvent();
-	}
-	
 	private void raiseColorChangedEvent()
 	{
-		for (ColorListener listener : _colorListeners)
-			listener.colorChanged(this, getColor());
+		final Color color = _color; //Get final reference to the current color, to use in anonymous class
+		EventDispatchHandler.getInstance().dispatch(new Event(this, "ColorChanged")
+		{
+			@Override
+			public void notifyListeners()
+			{
+				for (ColorListener listener : _colorListeners)
+					listener.colorChanged(this, color);
+			}
+		});
 	}
 	
 	private void raiseNameChangedEvent()
 	{
-		for (NameListener listener : _nameListeners)
-			listener.nameChanged(this, getName());
+		final String name = _name;
+		EventDispatchHandler.getInstance().dispatch(new Event(this, "NameChanged")
+		{
+			@Override
+			public void notifyListeners()
+			{
+				for (NameListener listener : _nameListeners)
+					listener.nameChanged(this, name);
+			}
+		});
 	}
 
 	@Override
