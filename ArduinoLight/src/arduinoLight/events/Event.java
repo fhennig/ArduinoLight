@@ -1,4 +1,4 @@
-package arduinoLight.threading;
+package arduinoLight.events;
 
 /**
  * Abstract Event-class.

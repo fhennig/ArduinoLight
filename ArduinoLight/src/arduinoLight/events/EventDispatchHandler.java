@@ -1,4 +1,4 @@
-package arduinoLight.threading;
+package arduinoLight.events;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -3,10 +3,10 @@ package arduinoLight.channel;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.events.Event;
+import arduinoLight.events.EventDispatchHandler;
 import arduinoLight.interfaces.propertyListeners.ColorListener;
 import arduinoLight.interfaces.propertyListeners.NameListener;
-import arduinoLight.threading.Event;
-import arduinoLight.threading.EventDispatchHandler;
 import arduinoLight.util.Color;
 
 /**
