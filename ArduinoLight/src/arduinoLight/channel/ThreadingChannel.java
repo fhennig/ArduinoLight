@@ -16,9 +16,10 @@ import arduinoLight.util.Color;
  */
 public class ThreadingChannel implements IChannel
 {
+	/** _id needs to be unique, it is used for the hashCode */
 	private final int _id;
 	private Color _color = new Color();
-	private String _name = "";
+	private String _name = "Channel";
 	
 	private List<ColorListener> _colorListeners = new ArrayList<>();
 	private List<NameListener> _nameListeners = new ArrayList<>();
@@ -28,6 +29,7 @@ public class ThreadingChannel implements IChannel
 		_id = id;
 	}
 	
+	//---------- IChannel: Getters / Setters -------------------
 	@Override
 	public Color getColor()
 	{
@@ -60,6 +62,7 @@ public class ThreadingChannel implements IChannel
 		return _id;
 	}
 	
+	//---------- Events ----------------------------------------
 	private void raiseColorChangedEvent()
 	{
 		final Color color = _color; //Get final reference to the current color, to use in anonymous class
@@ -112,15 +115,16 @@ public class ThreadingChannel implements IChannel
 		_nameListeners.remove(listener);		
 	}
 	
+	//---------- overridden from object ------------------------
 	@Override
 	public int hashCode()
 	{
-		return _id;
+		return _id * 57;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return getName() + " " + _id;
+		return getName() + "[" + _id + "]";
 	}
 }
