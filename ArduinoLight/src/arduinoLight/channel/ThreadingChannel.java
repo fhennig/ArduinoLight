@@ -1,7 +1,7 @@
 package arduinoLight.channel;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import arduinoLight.events.Event;
 import arduinoLight.events.EventDispatchHandler;
@@ -10,20 +10,26 @@ import arduinoLight.interfaces.propertyListeners.NameListener;
 import arduinoLight.util.Color;
 
 /**
- * This implementation of the IChannel interface uses a queue in a special thread to fire its events.
+ * This class is threadsafe!
+ * This implementation of the IChannel interface delegates Event firing to a different Thread.
  * This way, the swing-thread is blocked for shorter amount of times.
- * @author Felix
  */
 public class ThreadingChannel implements IChannel
 {
-	/** _id needs to be unique, it is used for the hashCode */
+	/** unique id, used for hashCode. Is threadsafe because final and primitive */
 	private final int _id;
-	private Color _color = new Color();
-	private String _name = "Channel";
 	
-	private List<ColorListener> _colorListeners = new ArrayList<>();
-	private List<NameListener> _nameListeners = new ArrayList<>();
+	/** immutable objects + volatile used to ensure visibility of changes across all threads */
+	private volatile Color _color = new Color();
+	private volatile String _name = "Channel";
 	
+	/** final CopyOnWriteArrayList used for save concurrent access / thread-safety */
+	private final List<ColorListener> _colorListeners = new CopyOnWriteArrayList<>();
+	private final List<NameListener> _nameListeners = new CopyOnWriteArrayList<>();
+	
+	/**
+	 * @param id  a unique integer.
+	 */
 	public ThreadingChannel(int id)
 	{
 		_id = id;
@@ -40,7 +46,7 @@ public class ThreadingChannel implements IChannel
 	public void setColor(Color color)
 	{
 		_color = color;
-		raiseColorChangedEvent();
+		raiseColorChangedEvent(color);
 	}
 	
 	@Override
@@ -53,7 +59,7 @@ public class ThreadingChannel implements IChannel
 	public void setName(String name)
 	{
 		_name = name;
-		raiseNameChangedEvent();
+		raiseNameChangedEvent(name);
 	}
 
 	@Override
@@ -63,9 +69,12 @@ public class ThreadingChannel implements IChannel
 	}
 	
 	//---------- Events ----------------------------------------
-	private void raiseColorChangedEvent()
+	/**
+	 * Color needs to get passed in as a parameter, to ensure that the correct color
+	 * is sent to the listeners.
+	 */
+	private void raiseColorChangedEvent(final Color color)
 	{
-		final Color color = _color; //Get final reference to the current color, to use in anonymous class
 		EventDispatchHandler.getInstance().dispatch(new Event(this, "ColorChanged")
 		{
 			@Override
@@ -77,9 +86,8 @@ public class ThreadingChannel implements IChannel
 		});
 	}
 	
-	private void raiseNameChangedEvent()
+	private void raiseNameChangedEvent(final String name)
 	{
-		final String name = _name;
 		EventDispatchHandler.getInstance().dispatch(new Event(this, "NameChanged")
 		{
 			@Override
@@ -125,6 +133,6 @@ public class ThreadingChannel implements IChannel
 	@Override
 	public String toString()
 	{
-		return getName() + "[" + _id + "]";
+		return _name + "[" + _id + "]";
 	}
 }
