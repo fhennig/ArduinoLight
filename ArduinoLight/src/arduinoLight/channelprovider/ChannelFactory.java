@@ -41,15 +41,15 @@ public class ChannelFactory
 	}
 	
 	//TODO where is this used, why is this used, how is this used?
-	//TODO look at _registeredChannels...
-	public synchronized IChannel getChannel(int id)
-	{
-		for (IChannel channel : _registeredChannels)
-		{
-			if (channel.getId() == id)
-				return channel;
-		}
-		
-		return null;
-	}
+	//TODO look at _registeredChannels... if it is needed, think about hashset.
+//	public synchronized IChannel getChannel(int id)
+//	{
+//		for (IChannel channel : _registeredChannels)
+//		{
+//			if (channel.getId() == id)
+//				return channel;
+//		}
+//		
+//		return null;
+//	}
 }
