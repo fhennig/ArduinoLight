@@ -21,14 +21,14 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.arduino.SerialConnection;
+import arduinoLight.arduino.SerialConnectionOld;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.interfaces.propertyListeners.SpeedListener;
 
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel implements ActiveListener, SpeedListener, ConnectionPanel{
 	
-	SerialConnection _connection;
+	SerialConnectionOld _connection;
 	
 	java.net.URL _imageURL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
 	ImageIcon _icon = new ImageIcon(_imageURL, "refresh");
@@ -41,7 +41,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 	JButton _refreshButton;
 	
 	
-	public SerialConnectionPanel(SerialConnection connection){
+	public SerialConnectionPanel(SerialConnectionOld connection){
 		initImageIcon();
 		_refreshButton = new JButton(_icon);
 		_connection = connection;
