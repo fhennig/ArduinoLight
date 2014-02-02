@@ -12,9 +12,9 @@ import arduinoLight.util.RGBColor;
  * @see AmblonePackage
  * @author Felix
  */
-public class AmbloneConnection extends SerialConnectionOld
+public class AmbloneConnectionOld extends SerialConnectionOld
 {		
-	public AmbloneConnection(Channelgenerator channelprovider)
+	public AmbloneConnectionOld(Channelgenerator channelprovider)
 	{
 		super(channelprovider);
 	}

@@ -3,7 +3,7 @@ package arduinoLight;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import arduinoLight.arduino.amblone.AmbloneConnection;
+import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
@@ -17,11 +17,10 @@ public class ArduinoLight
 	{		
 		CustomColorsProvider provider = new CustomColorsProvider();
 		
-		AmbloneConnection connection = new AmbloneConnection(provider);
+		AmbloneConnectionOld connection = new AmbloneConnectionOld(provider);
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
-		connection.addSpeedListener(connectionPanel);
 		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
 		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
 		

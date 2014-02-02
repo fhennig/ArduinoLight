@@ -17,39 +17,30 @@ import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.interfaces.propertyListeners.SpeedListener;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
-import arduinoLight.util.SpeedCounter;
 /**
  * This class provides a framework to set up a serialconnection. Subclasses need to implement the transmission protocol.
  * The Speed of the connection is observable via the SpeedListener-Interface.
  * Is observable by any class that implements SerialConnectionListener.
  * @author Felix
  */
-public abstract class SerialConnectionOld implements SpeedListener, ChannelcolorsListener, Closeable
+public abstract class SerialConnectionOld implements ChannelcolorsListener, Closeable
 {
-	private static final int TIME_OUT = 2000; //TODO Understand this ...
-	
 	protected Channelgenerator _channelprovider;
-	protected SerialPort _serialPort;
-	protected BufferedOutputStream _serialOutputStream;
 	
 	protected boolean _connectionActive = false;
 	
-	private final List<SpeedListener> _speedListeners = new ArrayList<SpeedListener>();
 	private final List<ActiveListener> _activeListeners = new ArrayList<ActiveListener>();
 	
-	/** SpeedCounter to measure the amount of packages sent per second */
-	private final SpeedCounter _ppsCounter = new SpeedCounter();
-	private int _pps;
+	private SerialConnection _connection;
 	
-	//TODO serialconnection (just sending bytes) should be encapsuled
 	//TODO special for amblone: use hashmap with 4 entries.
 	//TODO add stuff to set refreshfrequency
 			
 	
 	public SerialConnectionOld(Channelgenerator channelprovider)
 	{
-		_ppsCounter.addSpeedChangeListener(this);
 		setColorprovider(channelprovider);
+		_connection = new SerialConnection();
 	}
 	
 	
@@ -57,49 +48,15 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 	/**
 	 * Gives an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
 	 */
-	public Enumeration<CommPortIdentifier> getAvailablePorts()
+	public static Enumeration<CommPortIdentifier> getAvailablePorts()
 	{
-		@SuppressWarnings("unchecked")
-		Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
-		return portEnum;
+		return SerialConnection.getAvailablePorts();
 	}
-	
-	//TODO call this initialize or start and encapsule it
-	//TODO frequency passed in here as a parameter? look up if frequency can be changed
-	/**
-	 * Tries to establish a serialconnection with the given portId and baudRate and set the _serialOutputStream.
-	 * If the connection could be established, _transmissionActive is set to true.
-	 * @param portId a CommPortIdentifier-object, used for identifying and connecting to a port.
-	 * @param baudRate This has to match the settings in the arduino-code. Recommended value: 155200.
-	 * @throws PortInUseException, IllegalArgumentException
-	 * @throws IllegalStateException if there is already a connection active
-	 */
+	 
 	public void connect(CommPortIdentifier portId, int baudRate) throws PortInUseException
 	{
-		if (_connectionActive)
-		{
-			//'connect' not possible, there is already a connection set up.
-			throw new IllegalStateException("There is already a connection established");
-		}
-		
-		try
-		{
-			_serialPort = (SerialPort) portId.open("ArduinoLight", TIME_OUT); //"ArduinoLight" is the appName //throws PortInUse
-			_serialPort.setSerialPortParams(baudRate,
-					SerialPort.DATABITS_8,
-					SerialPort.STOPBITS_1,
-					SerialPort.PARITY_NONE);
-			_serialOutputStream = new BufferedOutputStream(_serialPort.getOutputStream());
-			
-			setActive(true); //using setActive to trigger event-firing
-			_ppsCounter.reset();
-		}
-		catch (UnsupportedCommOperationException | IOException ex)
-		{
-			throw new IllegalArgumentException(ex);
-		}
-		
-		debugprint("connect", "Connecting successful!");
+		_connection.open(portId, baudRate);
+		setActive(true);
 	}
 	
 	//TODO call this shutdown and encapsule
@@ -108,13 +65,8 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 	 */
 	public void disconnect()
 	{
-		if (_serialPort != null)
-		{
-			_serialPort.close();
-		}
+		_connection.close();
 		setActive(false);
-		_ppsCounter.reset();
-		debugprint("disconnect", "Disconnecting successful!");
 	}
 	
 	//TODO this as a private method looks confusing
@@ -142,7 +94,6 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 		}
 		_channelprovider = channelprovider;
 		_channelprovider.addChannelcolorsListener(this);
-		_ppsCounter.reset();
 	}
 	
 	/**
@@ -151,50 +102,25 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 	 */
 	protected abstract byte[] getBytesToTransmit(List<RGBColor> colors);
 	
-	//TODO this will end up in its own thread.
 	protected synchronized void transmit(byte[] bytes)
 	{
-		debugprint("transmit", "transmit-method reached.");
-		if (!_connectionActive)
-		{
-			debugprint("transmit", "connectionActive = false! transmission not possible.");
-			throw new IllegalStateException("There is no connection established for transmission!");
-		}
-		
-		try
-		{
-			_serialOutputStream.write(bytes);
-			_serialOutputStream.flush();
-			_ppsCounter.tick();
-		}
-		catch(IOException ex)
-		{
-			debugprint("transmit", "IOException" + ex.toString());
-			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
-			throw new IllegalStateException(ex);
-		}
-		debugprint("transmit", "transmission successful!");
+		_connection.transmit(bytes);
 	}
 	
 	//---------- Getters --------------------------------------- //TODO these all move in the new class
 	public String getPortName()
 	{
-		return _serialPort.getName();
+		return _connection.getPortName();
 	}
 	
 	public int getBaudRate()
 	{
-		return _serialPort.getBaudRate();
-	}
-	
-	public int getSpeed()
-	{
-		return _pps;
+		return _connection.getBaudRate();
 	}
 	
 	public boolean IsActive()
 	{
-		return _connectionActive;
+		return _connection.isOpen();
 	}
 
 	//---------- Event-Notify-Methods --------------------------
@@ -224,27 +150,6 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 		byte[] bytes = getBytesToTransmit(colors);
 		transmit(bytes);
 	}
-
-	//TODO this will move or be obsolete
-	/**
-	 * Gets called by the _ppsCounter if a new Speed is calculated.
-	 * The 'event' is then 'forwarded' to all Listeners.
-	 */
-	@Override
-	public void speedChanged(Object source, int newSpeed)
-	{
-		_pps = newSpeed;
-		fireSpeedChangedEvent(_pps);
-	}
-	
-	//---------- Event-Firing ----------------------------------
-	private void fireSpeedChangedEvent(int newSpeed)
-	{
-		for (SpeedListener listener : _speedListeners)
-		{
-			listener.speedChanged(this, newSpeed);
-		}
-	}
 	
 	public void fireActiveChangedEvent(boolean newActive)
 	{
@@ -266,30 +171,10 @@ public abstract class SerialConnectionOld implements SpeedListener, Channelcolor
 		_activeListeners.remove(listener);
 	}
 	
-	public void addSpeedListener(SpeedListener listener)
-	{
-		_speedListeners.add(listener);
-	}
-	
-	public void removeSpeedListener(SpeedListener listener)
-	{
-		_speedListeners.remove(listener);
-	}
-	
 	//---------- Closeable-Interface ---------------------------
 	@Override
 	public void onCloseEvent()
 	{
 		disconnect();
-	}
-	
-	//---------- Debug-Console-printing ------------------------
-	/**
-	 * prints, uses the DebugConsole.
-	 * 'containingClass' is already preset.
-	 */
-	private void debugprint(String method, String message)
-	{
-		DebugConsole.print("SerialConnection", method, message);
 	}
 }

@@ -26,14 +26,14 @@ import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.interfaces.propertyListeners.SpeedListener;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements ActiveListener, SpeedListener, ConnectionPanel{
+public class SerialConnectionPanel extends JPanel implements ActiveListener, ConnectionPanel{
 	
 	SerialConnectionOld _connection;
 	
 	java.net.URL _imageURL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
 	ImageIcon _icon = new ImageIcon(_imageURL, "refresh");
 	
-	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0");
+	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0"); //label for pps TODO this is obsolete
 	JLabel _lblNewLabel = new JLabel("COM-Port: ");
 	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
 	JComboBox<ComboBoxPortItem> _portComboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
@@ -78,7 +78,7 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 
 	private void refreshComboBox(){
 		_comboBoxModel.removeAllElements();
-		Enumeration<CommPortIdentifier> ports = _connection.getAvailablePorts();
+		Enumeration<CommPortIdentifier> ports = SerialConnectionOld.getAvailablePorts();
 		
 		while(ports.hasMoreElements()){
 			_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
@@ -147,11 +147,6 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Spe
 		} else {
 			_connectButton.setText("Connect");
 		}
-	}
-
-	@Override
-	public void speedChanged(Object source, int newSpeed) {
-		_connectionSpeedLabel.setText("Packages per Second: " + newSpeed );
 	}
 	
 	public void disconnect(){
