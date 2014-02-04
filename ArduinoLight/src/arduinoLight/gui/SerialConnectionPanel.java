@@ -23,7 +23,6 @@ import javax.swing.border.TitledBorder;
 
 import arduinoLight.arduino.SerialConnectionOld;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
-import arduinoLight.interfaces.propertyListeners.SpeedListener;
 
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel implements ActiveListener, ConnectionPanel{

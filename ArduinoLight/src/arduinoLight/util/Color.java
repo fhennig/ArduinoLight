@@ -6,6 +6,8 @@ package arduinoLight.util;
  */
 public class Color implements RGBColor
 {
+	public static final Color BLACK = new Color(255, 0, 0, 0);
+	
 	private final int _argb; 
 	
 	public Color()

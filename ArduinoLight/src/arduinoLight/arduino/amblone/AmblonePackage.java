@@ -3,7 +3,6 @@ package arduinoLight.arduino.amblone;
 import java.util.ArrayList;
 import java.util.List;
 
-import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 
 

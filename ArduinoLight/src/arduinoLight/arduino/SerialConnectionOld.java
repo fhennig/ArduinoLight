@@ -2,11 +2,7 @@ package arduinoLight.arduino;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.util.*;
 
 import arduinoLight.channel.IChannel;
@@ -14,8 +10,6 @@ import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.interfaces.Closeable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
-import arduinoLight.interfaces.propertyListeners.SpeedListener;
-import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 /**
  * This class provides a framework to set up a serialconnection. Subclasses need to implement the transmission protocol.
