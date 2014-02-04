@@ -6,12 +6,11 @@ import arduinoLight.util.DebugConsole;
 /**
  * Abstract Event-class.
  * This class can be easily implemented as an anonymous class in a typical 'raise...Event()'-method.
- * @author Felix
  */
 public abstract class Event implements Runnable
 {
 	private final int _hashCode;
-	private final String _name;
+	private final String _name; //Currently only used for debugging
 	
 	/**
 	 * The constructor takes a source object and a string as parameters.
@@ -38,8 +37,8 @@ public abstract class Event implements Runnable
 	@Override
 	public void run()
 	{
+		DebugConsole.print("Event", "run", "firing Event: " + _name);
 		notifyListeners();
-		DebugConsole.print("Event", "run", "Event: '" + _name + "' fired!");
 	}
 	
 	@Override

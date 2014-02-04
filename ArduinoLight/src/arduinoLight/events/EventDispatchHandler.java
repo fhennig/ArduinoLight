@@ -36,7 +36,7 @@ public class EventDispatchHandler
 	 */
 	public void dispatch(Event event)
 	{
+		DebugConsole.print("EventDispatchHandler", "dispatch", "dispatching Event: " + event.toString());
 		_executor.execute(event);
-		DebugConsole.print("EventDispatchHandler", "dispatch", "Event: '" + event.toString() + "' dispatched.");
 	}
 }

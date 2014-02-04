@@ -90,7 +90,6 @@ public class SerialConnection
 	 */
 	public void transmit(byte[] bytes)
 	{
-		debugprint("transmit", "transmit-method reached.");
 		if (!_open)
 		{
 			debugprint("transmit", "open = false! transmission not possible.");
@@ -108,7 +107,6 @@ public class SerialConnection
 			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
 			throw new IllegalStateException(ex);
 		}
-		debugprint("transmit", "transmission successful!");
 	}
 	
 	//---------- Getters ---------------------------------------

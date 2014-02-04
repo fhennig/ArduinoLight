@@ -1,72 +1,62 @@
-package arduinoLight.channelprovider.generator.debugprovider;
+package arduinoLight.channelprovider;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import arduinoLight.channel.IChannel;
-import arduinoLight.channelprovider.generator.threading.CalculationThread;
 import arduinoLight.util.*;
 
 /**
- * This Thread sets every channel to red, green, blue within a 1-second-interval.
- * @author Felix
- *
+ * This Thread holds a List of Channels and changes their Colors every second.
+ * Colors are RED, GREEN, BLUE. 
  */
-public class DebugCalculationThread extends CalculationThread {
-
-	private static final Color RED = new Color(255, 255, 0, 0);
-	private static final Color GREEN = new Color(255, 0, 255, 0);
-	private static final Color BLUE = new Color(255, 0, 0, 255);
+public class DebugColorswitchThread extends Thread
+{
+	private final List<IChannel> _channels = new CopyOnWriteArrayList<>();
 	
-	private volatile List<IChannel> _channels;
-	
-	
-	public DebugCalculationThread(List<IChannel> channels)
+	public DebugColorswitchThread(Collection<IChannel> collection)
 	{
-		_channels = channels;
+		_channels.addAll(collection);
 	}
 	
-	public void setChannels(List<IChannel> channels)
+	public List<IChannel> getChannels()
 	{
-		_channels = channels;
+		return _channels;
 	}
 	
 	
 	@Override
 	public void run()
 	{		
-		int i = 0;
+		int i = 0; //variable to switch through colors
 		Color currentColor = new Color(255, 255, 255, 255);
 		while(!isInterrupted())
 		{
-			List<IChannel> channelsCopy = new ArrayList<IChannel>(_channels);
 			DebugConsole.print("TestCalculationThread", "run", "currentColor: " + currentColor.toString());
-			
-			
 			
 			switch(i)
 			{
-			case 0: currentColor = RED; break;
-			case 1: currentColor = GREEN; break;
-			case 2: currentColor = BLUE; break;
+			case 0: currentColor = Color.RED; break;
+			case 1: currentColor = Color.GREEN; break;
+			case 2: currentColor = Color.BLUE; break;
 			}
 			
-			for (IChannel ch : channelsCopy)
+			for (IChannel ch : _channels)
 			{
 				ch.setColor(currentColor);
 			}
 			
 			i = (i + 1) % 3;
-			DebugConsole.print("TestCalculationThread", "run", "i = " + i);
-			fireIterationFinishedEvent();
-			try {
+			try
+			{
 				sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO What to do here? [InterruptedException]
-				//e.printStackTrace();
-				break;
+			}
+			catch (InterruptedException e)
+			{
+				break; //break --> ends thread
 			}
 		}
+		DebugConsole.print("TestCalculationThread", "run", "terminating Thread!");
 	}
 
 }
