@@ -3,6 +3,9 @@ package arduinoLight.channelprovider.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.ArduinoLight;
+import arduinoLight.channel.IChannel;
+import arduinoLight.channelprovider.ChannelFactory;
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.ChannelcompositionListener;
 import arduinoLight.channelprovider.ChannellistProvider;
@@ -28,7 +31,7 @@ public abstract class Channelgenerator extends Channelprovider implements Channe
 	public void addChannel()
 	{
 		//TODO currently the channel object is created here and no name is given. think about if this is good (probably not).
-		_channels.add(new Channel());
+		_channels.add(ChannelFactory.getInstance().getChannel());
 		fireChannelsChangedEvent();
 	}
 	

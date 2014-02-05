@@ -21,9 +21,10 @@ import javax.swing.border.TitledBorder;
 
 
 
+
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.ChannellistProvider;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
-import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
 public class StatusPanel extends JPanel implements ActiveListener{

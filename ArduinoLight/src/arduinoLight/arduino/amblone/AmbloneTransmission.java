@@ -1,0 +1,127 @@
+package arduinoLight.arduino.amblone;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import arduinoLight.arduino.*;
+import arduinoLight.channel.IChannel;
+import arduinoLight.util.Color;
+import arduinoLight.util.RGBColor;
+
+/**
+ * This class handles the periodic transmission of colors through a serial connection
+ * using the amblone protocol. 
+ */
+public class AmbloneTransmission
+{
+	private static final int SUPPORTED_CHANNELS = 4;
+	private ConcurrentMap<Integer, IChannel> _map = new ConcurrentHashMap<>();
+	private SerialConnection _connection;
+	private ScheduledExecutorService _executor;
+	
+	/**
+	 * @param port  an integer specifying an output port. 0 <= port < 4
+	 * @param channel  a channel that should be mapped to this output.
+	 */
+	public void setOutput(int port, IChannel channel)
+	{
+		if (port < 0 || port >= SUPPORTED_CHANNELS)
+		{
+			throw new IllegalArgumentException("Illegal Value for 'port' given: " + port);
+		}
+		if (channel == null) //if channel == null, the key is removed (every key should have a valid channel)
+			clearOutput(port);
+		else
+			_map.put(port, channel);
+	}
+	
+	/** Stops output on the specified port */
+	public void clearOutput(int port)
+	{
+		_map.remove(port);
+	}
+	
+	/**
+	 * This method expects an already opened connection.
+	 * Configuring a SerialConnection is not the purpose of this class.
+	 * @param connection  an open connection
+	 * @param frequency  the amount of refreshes per second (Hz)
+	 */
+	public synchronized void start(SerialConnection connection, int frequency)
+	{
+		if (connection.isOpen() == false)
+			throw new IllegalArgumentException("the connection must be open!");
+		
+		_connection = connection;
+		_executor = Executors.newSingleThreadScheduledExecutor();
+		long period = getPeriod(frequency);
+		Runnable transmission = new Runnable()
+		{
+			public void run()
+			{
+				AmblonePackage p = new AmblonePackage(getCurrentColors());
+				_connection.transmit(p.toByteArray());
+			}
+		};
+		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
+	}
+	
+	/**
+	 * This method stops the transission and returns the connection that
+	 * was passed in with 'start(...)'.
+	 */
+	public synchronized SerialConnection stopTransmission()
+	{
+		_executor.shutdown();
+		_executor = null;
+		SerialConnection c = _connection;
+		_connection = null;
+		
+		return c;
+	}
+	
+	/**
+	 * Returns a list of colors. //TODO write proper documentation
+	 * @return  a list of colors taken from the currently mapped channels
+	 */
+	private List<RGBColor> getCurrentColors()
+	{
+		//Find out how much channels are in use:
+		int channelsUsed = 0;
+		for (int i = SUPPORTED_CHANNELS - 1; i >= 0; i--)
+		{
+			if (_map.containsKey(i))
+			{
+				channelsUsed = i + 1;
+				break;
+			}
+		}
+		
+		List<RGBColor> result = new ArrayList<>(channelsUsed);
+		for (int i = 0; i < channelsUsed; i++)
+		{
+			IChannel channel = _map.get(i);
+			
+			if (channel != null)
+				result.add(channel.getColor());
+			else
+				result.add(Color.BLACK); //Add black for every output that is not in use.
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @param frequency  amount per second (Hz)
+	 * @return  the period in nanoseconds
+	 */
+	private static long getPeriod(int frequency)
+	{
+		return Math.round(1000000000.0 / frequency);
+	}
+}

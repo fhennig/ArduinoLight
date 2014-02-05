@@ -20,13 +20,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
-import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
 public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{

@@ -14,6 +14,6 @@ public class DebugConsole
 	public static void print(String containingClass, String method, String message)
 	{
 		if (isEnabled())
-			System.out.println("+++ " + containingClass + ": " + method + ": " + message);
+			System.out.println("+++ " + containingClass + ":\t" + method + ":\t" + message);
 	}
 }

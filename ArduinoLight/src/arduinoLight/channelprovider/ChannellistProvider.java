@@ -2,7 +2,7 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
-import arduinoLight.util.IChannel;
+import arduinoLight.channel.IChannel;
 
 public interface ChannellistProvider
 {

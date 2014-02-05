@@ -1,7 +1,7 @@
 package arduinoLight.channelprovider.generator.customColors;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.generator.Channelgenerator;
-import arduinoLight.util.IChannel;
 import arduinoLight.util.Color;
 
 public class CustomColorsProvider extends Channelgenerator

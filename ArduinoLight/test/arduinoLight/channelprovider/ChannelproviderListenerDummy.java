@@ -2,8 +2,8 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
-import arduinoLight.util.IChannel;
 
 public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannelcompositionListener, ActiveListener
 {

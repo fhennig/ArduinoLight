@@ -8,7 +8,6 @@ package arduinoLight.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -19,8 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.ChannellistProvider;
-import arduinoLight.util.IChannel;
 
 @SuppressWarnings("serial")
 public class ChannelPanel extends JPanel{
