@@ -10,6 +10,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+@SuppressWarnings("serial")
 public class ColorSlider extends JPanel{
 
 	Set<ChangeListener> _listener = new HashSet<ChangeListener>();

@@ -1,7 +1,5 @@
 package arduinoLight.channelprovider.generator.ambientlight;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Represents a relative screen part (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
@@ -10,7 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Screenselection
 {
 	private boolean[][] _matrix;
-	private List<ScreenselectionListener> _listeners = new CopyOnWriteArrayList<ScreenselectionListener>();
 	
 	
 	/**
@@ -33,16 +30,12 @@ public class Screenselection
 	 */
 	public void setCell(int x, int y, boolean flag)
 	{
-		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
-		{
-			throw new IllegalArgumentException();
-		}
+		coordinatesInBounds(x, y);
 		
 		synchronized (_matrix)
 		{
 			_matrix[x][y] = flag;
 		}
-		fireChangedEvent();
 	}
 	
 	/**
@@ -52,14 +45,19 @@ public class Screenselection
 	 */
 	public boolean getCell(int x, int y)
 	{
-		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
-		{
-			throw new IllegalArgumentException();
-		}
+		coordinatesInBounds(x, y);
 		
 		synchronized (_matrix)
 		{
 			return _matrix[x][y];
+		}
+	}
+	
+	private void coordinatesInBounds(int x, int y)
+	{
+		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
+		{
+			throw new IllegalArgumentException();
 		}
 	}
 	
@@ -112,19 +110,17 @@ public class Screenselection
 			}
 			_matrix = newMatrix;
 		}
-		fireChangedEvent();
 	}
 
 	/**
 	 * Sets every cell of the matrix to false.
 	 */
-	public synchronized void clearMatrix()
+	public void clearMatrix()
 	{
 		synchronized (_matrix)
 		{
 			_matrix = new boolean[_matrix.length][_matrix[0].length];
 		}
-		fireChangedEvent();
 	}
 	
 	/**
@@ -141,23 +137,5 @@ public class Screenselection
 	public synchronized int getRows()
 	{
 		return _matrix.length;
-	}
-	
-	private void fireChangedEvent()
-	{
-		for (ScreenselectionListener listener : _listeners)
-		{
-			listener.changed(this);
-		}
-	}
-	
-	public void addListener(ScreenselectionListener listener)
-	{
-		_listeners.add(listener);
-	}
-	
-	public void removeListener(ScreenselectionListener listener)
-	{
-		_listeners.remove(listener);
 	}
 }
