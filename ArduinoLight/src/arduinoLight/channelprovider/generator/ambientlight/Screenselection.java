@@ -1,14 +1,16 @@
 package arduinoLight.channelprovider.generator.ambientlight;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- * Represents a relative Screenpart (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
- * It does not provide a 'deep-Copy'-method, because this can be done manually (getColumns, getRows, getCell).
- * This class is thread-safe (every method has the 'synchronized'-keyword (Java-monitor-pattern)).
- * @author Felix
+ * Represents a relative screen part (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
+ * This class is thread-safe (Java-monitor-pattern).
  */
 public class Screenselection
 {
 	private boolean[][] _matrix;
+	private List<ScreenselectionListener> _listeners = new CopyOnWriteArrayList<ScreenselectionListener>();
 	
 	
 	/**
@@ -29,14 +31,18 @@ public class Screenselection
 	 * @param x the Column of the cell
 	 * @param y the Row of the cell
 	 */
-	public synchronized void setCell(int x, int y, boolean flag)
+	public void setCell(int x, int y, boolean flag)
 	{
 		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
 		{
 			throw new IllegalArgumentException();
 		}
 		
-		_matrix[x][y] = flag;
+		synchronized (_matrix)
+		{
+			_matrix[x][y] = flag;
+		}
+		fireChangedEvent();
 	}
 	
 	/**
@@ -44,28 +50,34 @@ public class Screenselection
 	 * @param x the Column of the cell
 	 * @param y the Row of the cell
 	 */
-	public synchronized boolean getCell(int x, int y)
+	public boolean getCell(int x, int y)
 	{
 		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
 		{
 			throw new IllegalArgumentException();
 		}
 		
-		return _matrix[x][y];
+		synchronized (_matrix)
+		{
+			return _matrix[x][y];
+		}
 	}
 	
 	/**
 	 * Returns a copy of the complete matrix.
 	 */
-	public synchronized boolean[][] getMatrixCopy()
+	public boolean[][] toBooleanArray()
 	{
 		boolean[][] copy = new boolean[_matrix.length][_matrix[0].length];
 		
-		for (int x = 0; x < _matrix.length; x++)
+		synchronized (_matrix)
 		{
-			for (int y = 0; y < _matrix[0].length; y++)
+			for (int x = 0; x < _matrix.length; x++)
 			{
-				copy[x][y] = _matrix[x][y];
+				for (int y = 0; y < _matrix[0].length; y++)
+				{
+					copy[x][y] = _matrix[x][y];
+				}
 			}
 		}
 		
@@ -79,7 +91,7 @@ public class Screenselection
 	 * @param newColCount new Amount of Columns
 	 * @param newRowCount new Amount of Rows
 	 */
-	public synchronized void changeMatrixsize(int newColCount, int newRowCount)
+	public void changeMatrixsize(int newColCount, int newRowCount)
 	{
 		if (newColCount < 1 || newRowCount < 1)
 		{
@@ -89,15 +101,18 @@ public class Screenselection
 		int smallestColCount = Math.min(newColCount, getColumns());
 		int smallestRowCount = Math.min(newRowCount, getRows());
 		
-		for (int c = 0; c < smallestColCount; c++)
+		synchronized (_matrix)
 		{
-			for (int r = 0; r < smallestRowCount; r++)
+			for (int c = 0; c < smallestColCount; c++)
 			{
-				newMatrix[c][r] = _matrix[c][r];
+				for (int r = 0; r < smallestRowCount; r++)
+				{
+					newMatrix[c][r] = _matrix[c][r];
+				}
 			}
+			_matrix = newMatrix;
 		}
-		
-		_matrix = newMatrix;
+		fireChangedEvent();
 	}
 
 	/**
@@ -105,7 +120,11 @@ public class Screenselection
 	 */
 	public synchronized void clearMatrix()
 	{
-		_matrix = new boolean[_matrix.length][_matrix[0].length];
+		synchronized (_matrix)
+		{
+			_matrix = new boolean[_matrix.length][_matrix[0].length];
+		}
+		fireChangedEvent();
 	}
 	
 	/**
@@ -122,5 +141,23 @@ public class Screenselection
 	public synchronized int getRows()
 	{
 		return _matrix.length;
+	}
+	
+	private void fireChangedEvent()
+	{
+		for (ScreenselectionListener listener : _listeners)
+		{
+			listener.changed(this);
+		}
+	}
+	
+	public void addListener(ScreenselectionListener listener)
+	{
+		_listeners.add(listener);
+	}
+	
+	public void removeListener(ScreenselectionListener listener)
+	{
+		_listeners.remove(listener);
 	}
 }

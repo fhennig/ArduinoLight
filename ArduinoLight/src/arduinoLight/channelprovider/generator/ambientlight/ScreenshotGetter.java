@@ -7,15 +7,16 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import arduinoLight.util.Color;
 import arduinoLight.util.DebugConsole;
 
-public class AmbientlightLogic// extends Colorprovider
+public class ScreenshotGetter
 {
 	/**
 	 * Used to get a Screenshot of the Main Screen of the user.
 	 * @return
 	 */
-	private BufferedImage getScreenshot()
+	private static BufferedImage getBufferedImageScreenshot()
 	{
 		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage capture = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -23,12 +24,12 @@ public class AmbientlightLogic// extends Colorprovider
 			capture = new Robot().createScreenCapture(screenRect);
 		} catch (AWTException e) {
 			//TODO AWTEXception handlen
-			DebugConsole.print("AmbientlightLogic", "getScreenshot", e.toString());
+			DebugConsole.print("AmbientlightLogic", "getScreenshot", "Exception:\n\n" + e.toString());
 		}
 		return capture;
 	}
 	
-	private int[][] getArrayFromImage(BufferedImage image)
+	private static Color[][] getArrayFromImage(BufferedImage image)
 	{
 		DataBufferInt dbb = (DataBufferInt) image.getRaster().getDataBuffer();
 		final int[] pixels = dbb.getData();
@@ -36,16 +37,21 @@ public class AmbientlightLogic// extends Colorprovider
 		final int height = image.getHeight();
 		int counter = 0;
 		
-		int[][] result = new int[height][width];
+		Color[][] result = new Color[height][width];
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
 			{
-				result[i][j] = pixels[counter];
+				result[i][j] = new Color(pixels[counter]);
 				counter++;
 			}
 		}
 		
 		return result;
+	}
+	
+	public static Color[][] getScreenshot()
+	{
+		return getArrayFromImage(getBufferedImageScreenshot());
 	}
 }

@@ -12,6 +12,7 @@ import arduinoLight.arduino.*;
 import arduinoLight.channel.IChannel;
 import arduinoLight.util.Color;
 import arduinoLight.util.RGBColor;
+import arduinoLight.util.Util;
 
 /**
  * This class handles the periodic transmission of colors through a serial connection
@@ -20,6 +21,7 @@ import arduinoLight.util.RGBColor;
 public class AmbloneTransmission
 {
 	private static final int SUPPORTED_CHANNELS = 4;
+	private static final int MAX_FREQUENCY = 240;
 	private ConcurrentMap<Integer, IChannel> _map = new ConcurrentHashMap<>();
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
@@ -56,10 +58,10 @@ public class AmbloneTransmission
 	{
 		if (connection.isOpen() == false)
 			throw new IllegalArgumentException("the connection must be open!");
-		
+
 		_connection = connection;
 		_executor = Executors.newSingleThreadScheduledExecutor();
-		long period = getPeriod(frequency);
+		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
 		Runnable transmission = new Runnable()
 		{
 			public void run()
@@ -114,14 +116,5 @@ public class AmbloneTransmission
 		}
 		
 		return result;
-	}
-	
-	/**
-	 * @param frequency  amount per second (Hz)
-	 * @return  the period in nanoseconds
-	 */
-	private static long getPeriod(int frequency)
-	{
-		return Math.round(1000000000.0 / frequency);
 	}
 }

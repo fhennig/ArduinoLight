@@ -9,7 +9,6 @@ import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.IChannel;
-import arduinoLight.channelprovider.ChannelFactory;
 import arduinoLight.channelprovider.DebugColorswitchThread;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.Gui;
@@ -17,6 +16,7 @@ import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
 import arduinoLight.gui.customColor.CustomColorPanel;
+import arduinoLight.model.Model;
 
 public class ArduinoLight
 {
@@ -46,8 +46,8 @@ public class ArduinoLight
 	public static void test()
 	{
 		final List<IChannel> channels = new ArrayList<>();
-		IChannel channel1 = ChannelFactory.getInstance().getChannel();
-		IChannel channel2 = ChannelFactory.getInstance().getChannel();
+		IChannel channel1 = Model.getInstance().getChannelFactory().newChannel();
+		IChannel channel2 = Model.getInstance().getChannelFactory().newChannel();
 		channels.add(channel1);
 		channels.add(channel2);
 		
