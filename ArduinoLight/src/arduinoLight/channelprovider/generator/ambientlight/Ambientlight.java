@@ -15,6 +15,11 @@ import arduinoLight.model.Model;
 import arduinoLight.util.Color;
 import arduinoLight.util.Util;
 
+/**
+ * This class contains channels and screen selections.
+ * If it is started, it refreshes the channel-colors periodically,
+ * using the screen selection for each channel and and applying them to a taken screenshot. 
+ */
 public class Ambientlight implements Channelholder
 {
 	//TODO thread safety?
@@ -23,6 +28,7 @@ public class Ambientlight implements Channelholder
 	private ScheduledExecutorService _executor;
 	private ScreenshotGetter _screenGetter = new ScreenshotGetter();
 
+	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
 	public void addChannel()
 	{
 		IChannel newChannel = Model.getInstance().getChannelFactory().newChannel();
@@ -30,6 +36,7 @@ public class Ambientlight implements Channelholder
 		_map.put(newChannel, selection);
 	}
 	
+	/** If the specified Channel is currently in use, it is removed */
 	public void removeChannel(IChannel channel)
 	{
 		_map.remove(channel);
@@ -46,8 +53,6 @@ public class Ambientlight implements Channelholder
 	
 	public synchronized void start(int frequency)
 	{
-		_executor = Executors.newSingleThreadScheduledExecutor();
-		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
 		Runnable colorSetLoop = new Runnable()
 		{
 			public void run()
@@ -67,6 +72,8 @@ public class Ambientlight implements Channelholder
 				}
 			}
 		};
+		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
+		_executor = Executors.newSingleThreadScheduledExecutor();
 		_executor.scheduleAtFixedRate(colorSetLoop, 0, period, TimeUnit.NANOSECONDS);
 	}
 	
