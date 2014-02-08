@@ -50,8 +50,8 @@ public class ArduinoLight
 		IChannel channel1 = Model.getInstance().getChannelFactory().newChannel();
 		IChannel channel2 = Model.getInstance().getChannelFactory().newChannel();
 		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
-		ambientlight.addChannel(channel1);
-		ambientlight.getScreenselection(channel1).setCell(0, 0, true);
+		ambientlight.addChannel(channel2);
+		ambientlight.getScreenselection(channel2).setCell(0, 0, true);
 		
 		channels.add(channel1);
 		
@@ -95,6 +95,6 @@ public class ArduinoLight
 		
 		testThread.start();
 		amblone.start(connection, 100);
-		ambientlight.start(20);
+		ambientlight.start(32);
 	}
 }

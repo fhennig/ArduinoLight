@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arduinoLight.util.Color;
+import arduinoLight.util.DebugConsole;
 
 public class Image
 {
@@ -12,13 +13,22 @@ public class Image
 	/** Creates a new Image with a copy of the given Colors */
 	public Image(Color[][] pixels)
 	{
-		this(pixels[0].length, pixels.length);
+		if (pixels.length <= 0 || pixels[0].length <= 0)
+			throw new IllegalArgumentException();
+
+		int width = pixels[0].length;
+		int height = pixels.length;
 		
-		for (int y = 0; y < pixels.length; y++)
+		_pixels = new Color[height][width];
+		
+		for (int y = 0; y < height; y++)
 		{
-			for (int x = 0; x < pixels[0].length; x++)
+			for (int x = 0; x < width; x++)
 			{
-				setPixel(x, y, pixels[x][y]);
+				Color pixel = pixels[y][x];
+				if (pixel == null)
+					pixel = Color.BLACK;
+				setPixel(x, y, pixel);
 			}
 		}
 	}
@@ -34,8 +44,12 @@ public class Image
 	{
 		if (width <= 0 || height <= 0)
 			throw new IllegalArgumentException();
+		if (color == null)
+			throw new IllegalArgumentException();
 		
-		_pixels = new Color[width][height];
+		DebugConsole.print("Image", "contructor", "creating image: " + width + "x" + height);
+		
+		_pixels = new Color[height][width];
 		
 		for (int y = 0; y < height; y++)
 		{
@@ -49,7 +63,12 @@ public class Image
 	public void setPixel(int x, int y, Color color)
 	{
 		validateCoordinates(x, y);
-		_pixels[x][y] = color;
+		_pixels[y][x] = color;
+	}
+	
+	public Color getPixel(int x, int y)
+	{
+		return _pixels[y][x];
 	}
 	
 	public Color getAverageColor(Areaselection selection)
@@ -89,11 +108,11 @@ public class Image
 	{
 		List<Color> selectedPixels = new ArrayList<>(xLength * yLength);
 		
-		for (; y < yLength + y; y++)
+		for (int yi = y; yi < yLength + y; yi++)
 		{
-			for (; x < xLength + x; x++)
+			for (int xi = x; xi < xLength + x; xi++)
 			{
-				selectedPixels.add(_pixels[x][y]);
+				selectedPixels.add(_pixels[yi][xi]);
 			}
 		}
 		
@@ -113,7 +132,9 @@ public class Image
 	/** Throws IllegalArgumentException if the given coordinates are out of bounds */
 	private void validateCoordinates(int x, int y)
 	{
-		if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
-			throw new IllegalArgumentException();
+		if (x < 0 || x >= getWidth())
+			throw new IllegalArgumentException("x=" + x + " but must be between 0 and " + getWidth());
+		if (y < 0 || y >= getHeight())
+			throw new IllegalArgumentException("y=" + y + " but must be between 0 and " + getHeight());
 	}
 }

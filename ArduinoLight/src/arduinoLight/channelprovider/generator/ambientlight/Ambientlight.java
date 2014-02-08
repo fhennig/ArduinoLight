@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import arduinoLight.channel.IChannel;
 import arduinoLight.channelwriter.ModifiableChannelholder;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
 
 /**
@@ -55,7 +56,12 @@ public class Ambientlight implements ModifiableChannelholder
 		{
 			public void run()
 			{
-				Image screenshot = ScreenshotHelper.getScreenshot();
+				DebugConsole.print("Ambientlight", "colorsetloop", "Taking screenshot");
+				Image screenshot = null;
+				try {
+					screenshot = ScreenshotHelper.getScreenshot();
+				} catch (Exception e) { e.printStackTrace();}
+				DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
 				Iterator<IChannel> map = _map.keySet().iterator();
 				while (map.hasNext())
 				{

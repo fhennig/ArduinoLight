@@ -12,10 +12,15 @@ import arduinoLight.util.DebugConsole;
 
 public class ScreenshotHelper
 {
+	/**
+	 * Returns a screenshot of the Users main screen
+	 */
 	public static Image getScreenshot()
 	{
-		Color[][] imageArray = getArrayFromImage(getBufferedImageScreenshot()); 
-		return new Image(imageArray);
+		BufferedImage bufferedImage = getBufferedImageScreenshot();
+		Color[][] imageArray = getArrayFromImage(bufferedImage); 
+		Image image = new Image(imageArray);
+		return image;
 	}
 	
 	/**
