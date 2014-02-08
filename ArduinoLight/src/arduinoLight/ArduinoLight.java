@@ -9,8 +9,8 @@ import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.IChannel;
-import arduinoLight.channelprovider.DebugColorswitchThread;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
+import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
@@ -46,17 +46,17 @@ public class ArduinoLight
 	
 	public static void test()
 	{
-		final List<IChannel> channels = new ArrayList<>();
 		IChannel channel1 = Model.getInstance().getChannelFactory().newChannel();
 		IChannel channel2 = Model.getInstance().getChannelFactory().newChannel();
+		
+		Areaselection selectionTop = new Areaselection(1, 2);
+		Areaselection selectionBot = new Areaselection(1, 2);
+		selectionTop.setCell(0, 0, true);
+		selectionBot.setCell(0, 1, true);
+		
 		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
-		ambientlight.addChannel(channel2);
-		ambientlight.getScreenselection(channel2).setCell(0, 0, true);
-		
-		channels.add(channel1);
-		
-		Thread testThread = new DebugColorswitchThread(channels);
-		
+		ambientlight.addChannel(channel1, selectionTop);
+		ambientlight.addChannel(channel2, selectionBot);
 		
 		SerialConnection connection = new SerialConnection();
 		Enumeration<CommPortIdentifier> portIds = SerialConnection.getAvailablePorts();
@@ -89,12 +89,11 @@ public class ArduinoLight
 		}
 		
 		AmbloneTransmission amblone = new AmbloneTransmission();
-		amblone.setOutput(0, channel1);
-		amblone.setOutput(1, channel2);
+		amblone.setOutput(1, channel1);
+		amblone.setOutput(0, channel2);
 		
 		
-		testThread.start();
 		amblone.start(connection, 100);
-		ambientlight.start(32);
+		ambientlight.start(10);
 	}
 }

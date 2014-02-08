@@ -30,7 +30,13 @@ public class Ambientlight implements ModifiableChannelholder
 	@Override
 	public void addChannel(IChannel channel)
 	{
-		Areaselection selection = new Areaselection(2, 2);
+		addChannel(channel, new Areaselection(2, 2));
+	}
+	
+	public void addChannel(IChannel channel, Areaselection selection)
+	{
+		if (channel == null || selection == null)
+			throw new IllegalArgumentException();
 		_map.put(channel, selection);
 	}
 	
@@ -56,23 +62,30 @@ public class Ambientlight implements ModifiableChannelholder
 		{
 			public void run()
 			{
-				DebugConsole.print("Ambientlight", "colorsetloop", "Taking screenshot");
-				Image screenshot = null;
-				try {
-					screenshot = ScreenshotHelper.getScreenshot();
-				} catch (Exception e) { e.printStackTrace();}
-				DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
-				Iterator<IChannel> map = _map.keySet().iterator();
-				while (map.hasNext())
+				try
 				{
-					IChannel channel;
-					Areaselection selection;
-					synchronized (_map)
+					DebugConsole.print("Ambientlight", "colorsetloop", "Taking screenshot");
+					Image screenshot = null;
+					try {
+						screenshot = ScreenshotHelper.getScreenshot();
+					} catch (Exception e) { e.printStackTrace();}
+					DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
+					Iterator<IChannel> map = _map.keySet().iterator();
+					while (map.hasNext())
 					{
-						channel = map.next();
-						selection = _map.get(channel);
+						IChannel channel;
+						Areaselection selection;
+						synchronized (_map)
+						{
+							channel = map.next();
+							selection = _map.get(channel);
+						}
+						channel.setColor(screenshot.getAverageColor(selection));
 					}
-					channel.setColor(screenshot.getAverageColor(selection));
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
 				}
 			}
 		};

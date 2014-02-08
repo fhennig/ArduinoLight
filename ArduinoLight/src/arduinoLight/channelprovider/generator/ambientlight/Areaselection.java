@@ -20,7 +20,7 @@ public class Areaselection
 			throw new IllegalArgumentException();
 		}
 		
-		_matrix = new boolean[columns][rows];
+		_matrix = new boolean[rows][columns];
 	}
 
 	/**
@@ -32,7 +32,7 @@ public class Areaselection
 	{
 		validateCoordinates(x, y);
 		
-		_matrix[x][y] = flag;
+		_matrix[y][x] = flag;
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class Areaselection
 	{
 		validateCoordinates(x, y);
 		
-		return _matrix[x][y];
+		return _matrix[y][x];
 	}
 
 	/**
@@ -60,17 +60,17 @@ public class Areaselection
 		{
 			throw new IllegalArgumentException();
 		}
-		boolean[][] newMatrix = new boolean[newColCount][newRowCount];
+		boolean[][] newMatrix = new boolean[newRowCount][newColCount];
 		int smallestColCount = Math.min(newColCount, getColumns());
 		int smallestRowCount = Math.min(newRowCount, getRows());
 		
 		synchronized (_matrix)
 		{
-			for (int c = 0; c < smallestColCount; c++)
+			for (int r = 0; r < smallestRowCount; r++)
 			{
-				for (int r = 0; r < smallestRowCount; r++)
+				for (int c = 0; c < smallestColCount; c++)
 				{
-					newMatrix[c][r] = _matrix[c][r];
+					newMatrix[r][c] = _matrix[r][c];
 				}
 			}
 			_matrix = newMatrix;
@@ -113,11 +113,11 @@ public class Areaselection
 		
 		synchronized (_matrix)
 		{
-			for (int x = 0; x < _matrix.length; x++)
+			for (int y = 0; y < getRows(); y++)
 			{
-				for (int y = 0; y < _matrix[0].length; y++)
+				for (int x = 0; x < getColumns(); x++)
 				{
-					copy[x][y] = _matrix[x][y];
+					copy[y][x] = _matrix[y][x];
 				}
 			}
 		}
@@ -129,9 +129,9 @@ public class Areaselection
 	
 	private void validateCoordinates(int x, int y)
 	{
-		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
-		{
-			throw new IllegalArgumentException();
-		}
+		if (x < 0 || x >= getColumns())
+			throw new IllegalArgumentException("x should be between 0 and " + getColumns() + " but was " + x);
+		if (y < 0 || y >= getRows())
+			throw new IllegalArgumentException("y should be between 0 and " + getRows() + " but was " + y);
 	}
 }

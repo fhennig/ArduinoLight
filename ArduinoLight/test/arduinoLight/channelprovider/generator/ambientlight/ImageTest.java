@@ -27,9 +27,10 @@ public class ImageTest
 	public void testArrayConstructor()
 	{
 		Color[][] imageArray = new Color[3][3];
+		//         y  x
 		imageArray[0][0] = Color.RED;
-		imageArray[1][0] = Color.GREEN;
-		imageArray[2][0] = Color.BLUE;
+		imageArray[0][1] = Color.GREEN;
+		imageArray[0][2] = Color.BLUE;
 		
 		Image i = new Image(imageArray);
 		
@@ -49,14 +50,38 @@ public class ImageTest
 	}
 	
 	@Test
+	public void testGetWidth()
+	{
+		Image i = new Image(2, 4);
+		Assert.assertEquals(2, i.getWidth());
+	}
+	
+	@Test
+	public void testGetHeight()
+	{
+		Image i = new Image(2, 4);
+		Assert.assertEquals(4, i.getHeight());
+	}
+	
+	@Test
 	public void testGetSelectedPixelsWithCoordinates()
 	{
 		Image i = new Image(3, 3, Color.BLACK);
 		i.setPixel(0, 0, Color.RED);
-		List<Color> selectedPixels = i.getSelectedPixels(0, 0, 1, 1);
+		List<Color> selectedPixels = i.getSelectedPixels(0, 0, 0, 0);
 		
 		Assert.assertEquals(1, selectedPixels.size());
 		Assert.assertEquals(Color.RED, selectedPixels.get(0));
+		
+
+		selectedPixels = i.getSelectedPixels(0, 0, 2, 0);
+		Assert.assertEquals("one row selected, 3 values expected", 3, selectedPixels.size());
+		
+		selectedPixels = i.getSelectedPixels(0, 0, 0, 2);
+		Assert.assertEquals("one column selected, 3 values expected", 3, selectedPixels.size());
+		
+		selectedPixels = i.getSelectedPixels(0, 0, 2, 2);
+		Assert.assertEquals(9, selectedPixels.size());
 	}
 	
 //	private Image get3x3Image()

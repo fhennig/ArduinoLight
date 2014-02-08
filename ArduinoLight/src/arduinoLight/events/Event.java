@@ -1,6 +1,5 @@
 package arduinoLight.events;
 
-import arduinoLight.util.DebugConsole;
 
 
 /**
@@ -37,7 +36,7 @@ public abstract class Event implements Runnable
 	@Override
 	public void run()
 	{
-		DebugConsole.print("Event", "run", "firing Event: " + _name);
+		//DebugConsole.print("Event", "run", "firing Event: " + _name);
 		notifyListeners();
 	}
 	

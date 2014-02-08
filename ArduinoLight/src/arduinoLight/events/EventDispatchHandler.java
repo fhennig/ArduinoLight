@@ -2,8 +2,6 @@ package arduinoLight.events;
 
 import java.util.concurrent.*;
 
-import arduinoLight.util.DebugConsole;
-
 
 /**
  * This class is a singleton and provides global access to dispatch Events. 
@@ -36,7 +34,7 @@ public class EventDispatchHandler
 	 */
 	public void dispatch(Event event)
 	{
-		DebugConsole.print("EventDispatchHandler", "dispatch", "dispatching Event: " + event.toString());
+		//DebugConsole.print("EventDispatchHandler", "dispatch", "dispatching Event: " + event.toString());
 		_executor.execute(event);
 	}
 }

@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arduinoLight.util.Color;
-import arduinoLight.util.DebugConsole;
 
 public class Image
 {
 	private final Color[][] _pixels;
 	
-	/** Creates a new Image with a copy of the given Colors */
+	/**
+	 * Creates a new Image with a copy of the given Colors
+	 * pixels.length will be the height of the Image.
+	 * pixels[0].length will be the width of the Image.
+	 */
 	public Image(Color[][] pixels)
 	{
 		if (pixels.length <= 0 || pixels[0].length <= 0)
@@ -47,8 +50,6 @@ public class Image
 		if (color == null)
 			throw new IllegalArgumentException();
 		
-		DebugConsole.print("Image", "contructor", "creating image: " + width + "x" + height);
-		
 		_pixels = new Color[height][width];
 		
 		for (int y = 0; y < height; y++)
@@ -84,18 +85,23 @@ public class Image
 			return new ArrayList<Color>();
 		
 		List<Color> selectedPixels = new ArrayList<>(200);
-		double partWidth = (double)_pixels[0].length / selection.getRows();
-		double partHeight = (double)_pixels.length / selection.getColumns();
-		
+		double partWidth = (double)getWidth() / selection.getColumns();
+		double partHeight = (double)getHeight() / selection.getRows();
+		//DebugConsole.print("Image", "getSelectedPixels", "width: " + getWidth() + "   sel-cols: " + selection.getColumns() + "   partW: " + partWidth);
+		//DebugConsole.print("Image", "getSelectedPixels", "height: " + getHeight() + "   sel-rows: " + selection.getRows() + "   partH: " + partHeight);
+		System.out.println();
 		for (int y = 0; y < selection.getRows(); y++)
 		{
 			for (int x = 0; x < selection.getColumns(); x++)
 			{
 				if (selection.getCell(x, y))
 				{
-					int imgX = (int) Math.round(x * partWidth);
-					int imgY = (int) Math.round(y * partHeight);
-					List<Color> selectedPartPixels = getSelectedPixels(imgX, imgY, (int) Math.round(partWidth), (int) Math.round(partHeight));
+					int imgX1 = (int) Math.round(x * partWidth);
+					int imgY1 = (int) Math.round(y * partHeight);
+					int imgX2 = (int) Math.round((x + 1) * partWidth) - 1;
+					int imgY2 = (int) Math.round((y + 1) * partHeight - 1);
+					
+					List<Color> selectedPartPixels = getSelectedPixels(imgX1, imgY1, imgX2, imgY2);
 					selectedPixels.addAll(selectedPartPixels);
 				}
 			}
@@ -104,15 +110,36 @@ public class Image
 		return selectedPixels;
 	}
 	
-	public List<Color> getSelectedPixels(int x, int y, int xLength, int yLength)
+	/**
+	 * Returns a List of Colors that contains the Colors that are inside
+	 * the rectangle that is specified by the given points (x1|y1), (x2|y2).
+	 * The given points are included in the rectangle.
+	 */
+	public List<Color> getSelectedPixels(int x1, int y1, int x2, int y2)
 	{
-		List<Color> selectedPixels = new ArrayList<>(xLength * yLength);
-		
-		for (int yi = y; yi < yLength + y; yi++)
+		validateCoordinates(x1, y1);
+		validateCoordinates(x2, y2);
+		if (x1 > x2)
 		{
-			for (int xi = x; xi < xLength + x; xi++)
+			int temp = x2;
+			x2 = x1;
+			x1 = temp;
+		}
+		if (y1 > y2)
+		{
+			int temp = y2;
+			y2 = y1;
+			y1 = temp;
+		}
+		
+		int amountOfElements = (x2 - x1) * (y2 - y1);
+		List<Color> selectedPixels = new ArrayList<>(amountOfElements);
+		
+		for (int y = y1; y <= y2; y++)
+		{
+			for (int x = x1; x <= x2; x++)
 			{
-				selectedPixels.add(_pixels[yi][xi]);
+				selectedPixels.add(_pixels[y][x]);
 			}
 		}
 		
