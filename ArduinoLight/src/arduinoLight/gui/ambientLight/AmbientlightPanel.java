@@ -14,22 +14,22 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.Dummyprovider;
-import arduinoLight.channelprovider.generator.Channelgenerator;
-import arduinoLight.gui.ColorSlider;
+import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
+import arduinoLight.channelprovider.generator.ambientlight.Screenselection;
 import arduinoLight.gui.ChannelPanel;
+import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.TabPanel;
 
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends TabPanel{
 	
-	Channelgenerator _provider = new Dummyprovider();
+	Ambientlight _ambientLight = new Ambientlight();
 	
 	JPanel _mainPanel = new JPanel();
 	JPanel _leftPanel = new JPanel();
 	
-	ChannelPanel _statusPanel = new ChannelPanel(_provider);
-	JPanel _screenSelectionPanel = new ScreenSelectionPanel();
+	ChannelPanel _statusPanel = new ChannelPanel(_ambientLight);
+	JPanel _screenSelectionPanel = new ScreenSelectionPanel(new Screenselection(2, 2));
 
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
 	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);

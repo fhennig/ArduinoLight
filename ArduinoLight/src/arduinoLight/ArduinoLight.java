@@ -10,6 +10,7 @@ import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.IChannel;
 import arduinoLight.channelprovider.DebugColorswitchThread;
+import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
@@ -22,7 +23,7 @@ public class ArduinoLight
 {
 	public static void main(String[] args)
 	{		
-		//test();
+		test();
 		CustomColorsProvider provider = new CustomColorsProvider();
 		
 		AmbloneConnectionOld connection = new AmbloneConnectionOld(provider);
@@ -48,8 +49,11 @@ public class ArduinoLight
 		final List<IChannel> channels = new ArrayList<>();
 		IChannel channel1 = Model.getInstance().getChannelFactory().newChannel();
 		IChannel channel2 = Model.getInstance().getChannelFactory().newChannel();
+		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
+		ambientlight.addChannel(channel1);
+		ambientlight.getScreenselection(channel1).setCell(0, 0, true);
+		
 		channels.add(channel1);
-		channels.add(channel2);
 		
 		Thread testThread = new DebugColorswitchThread(channels);
 		
@@ -91,5 +95,6 @@ public class ArduinoLight
 		
 		testThread.start();
 		amblone.start(connection, 100);
+		ambientlight.start(20);
 	}
 }

@@ -27,6 +27,7 @@ import arduinoLight.gui.ActivatePanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.TabPanel;
+import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
 public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
@@ -52,7 +53,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	public CustomColorPanel(CustomColorsProvider colorProvider, String title){
 		_colorProvider = colorProvider;
 		_title = title;
-		 _channelPanel = new ChannelPanel(_colorProvider);
+		 _channelPanel = new ChannelPanel(Model.getInstance().getAmbientlight()); //TODO !!! this is wrong
 		 _activatePanel = new ActivatePanel(_colorProvider);
 		initComponents();
 	}

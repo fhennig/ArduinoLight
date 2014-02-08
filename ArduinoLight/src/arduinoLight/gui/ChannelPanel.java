@@ -8,7 +8,7 @@ package arduinoLight.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -19,12 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import arduinoLight.channel.IChannel;
-import arduinoLight.channelprovider.ChannellistProvider;
+import arduinoLight.channelwriter.ModifiableChannelholder;
+import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
 public class ChannelPanel extends JPanel{
 
-	ChannellistProvider _provider;
+	ModifiableChannelholder _provider;
 	
 	private DefaultComboBoxModel<ComboBoxChannelItem> _channelBoxModel = new DefaultComboBoxModel<ComboBoxChannelItem>();
 	private JComboBox<ComboBoxChannelItem> _channelBox = new JComboBox<ComboBoxChannelItem>(_channelBoxModel);
@@ -32,7 +33,7 @@ public class ChannelPanel extends JPanel{
 	private JButton _removeButton = new JButton("Remove");
 	private JButton _addButton = new JButton("Add");
 	
-	public ChannelPanel(ChannellistProvider provider){
+	public ChannelPanel(ModifiableChannelholder provider){
 		_provider = provider;
 		initComponents();
 	}
@@ -41,7 +42,7 @@ public class ChannelPanel extends JPanel{
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(new TitledBorder(null, "Status", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
 
-		_provider.addChannel();
+		_provider.addChannel(Model.getInstance().getChannelFactory().newChannel());
 		updateComboBoxModel();
 		
 		//_channelBox.setEditable(true);
@@ -62,7 +63,7 @@ public class ChannelPanel extends JPanel{
 	
 	private void updateComboBoxModel(){
 		_channelBoxModel.removeAllElements();
-		List<IChannel> newChannellist = _provider.getChannels();
+		Set<IChannel> newChannellist = _provider.getChannels();
 		for(IChannel channel : newChannellist){
 			ComboBoxChannelItem channelItem = new ComboBoxChannelItem(channel);
 			_channelBoxModel.addElement(channelItem);
@@ -91,7 +92,7 @@ public class ChannelPanel extends JPanel{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			_provider.addChannel();
+			_provider.addChannel(Model.getInstance().getChannelFactory().newChannel());
 			updateComboBoxModel();
 			_channelBox.setSelectedIndex(_channelBoxModel.getSize() - 1);
 			_removeButton.setEnabled(true);

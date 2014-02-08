@@ -10,8 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import arduinoLight.channel.IChannel;
-import arduinoLight.channelwriter.Channelholder;
-import arduinoLight.model.Model;
+import arduinoLight.channelwriter.ModifiableChannelholder;
 import arduinoLight.util.Color;
 import arduinoLight.util.Util;
 
@@ -20,7 +19,7 @@ import arduinoLight.util.Util;
  * If it is started, it refreshes the channel-colors periodically,
  * using the screen selection for each channel and and applying them to a taken screenshot. 
  */
-public class Ambientlight implements Channelholder
+public class Ambientlight implements ModifiableChannelholder
 {
 	//TODO thread safety?
 	private static final int MAX_FREQUENCY = 100;
@@ -29,14 +28,15 @@ public class Ambientlight implements Channelholder
 	private ScreenshotGetter _screenGetter = new ScreenshotGetter();
 
 	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
-	public void addChannel()
+	@Override
+	public void addChannel(IChannel channel)
 	{
-		IChannel newChannel = Model.getInstance().getChannelFactory().newChannel();
 		Screenselection selection = new Screenselection(2, 2);
-		_map.put(newChannel, selection);
+		_map.put(channel, selection);
 	}
 	
 	/** If the specified Channel is currently in use, it is removed */
+	@Override
 	public void removeChannel(IChannel channel)
 	{
 		_map.remove(channel);
