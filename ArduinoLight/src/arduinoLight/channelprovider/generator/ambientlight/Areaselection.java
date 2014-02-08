@@ -2,18 +2,18 @@ package arduinoLight.channelprovider.generator.ambientlight;
 
 
 /**
- * Represents a relative screen part (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
+ * Represents a relative part of a 2D Area (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
  * This class is thread-safe (Java-monitor-pattern).
  */
-public class Screenselection
+public class Areaselection
 {
 	private boolean[][] _matrix;
 	
 	
 	/**
-	 * Creates a new Screenselection with the specified Amount of Rows and Columns.
+	 * Creates a new Areaselection with the specified Amount of Rows and Columns.
 	 */
-	public Screenselection(int columns, int rows)
+	public Areaselection(int columns, int rows)
 	{
 		if (columns < 1 || rows < 1)
 		{
@@ -28,14 +28,11 @@ public class Screenselection
 	 * @param x the Column of the cell
 	 * @param y the Row of the cell
 	 */
-	public void setCell(int x, int y, boolean flag)
+	public synchronized void setCell(int x, int y, boolean flag)
 	{
-		coordinatesInBounds(x, y);
+		validateCoordinates(x, y);
 		
-		synchronized (_matrix)
-		{
-			_matrix[x][y] = flag;
-		}
+		_matrix[x][y] = flag;
 	}
 	
 	/**
@@ -43,43 +40,11 @@ public class Screenselection
 	 * @param x the Column of the cell
 	 * @param y the Row of the cell
 	 */
-	public boolean getCell(int x, int y)
+	public synchronized boolean getCell(int x, int y)
 	{
-		coordinatesInBounds(x, y);
+		validateCoordinates(x, y);
 		
-		synchronized (_matrix)
-		{
-			return _matrix[x][y];
-		}
-	}
-	
-	private void coordinatesInBounds(int x, int y)
-	{
-		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
-		{
-			throw new IllegalArgumentException();
-		}
-	}
-	
-	/**
-	 * Returns a copy of the complete matrix.
-	 */
-	public boolean[][] toBooleanArray()
-	{
-		boolean[][] copy = new boolean[_matrix.length][_matrix[0].length];
-		
-		synchronized (_matrix)
-		{
-			for (int x = 0; x < _matrix.length; x++)
-			{
-				for (int y = 0; y < _matrix[0].length; y++)
-				{
-					copy[x][y] = _matrix[x][y];
-				}
-			}
-		}
-		
-		return copy;
+		return _matrix[x][y];
 	}
 
 	/**
@@ -115,7 +80,7 @@ public class Screenselection
 	/**
 	 * Sets every cell of the matrix to false.
 	 */
-	public void clearMatrix()
+	public void clear()
 	{
 		synchronized (_matrix)
 		{
@@ -137,5 +102,36 @@ public class Screenselection
 	public synchronized int getRows()
 	{
 		return _matrix.length;
+	}
+	
+	/**
+	 * Returns a boolean Array that represents the selections made.
+	 */
+	public boolean[][] toBooleanArray()
+	{
+		boolean[][] copy = new boolean[_matrix.length][_matrix[0].length];
+		
+		synchronized (_matrix)
+		{
+			for (int x = 0; x < _matrix.length; x++)
+			{
+				for (int y = 0; y < _matrix[0].length; y++)
+				{
+					copy[x][y] = _matrix[x][y];
+				}
+			}
+		}
+		
+		return copy;
+	}
+	
+	
+	
+	private void validateCoordinates(int x, int y)
+	{
+		if (x >= getColumns() || x < 0 || y < 0 || y >= getRows())
+		{
+			throw new IllegalArgumentException();
+		}
 	}
 }
