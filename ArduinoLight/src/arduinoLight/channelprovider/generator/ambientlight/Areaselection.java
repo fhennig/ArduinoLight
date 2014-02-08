@@ -54,7 +54,7 @@ public class Areaselection
 	 * @param newColCount new Amount of Columns
 	 * @param newRowCount new Amount of Rows
 	 */
-	public void changeMatrixsize(int newColCount, int newRowCount)
+	public void changeSize(int newColCount, int newRowCount)
 	{
 		if (newColCount < 1 || newRowCount < 1)
 		{
