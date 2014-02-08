@@ -1,7 +1,9 @@
 package arduinoLight.arduino.amblone;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
@@ -22,9 +24,26 @@ public class AmbloneTransmission
 {
 	private static final int SUPPORTED_CHANNELS = 4;
 	private static final int MAX_FREQUENCY = 240;
-	private ConcurrentMap<Integer, IChannel> _map = new ConcurrentHashMap<>();
+	private ConcurrentMap<Integer, IChannel> _map;
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
+	
+	public AmbloneTransmission()
+	{
+		initMap();
+	}
+	
+	private void initMap()
+	{
+		_map = new ConcurrentHashMap<>();
+		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
+			_map.put(i, null);
+	}
+	
+	public Set<Integer> getPossiblePorts()
+	{
+		return Collections.unmodifiableSet(_map.keySet());
+	}
 	
 	/**
 	 * @param port  an integer specifying an output port. 0 <= port < 4
@@ -32,7 +51,7 @@ public class AmbloneTransmission
 	 */
 	public void setOutput(int port, IChannel channel)
 	{
-		if (port < 0 || port >= SUPPORTED_CHANNELS)
+		if (!_map.containsKey(port))
 		{
 			throw new IllegalArgumentException("Illegal Value for 'port' given: " + port);
 		}
@@ -45,7 +64,7 @@ public class AmbloneTransmission
 	/** Stops output on the specified port */
 	public void clearOutput(int port)
 	{
-		_map.remove(port);
+		_map.put(port, null);
 	}
 	
 	/**
@@ -97,7 +116,7 @@ public class AmbloneTransmission
 		int channelsUsed = 0;
 		for (int i = SUPPORTED_CHANNELS - 1; i >= 0; i--)
 		{
-			if (_map.containsKey(i))
+			if (_map.get(i) != null)
 			{
 				channelsUsed = i + 1;
 				break;
