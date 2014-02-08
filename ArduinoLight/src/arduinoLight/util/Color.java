@@ -1,5 +1,7 @@
 package arduinoLight.util;
 
+import java.util.Collection;
+
 /**
  * Immutable!
  * @author Felix
@@ -112,6 +114,35 @@ public class Color implements RGBColor
 			i = 0;
 		
 		return i;
+	}
+	
+	/**
+	 * Returns the average color of the given colors.
+	 */
+	public static Color getAverageColor(Collection<Color> colors)
+	{
+		if (colors.size() == 0)
+			return Color.BLACK;
+		
+		long aSum = 0;
+		long rSum = 0;
+		long gSum = 0;
+		long bSum = 0;
+		
+		for (Color color : colors)
+		{
+			aSum += color.getA();
+			rSum += color.getR();
+			gSum += color.getG();
+			bSum += color.getB();
+		}
+		
+		int a = (int) Math.round((double) aSum / colors.size());
+		int r = (int) Math.round((double) rSum / colors.size());
+		int g = (int) Math.round((double) gSum / colors.size());
+		int b = (int) Math.round((double) bSum / colors.size());
+		
+		return new Color(a, r, g, b);
 	}
 
 	//---------- overridden from object ------------------------
