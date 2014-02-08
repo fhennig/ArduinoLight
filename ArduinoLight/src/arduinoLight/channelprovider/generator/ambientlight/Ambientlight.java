@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import arduinoLight.channel.IChannel;
 import arduinoLight.channelwriter.ModifiableChannelholder;
-import arduinoLight.util.Color;
 import arduinoLight.util.Util;
 
 /**
@@ -23,15 +22,14 @@ public class Ambientlight implements ModifiableChannelholder
 {
 	//TODO thread safety?
 	private static final int MAX_FREQUENCY = 100;
-	private Map<IChannel, Screenselection> _map = new ConcurrentHashMap<IChannel, Screenselection>();
+	private Map<IChannel, Areaselection> _map = new ConcurrentHashMap<IChannel, Areaselection>();
 	private ScheduledExecutorService _executor;
-	private ScreenshotGetter _screenGetter = new ScreenshotGetter();
 
 	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
 	@Override
 	public void addChannel(IChannel channel)
 	{
-		Screenselection selection = new Screenselection(2, 2);
+		Areaselection selection = new Areaselection(2, 2);
 		_map.put(channel, selection);
 	}
 	
@@ -46,7 +44,7 @@ public class Ambientlight implements ModifiableChannelholder
 	 * Returns the Screenselection assigned to that Channel.
 	 * If this class does not use the given Channel, null is returned.
 	 */
-	public Screenselection getScreenselection(IChannel channel)
+	public Areaselection getScreenselection(IChannel channel)
 	{
 		return _map.get(channel);
 	}
@@ -57,18 +55,18 @@ public class Ambientlight implements ModifiableChannelholder
 		{
 			public void run()
 			{
-				Color[][] screenshot = _screenGetter.getScreenshot();
+				Image screenshot = ScreenshotHelper.getScreenshot();
 				Iterator<IChannel> map = _map.keySet().iterator();
 				while (map.hasNext())
 				{
 					IChannel channel;
-					Screenselection selection;
+					Areaselection selection;
 					synchronized (_map)
 					{
 						channel = map.next();
 						selection = _map.get(channel);
 					}
-					channel.setColor(_screenGetter.getAverageColor(screenshot, selection));
+					channel.setColor(screenshot.getAverageColor(selection));
 				}
 			}
 		};

@@ -17,12 +17,12 @@ import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.generator.ambientlight.Screenselection;
+import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
 
 @SuppressWarnings("serial")
 public class ScreenSelectionPanel extends JPanel {
 
-	private Screenselection _selection;
+	private Areaselection _selection;
 	
 	JPanel _screenOptionPanel = new JPanel();
 	JLabel _rowLabel = new JLabel("Rows: ");
@@ -35,7 +35,7 @@ public class ScreenSelectionPanel extends JPanel {
 	JPanel _table;
 	GridLayout _grid;
 	
-	public ScreenSelectionPanel(Screenselection selection)
+	public ScreenSelectionPanel(Areaselection selection)
 	{
 		_selection = selection;
 		initComponents();
