@@ -6,6 +6,9 @@ package arduinoLight.util;
  */
 public class DebugConsole
 {
+	private static int classLength = 0;
+	private static int methodLength = 0;
+	
 	public static boolean isEnabled()
 	{
 		return true;
@@ -13,7 +16,27 @@ public class DebugConsole
 	
 	public static void print(String containingClass, String method, String message)
 	{
-		if (isEnabled())
-			System.out.println("+++ " + containingClass + ":\t" + method + ":\t" + message);
+		if (!isEnabled())
+			return;
+		containingClass = padClass(containingClass);
+		method = padMethod(method);
+		System.out.println("+++ " + containingClass + ":" + method + ":" + message);
+	}
+	
+	
+	private static String padClass(String containingClass)
+	{
+		if (containingClass.length() > classLength)
+			classLength = containingClass.length();
+		
+		return Util.getRightPaddedString(containingClass, classLength);
+	}
+	
+	private static String padMethod(String method)
+	{
+		if (method.length() > methodLength)
+			methodLength = method.length();
+		
+		return Util.getRightPaddedString(method, methodLength);
 	}
 }
