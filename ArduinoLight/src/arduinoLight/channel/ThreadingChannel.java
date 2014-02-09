@@ -14,7 +14,7 @@ import arduinoLight.util.Color;
  * This implementation of the IChannel interface delegates Event firing to a different Thread.
  * This way, the swing-thread is blocked for shorter amount of times.
  */
-public class ThreadingChannel implements IChannel
+public class ThreadingChannel implements Channel
 {
 	/** unique id, used for hashCode. Is threadsafe because final and primitive */
 	private final int _id;

@@ -3,17 +3,17 @@ package arduinoLight.channelprovider;
 import java.util.ArrayList;
 import java.util.List;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.interfaces.propertyListeners.ChannelsListener;
 
 public abstract class Channelprovider
 {
-	protected final List<IChannel> _channels = new ArrayList<IChannel>();
+	protected final List<Channel> _channels = new ArrayList<Channel>();
 	private final List<ChannelsListener> _channelsListeners = new ArrayList<ChannelsListener>();
 	
-	public List<IChannel> getChannels()
+	public List<Channel> getChannels()
 	{
-		return new ArrayList<IChannel>(_channels);
+		return new ArrayList<Channel>(_channels);
 	}
 	
 	//---------- Event-Firing ----------------------------------
@@ -25,7 +25,7 @@ public abstract class Channelprovider
 	{
 		for (ChannelsListener l : _channelsListeners)
 		{
-			l.channelsChanged(this, new ArrayList<IChannel>(_channels));
+			l.channelsChanged(this, new ArrayList<Channel>(_channels));
 		}
 	}
 	

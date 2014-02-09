@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelwriter.ModifiableChannelholder;
 import arduinoLight.model.Model;
 
@@ -63,8 +63,8 @@ public class ChannelPanel extends JPanel{
 	
 	private void updateComboBoxModel(){
 		_channelBoxModel.removeAllElements();
-		Set<IChannel> newChannellist = _provider.getChannels();
-		for(IChannel channel : newChannellist){
+		Set<Channel> newChannellist = _provider.getChannels();
+		for(Channel channel : newChannellist){
 			ComboBoxChannelItem channelItem = new ComboBoxChannelItem(channel);
 			_channelBoxModel.addElement(channelItem);
 		}
@@ -72,9 +72,9 @@ public class ChannelPanel extends JPanel{
 	
 	public class ComboBoxChannelItem{
 		
-		IChannel _channel;
+		Channel _channel;
 		
-		public ComboBoxChannelItem(IChannel channel){
+		public ComboBoxChannelItem(Channel channel){
 			_channel = channel;
 		}
 		
@@ -83,7 +83,7 @@ public class ChannelPanel extends JPanel{
 			return "Channel: " + Integer.toString(_channel.getId());
 		}
 		
-		public IChannel getChannel(){
+		public Channel getChannel(){
 			return _channel;
 		}
 	}
@@ -111,7 +111,7 @@ public class ChannelPanel extends JPanel{
 		}
 	}
 	
-	public IChannel getSelectedChannel() {
+	public Channel getSelectedChannel() {
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		

@@ -1,9 +1,9 @@
 package arduinoLight.channelwriter;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 
 public interface ModifiableChannelholder extends Channelholder
 {
-	public void addChannel(IChannel channel);
-	public void removeChannel(IChannel channel);
+	public void addChannel(Channel channel);
+	public void removeChannel(Channel channel);
 }

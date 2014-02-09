@@ -2,12 +2,12 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 
 public class ChannelproviderListenerDummy implements ChannelcolorsListener, ChannelcompositionListener, ActiveListener
 {
-	private List<IChannel> _latestChannels;
+	private List<Channel> _latestChannels;
 	private boolean _latestActiveState;
 	
 	private int _amountColorChangedEvents = 0;
@@ -18,7 +18,7 @@ public class ChannelproviderListenerDummy implements ChannelcolorsListener, Chan
 	
 	
 	@Override
-	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
+	public void channelcolorsUpdated(Object source, List<Channel> refreshedChannellist)
 	{
 		_latestChannels = refreshedChannellist;
 		_latestSource = source;
@@ -33,7 +33,7 @@ public class ChannelproviderListenerDummy implements ChannelcolorsListener, Chan
 		_amountActiveChangedEvents++;
 	}
 
-	public List<IChannel> getLatestChannels()
+	public List<Channel> getLatestChannels()
 	{
 		return _latestChannels;
 	}
@@ -64,7 +64,7 @@ public class ChannelproviderListenerDummy implements ChannelcolorsListener, Chan
 	}
 
 	@Override
-	public void channellistChanged(Object source, List<IChannel> newChannellist)
+	public void channellistChanged(Object source, List<Channel> newChannellist)
 	{
 		_amountChannelsChangedEvents++;
 	}

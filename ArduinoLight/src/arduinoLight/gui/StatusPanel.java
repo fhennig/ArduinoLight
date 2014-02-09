@@ -22,7 +22,7 @@ import javax.swing.border.TitledBorder;
 
 
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.ChannellistProvider;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 
@@ -62,8 +62,8 @@ public class StatusPanel extends JPanel implements ActiveListener{
 	
 	private void refreshComboBoxModel(){
 		_channelBoxModel.removeAllElements();
-		List<IChannel> newChannellist = _provider.getChannels();
-		for(IChannel channel : newChannellist){
+		List<Channel> newChannellist = _provider.getChannels();
+		for(Channel channel : newChannellist){
 			ComboBoxChannelItem channelItem = new ComboBoxChannelItem(channel);
 			_channelBoxModel.addElement(channelItem);
 		}
@@ -71,9 +71,9 @@ public class StatusPanel extends JPanel implements ActiveListener{
 	
 	class ComboBoxChannelItem{
 		
-		IChannel _channel;
+		Channel _channel;
 		
-		public ComboBoxChannelItem(IChannel channel){
+		public ComboBoxChannelItem(Channel channel){
 			_channel = channel;
 		}
 		
@@ -82,7 +82,7 @@ public class StatusPanel extends JPanel implements ActiveListener{
 			return Integer.toString(_channel.getId());
 		}
 		
-		public IChannel getChannel(){
+		public Channel getChannel(){
 			return _channel;
 		}
 	}
@@ -121,7 +121,7 @@ public class StatusPanel extends JPanel implements ActiveListener{
 		}
 	}
 	
-	public IChannel getSelectedChannel() {
+	public Channel getSelectedChannel() {
 		ComboBoxChannelItem channelItem = (ComboBoxChannelItem)_channelBox.getSelectedItem(); 
 		return channelItem.getChannel();
 		

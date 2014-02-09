@@ -2,7 +2,7 @@ package arduinoLight.channelwriter;
 
 import java.util.*;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 
 public interface Channelholder
 {
@@ -10,5 +10,5 @@ public interface Channelholder
 	 * This method returns an unmodifiableList of
 	 * the channels that are used for writing. 
 	 */
-	public Set<IChannel> getChannels();
+	public Set<Channel> getChannels();
 }

@@ -3,7 +3,7 @@ package arduinoLight.channelprovider.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.*;
 import arduinoLight.interfaces.Activatable;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
@@ -31,7 +31,7 @@ public abstract class Channelgenerator extends Channelprovider implements Channe
 		fireChannelsChangedEvent();
 	}
 	
-	public void removeChannel(IChannel channel)
+	public void removeChannel(Channel channel)
 	{
 		if (!_channels.contains(channel))
 		{
@@ -47,7 +47,7 @@ public abstract class Channelgenerator extends Channelprovider implements Channe
 		fireChannelsChangedEvent();
 	}
 	
-	public List<IChannel> getChannels()
+	public List<Channel> getChannels()
 	{
 		return _channels;
 	}

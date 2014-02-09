@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channel.ThreadingChannel;
 import arduinoLight.channelwriter.Channelholder;
 
@@ -19,16 +19,16 @@ public class ChannelFactory implements Channelholder
 	//TODO thread safety?
 	/** Used to generate IDs */
     private static int _instances = 0;
-	private Set<IChannel> _createdChannels = new HashSet<>();
+	private Set<Channel> _createdChannels = new HashSet<>();
 	
 	public ChannelFactory()
 	{
 		
 	}
 	
-	public synchronized IChannel newChannel()
+	public synchronized Channel newChannel()
 	{
-		IChannel newChannel = new ThreadingChannel(_instances);
+		Channel newChannel = new ThreadingChannel(_instances);
 		_instances++;
 		_createdChannels.add(newChannel);
 		return newChannel;
@@ -38,7 +38,7 @@ public class ChannelFactory implements Channelholder
 	 * @see arduinoLight.channelwriter.Channelholder#getChannels()
 	 */
 	@Override
-	public Set<IChannel> getChannels()
+	public Set<Channel> getChannels()
 	{
 		return Collections.unmodifiableSet(_createdChannels);
 	}

@@ -3,7 +3,7 @@ package arduinoLight.channelprovider;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.util.*;
 
 /**
@@ -12,14 +12,14 @@ import arduinoLight.util.*;
  */
 public class DebugColorswitchThread extends Thread
 {
-	private final List<IChannel> _channels = new CopyOnWriteArrayList<>();
+	private final List<Channel> _channels = new CopyOnWriteArrayList<>();
 	
-	public DebugColorswitchThread(Collection<IChannel> collection)
+	public DebugColorswitchThread(Collection<Channel> collection)
 	{
 		_channels.addAll(collection);
 	}
 	
-	public List<IChannel> getChannels()
+	public List<Channel> getChannels()
 	{
 		return _channels;
 	}
@@ -41,7 +41,7 @@ public class DebugColorswitchThread extends Thread
 			case 2: currentColor = Color.BLUE; break;
 			}
 			
-			for (IChannel ch : _channels)
+			for (Channel ch : _channels)
 			{
 				ch.setColor(currentColor);
 			}

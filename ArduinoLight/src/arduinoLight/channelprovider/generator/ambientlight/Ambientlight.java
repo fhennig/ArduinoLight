@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelwriter.ModifiableChannelholder;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
@@ -23,17 +23,17 @@ public class Ambientlight implements ModifiableChannelholder
 {
 	//TODO thread safety?
 	private static final int MAX_FREQUENCY = 100;
-	private Map<IChannel, Areaselection> _map = new ConcurrentHashMap<IChannel, Areaselection>();
+	private Map<Channel, Areaselection> _map = new ConcurrentHashMap<Channel, Areaselection>();
 	private ScheduledExecutorService _executor;
 
 	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
 	@Override
-	public void addChannel(IChannel channel)
+	public void addChannel(Channel channel)
 	{
 		addChannel(channel, new Areaselection(2, 2));
 	}
 	
-	public void addChannel(IChannel channel, Areaselection selection)
+	public void addChannel(Channel channel, Areaselection selection)
 	{
 		if (channel == null || selection == null)
 			throw new IllegalArgumentException();
@@ -42,7 +42,7 @@ public class Ambientlight implements ModifiableChannelholder
 	
 	/** If the specified Channel is currently in use, it is removed */
 	@Override
-	public void removeChannel(IChannel channel)
+	public void removeChannel(Channel channel)
 	{
 		_map.remove(channel);
 	}
@@ -51,7 +51,7 @@ public class Ambientlight implements ModifiableChannelholder
 	 * Returns the Screenselection assigned to that Channel.
 	 * If this class does not use the given Channel, null is returned.
 	 */
-	public Areaselection getScreenselection(IChannel channel)
+	public Areaselection getScreenselection(Channel channel)
 	{
 		return _map.get(channel);
 	}
@@ -70,10 +70,10 @@ public class Ambientlight implements ModifiableChannelholder
 						screenshot = ScreenshotHelper.getScreenshot();
 					} catch (Exception e) { e.printStackTrace();}
 					DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
-					Iterator<IChannel> map = _map.keySet().iterator();
+					Iterator<Channel> map = _map.keySet().iterator();
 					while (map.hasNext())
 					{
-						IChannel channel;
+						Channel channel;
 						Areaselection selection;
 						synchronized (_map)
 						{
@@ -102,7 +102,7 @@ public class Ambientlight implements ModifiableChannelholder
 
 	/** @see arduinoLight.channelwriter.Channelwriter#getChannels() */
 	@Override
-	public Set<IChannel> getChannels()
+	public Set<Channel> getChannels()
 	{
 		return Collections.unmodifiableSet(_map.keySet());
 	}

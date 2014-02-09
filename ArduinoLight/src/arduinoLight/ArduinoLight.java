@@ -8,7 +8,7 @@ import java.util.*;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
 import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
@@ -46,8 +46,8 @@ public class ArduinoLight
 	
 	public static void test()
 	{
-		IChannel channel1 = Model.getInstance().getChannelFactory().newChannel();
-		IChannel channel2 = Model.getInstance().getChannelFactory().newChannel();
+		Channel channel1 = Model.getInstance().getChannelFactory().newChannel();
+		Channel channel2 = Model.getInstance().getChannelFactory().newChannel();
 		
 		Areaselection selectionTop = new Areaselection(1, 2);
 		Areaselection selectionBot = new Areaselection(1, 2);

@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import arduinoLight.arduino.*;
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.util.Color;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.Util;
@@ -22,9 +22,9 @@ import arduinoLight.util.Util;
  */
 public class AmbloneTransmission
 {
+	public static final int MAX_FREQUENCY = 240;
 	private static final int SUPPORTED_CHANNELS = 4;
-	private static final int MAX_FREQUENCY = 240;
-	private ConcurrentMap<Integer, IChannel> _map;
+	private ConcurrentMap<Integer, Channel> _map;
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	
@@ -49,7 +49,7 @@ public class AmbloneTransmission
 	 * @param port  an integer specifying an output port. 0 <= port < 4
 	 * @param channel  a channel that should be mapped to this output.
 	 */
-	public void setOutput(int port, IChannel channel)
+	public void setOutput(int port, Channel channel)
 	{
 		if (!_map.containsKey(port))
 		{
@@ -126,7 +126,7 @@ public class AmbloneTransmission
 		List<RGBColor> result = new ArrayList<>(channelsUsed);
 		for (int i = 0; i < channelsUsed; i++)
 		{
-			IChannel channel = _map.get(i);
+			Channel channel = _map.get(i);
 			
 			if (channel != null)
 				result.add(channel.getColor());

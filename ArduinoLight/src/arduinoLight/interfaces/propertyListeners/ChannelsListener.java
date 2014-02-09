@@ -2,9 +2,9 @@ package arduinoLight.interfaces.propertyListeners;
 
 import java.util.List;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 
 public interface ChannelsListener
 {
-	public void channelsChanged(Object source, List<IChannel> newChannels);
+	public void channelsChanged(Object source, List<Channel> newChannels);
 }

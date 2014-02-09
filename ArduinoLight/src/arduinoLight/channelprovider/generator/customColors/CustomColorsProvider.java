@@ -1,6 +1,6 @@
 package arduinoLight.channelprovider.generator.customColors;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.util.Color;
 
@@ -18,11 +18,11 @@ public class CustomColorsProvider extends Channelgenerator
 		return true;
 	}
 	
-	public void setChannelcolor(IChannel channel, Color color)
+	public void setChannelcolor(Channel channel, Color color)
 	{
-		IChannel foundChannel = null;
+		Channel foundChannel = null;
 		
-		for (IChannel c : _channels)
+		for (Channel c : _channels)
 		{
 			if (c == channel)
 			{

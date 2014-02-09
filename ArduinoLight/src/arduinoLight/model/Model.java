@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
 import arduinoLight.channelwriter.Channelholder;
 
@@ -63,15 +63,15 @@ public class Model
 	 * Searches for a Channelholder that uses the specified channel.
 	 * If the channel is not being written to currently, an instance of UnusedChannels is returned. 
 	 */
-	public Channelholder getChannelwriter(IChannel channel)
+	public Channelholder getChannelwriter(Channel channel)
 	{
-		Set<IChannel> writerChannels = null;
+		Set<Channel> writerChannels = null;
 		//Search all the writers
 		for (Channelholder cwriter : _channelwriters)
 		{
 			writerChannels = cwriter.getChannels();
 			//Search Channels for each writer
-			for (IChannel ch : writerChannels)
+			for (Channel ch : writerChannels)
 			{
 				if (ch.equals(channel))
 				{
@@ -86,9 +86,9 @@ public class Model
 	private class UnusedChannels implements Channelholder
 	{
 		@Override
-		public Set<IChannel> getChannels()
+		public Set<Channel> getChannels()
 		{
-			Set<IChannel> unusedChannels = new HashSet<IChannel>(getChannels());
+			Set<Channel> unusedChannels = new HashSet<Channel>(getChannels());
 			
 			for (Channelholder channelwriter : _channelwriters)
 			{

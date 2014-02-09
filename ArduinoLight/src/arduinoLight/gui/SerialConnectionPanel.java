@@ -4,13 +4,17 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,125 +22,137 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
+import org.omg.CORBA.FREE_MEM;
+
+import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.SerialConnectionOld;
+import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
+import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel implements ActiveListener, ConnectionPanel{
 	
-	SerialConnectionOld _connection;
+	private SerialConnectionOld _connectionOld;
+	private SerialConnection _connection;
+	private AmbloneTransmission _amblone;
 	
-	java.net.URL _imageURL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
-	ImageIcon _icon = new ImageIcon(_imageURL, "refresh");
+	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
 	
-	JLabel _connectionSpeedLabel = new JLabel("Packages per Second: 0"); //label for pps TODO this is obsolete
-	JLabel _lblNewLabel = new JLabel("COM-Port: ");
-	DefaultComboBoxModel<ComboBoxPortItem> _comboBoxModel = new DefaultComboBoxModel<ComboBoxPortItem>();
-	JComboBox<ComboBoxPortItem> _portComboBox = new JComboBox<ComboBoxPortItem>(_comboBoxModel);
-	JToggleButton _connectButton = new JToggleButton("Connect");
-	JButton _refreshButton;
+	private ImageIcon _refreshIcon;
+	private JComboBox<PortItem> _portComboBox;
+	private JSpinner _frequencySpinner;
+	private JToggleButton _connectButton;
+	private JButton _refreshButton;
+	private JLabel _portLabel = new JLabel("COM-Port: ");
+	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	
 	
-	public SerialConnectionPanel(SerialConnectionOld connection){
-		initImageIcon();
-		_refreshButton = new JButton(_icon);
-		_connection = connection;
-		_connection.addActiveListener(this);
+	public SerialConnectionPanel(SerialConnectionOld connection)
+	{
+		_connectionOld = connection;
+		_connectionOld.addActiveListener(this);
+		
 		initComponents();
 	}
 	
-	private void initImageIcon(){
-		Image icon = _icon.getImage();
-		Image newIcon = icon.getScaledInstance(20, 17, Image.SCALE_DEFAULT);
-		_icon = new ImageIcon(newIcon);
+	private void initComponents()
+	{
+		//refreshButton
+		initRefreshIcon();
+		_refreshButton = new JButton(_refreshIcon);
+		_refreshButton.addActionListener(new RefreshButtonHandler());
+		_refreshButton.setPreferredSize(new Dimension(30, 0));
+		
+		//frequencySpinner
+		_frequencySpinner = new JSpinner();
+		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_FREQUENCY, 1));
+		
+		//portComboBox
+		ComboBoxModel<PortItem> cbModel = new DefaultComboBoxModel<PortItem>();
+		_portComboBox = new JComboBox<PortItem>(cbModel);
+		_portComboBox.addPopupMenuListener(new ComboBoxMenuListener());
+		_portComboBox.setPreferredSize(new Dimension(100, 0));
+		
+		//connectButton
+		_connectButton = new JToggleButton("Connect");
+		_connectButton.addActionListener(new ConnectButtonHandler());
+		
+		//Layout
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.weighty = 0.5;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.setBorder(BorderFactory.createTitledBorder("Connection Settings"));
+		this.setLayout(new GridBagLayout());
+		//this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		JPanel upperLine = new JPanel();
+			upperLine.setLayout(new BoxLayout(upperLine, BoxLayout.X_AXIS));
+			upperLine.add(new JLabel("TODO: Output-->Channel Mapping Controls"));
+		JPanel lowerLine = new JPanel();
+			lowerLine.setLayout(new BoxLayout(lowerLine, BoxLayout.X_AXIS));
+			//lowerLine.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
+			lowerLine.add(_frequencyLabel);
+			lowerLine.add(_frequencySpinner);
+			lowerLine.add(Box.createHorizontalStrut(20));
+			lowerLine.add(_portLabel);
+			lowerLine.add(_portComboBox);
+			lowerLine.add(_refreshButton);
+		this.add(upperLine, gbc);
+		gbc.gridy = 1;
+		this.add(lowerLine, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.gridheight = 2;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		this.add(Box.createGlue(), gbc);
+		gbc.weightx = 0;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.gridx = 2;
+		this.add(_connectButton, gbc);
+		
+		//preload CommPortIdentifiers
+		refreshComboBox();
 	}
 	
-	class connectButtonHandler implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(_connectButton.isSelected()){
-				try {
-					ComboBoxPortItem selectedItem = (ComboBoxPortItem) _comboBoxModel.getSelectedItem();
-					_connection.connect(selectedItem.getPort(), 256000);
-				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
-					_connectButton.setSelected(false);
-					JOptionPane.showMessageDialog(null,
-							"Could not establish a Connection!\nIs the Connection already in use?",
-							"Connection failed!",
-							JOptionPane.ERROR_MESSAGE);
-				}
-			} else {
-				_connection.disconnect();
-			}
-		}
+	private void initRefreshIcon()
+	{
+		_refreshIcon = new ImageIcon(_REFRESH_IMG_URL, "refresh");
+		Image icon = _refreshIcon.getImage();
+		Image newIcon = icon.getScaledInstance(20, 17, Image.SCALE_DEFAULT);
+		_refreshIcon = new ImageIcon(newIcon);
 	}
 	
 
-	private void refreshComboBox(){
-		_comboBoxModel.removeAllElements();
+	private void refreshComboBox()
+	{
+		DefaultComboBoxModel<PortItem> model = (DefaultComboBoxModel<PortItem>) _portComboBox.getModel();
+		model.removeAllElements();
 		Enumeration<CommPortIdentifier> ports = SerialConnectionOld.getAvailablePorts();
 		
 		while(ports.hasMoreElements()){
-			_comboBoxModel.addElement(new ComboBoxPortItem(ports.nextElement()));
+			model.addElement(new PortItem(ports.nextElement()));
 		}
 		
-		if(_comboBoxModel.getSize() == 0){
+		if(model.getSize() == 0){
 			_connectButton.setEnabled(false);
 		} else {
 			_connectButton.setEnabled(true);
 		}
-	}
-	
-	class RefreshButtonHandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			refreshComboBox();
-		}
-		
-	}
-	
-	private void initComponents() {
-		
-		refreshComboBox();
-		
-		_connectButton.addActionListener(new connectButtonHandler());
-		_refreshButton.addActionListener(new RefreshButtonHandler());
-		
-		_refreshButton.setPreferredSize(new Dimension(30, 10));
-		_connectButton.setPreferredSize(new Dimension(100, 25));
-		
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		this.setBorder(new TitledBorder(null, "Connection Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));				
-		this.add(_connectionSpeedLabel);
-		this.add(Box.createHorizontalGlue());
-		this.add(_lblNewLabel);
-		this.add(_portComboBox);
-		this.add(_refreshButton);
-		this.add(Box.createHorizontalStrut(20));
-		this.add(_connectButton);
-		
-	}
-	
-	class ComboBoxPortItem {
-
-		CommPortIdentifier _port;
-		
-		public ComboBoxPortItem(CommPortIdentifier port){
-			_port = port;
-		}
-		
-		@Override
-		public String toString() {
-			return _port.getName();
-		}
-		
-		public CommPortIdentifier getPort(){
-			return _port;
-		}
+		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
 	}
 
 	@Override
@@ -148,7 +164,81 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 		}
 	}
 	
+	@Override
 	public void disconnect(){
-		_connection.disconnect();
+		_connectionOld.disconnect();
+	}
+	
+	class RefreshButtonHandler implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			refreshComboBox();
+		}
+		
+	}
+	
+	class ConnectButtonHandler implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(_connectButton.isSelected()){
+				try {
+					PortItem selectedItem = (PortItem) _portComboBox.getModel().getSelectedItem();
+					_connectionOld.connect(selectedItem.getPort(), 256000);
+				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
+					_connectButton.setSelected(false);
+					JOptionPane.showMessageDialog(null,
+							"Could not establish a Connection!\nIs the Connection already in use?",
+							"Connection failed!",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				_connectionOld.disconnect();
+			}
+		}
+	}
+	
+	/**
+	 * This listener refreshes the ComboBox if the combobox's popupmenu is opened.
+	 */
+	private class ComboBoxMenuListener implements PopupMenuListener
+	{
+		@Override
+		public void popupMenuCanceled(PopupMenuEvent e) { /** Do nothing */ }
+
+		@Override
+		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { /** Do nothing */ }
+
+		@Override
+		public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+		{
+			refreshComboBox();
+		}
+	}
+	
+	/**
+	 * Can be used inside a ComboBox. Holds a reference to a CommPortIdentifier.
+	 * Provides a proper toString method.
+	 */
+	private class PortItem
+	{
+		CommPortIdentifier _port;
+		
+		public PortItem(CommPortIdentifier port)
+		{
+			_port = port;
+		}
+		
+		public CommPortIdentifier getPort()
+		{
+			return _port;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return _port.getName();
+		}
 	}
 }
+

@@ -20,7 +20,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
 import arduinoLight.gui.ActivatePanel;
@@ -98,8 +98,8 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	
 	private void refreshPreviewPanel(){
 		_previewPanel.removeAll();
-		List<IChannel> newChannels = _colorProvider.getChannels();
-		for(IChannel channel : newChannels){
+		List<Channel> newChannels = _colorProvider.getChannels();
+		for(Channel channel : newChannels){
 			JPanel newPanel = new JPanel();
 			newPanel.setBackground(new Color(channel.getColor().getR(), channel.getColor().getG(), channel.getColor().getB(), 255));
 			newPanel.setBorder(new LineBorder(Color.black));
@@ -142,7 +142,7 @@ public class CustomColorPanel extends TabPanel implements ChannelcolorsListener{
 	
 	@Override
 	public void channelcolorsUpdated(Object source,
-			List<IChannel> refreshedChannellist) {
+			List<Channel> refreshedChannellist) {
 		updateColors();
 	}
 }

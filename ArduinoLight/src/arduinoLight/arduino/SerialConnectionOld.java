@@ -5,7 +5,7 @@ import gnu.io.PortInUseException;
 
 import java.util.*;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.ChannelcolorsListener;
 import arduinoLight.channelprovider.generator.Channelgenerator;
 import arduinoLight.interfaces.Closeable;
@@ -124,7 +124,7 @@ public abstract class SerialConnectionOld implements ChannelcolorsListener, Clos
 	 * The colors of the channels that get passed are then transmitted.
 	 */
 	@Override
-	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist)
+	public void channelcolorsUpdated(Object source, List<Channel> refreshedChannellist)
 	{
 		if (!_connectionActive)
 			return; //if the connection is not active, take no action.
@@ -136,7 +136,7 @@ public abstract class SerialConnectionOld implements ChannelcolorsListener, Clos
 		int channelCount = refreshedChannellist.size();
 		List<RGBColor> colors = new ArrayList<>(channelCount);
 		
-		for (IChannel channel : refreshedChannellist)
+		for (Channel channel : refreshedChannellist)
 		{
 			colors.add(channel.getColor());
 		}

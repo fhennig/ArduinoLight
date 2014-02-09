@@ -2,7 +2,7 @@ package arduinoLight.channelprovider;
 
 import java.util.List;
 
-import arduinoLight.channel.IChannel;
+import arduinoLight.channel.Channel;
 
 /**
  * This interface should be implemented by a Mixer, that can then react to the channelsUpdatedEvent and sent the colors via an Arduinoconnection
@@ -14,5 +14,5 @@ public interface ChannelcolorsListener
 	/**
 	 * Gets called if the colors are refreshed. Does not get called if a channel is added or removed.
 	 */
-	public void channelcolorsUpdated(Object source, List<IChannel> refreshedChannellist);
+	public void channelcolorsUpdated(Object source, List<Channel> refreshedChannellist);
 }
