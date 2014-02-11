@@ -106,4 +106,10 @@ public class Ambientlight implements ModifiableChannelholder
 	{
 		return Collections.unmodifiableSet(_map.keySet());
 	}
+
+	@Override
+	public String getChannelsDescription()
+	{
+		return "Ambientlight-Channels";
+	}
 }

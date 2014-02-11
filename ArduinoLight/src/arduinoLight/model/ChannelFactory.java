@@ -28,9 +28,16 @@ public class ChannelFactory implements Channelholder
 	
 	public synchronized Channel newChannel()
 	{
+		return newChannel(null);
+	}
+	
+	public synchronized Channel newChannel(String name)
+	{
 		Channel newChannel = new ThreadingChannel(_instances);
 		_instances++;
 		_createdChannels.add(newChannel);
+		if (name != null)
+			newChannel.setName(name);
 		return newChannel;
 	}
 
@@ -47,5 +54,11 @@ public class ChannelFactory implements Channelholder
 	public String toString()
 	{
 		return "ChannelFactory";
+	}
+
+	@Override
+	public String getChannelsDescription()
+	{
+		return "All Channels";
 	}
 }

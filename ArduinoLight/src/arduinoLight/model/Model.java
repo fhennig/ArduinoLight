@@ -19,7 +19,7 @@ public class Model
 	
 	private Model()
 	{
-		
+		_channelwriters.add(_ambientlight);
 	}
 	
 	public static Model getInstance()
@@ -43,12 +43,6 @@ public class Model
 	
 	public Ambientlight getAmbientlight()
 	{
-		if (_ambientlight == null)
-		{
-			_ambientlight = new Ambientlight();
-			_channelwriters.add(_ambientlight);
-		}
-		
 		return _ambientlight;
 	}
 	
@@ -56,14 +50,15 @@ public class Model
 	{
 		List<Channelholder> channelHolders = new ArrayList<Channelholder>(_channelwriters);
 		channelHolders.add(_channelFactory);
-		return null;
+		channelHolders.add(_unusedChannels);
+		return channelHolders;
 	}
 	
 	/**
 	 * Searches for a Channelholder that uses the specified channel.
 	 * If the channel is not being written to currently, an instance of UnusedChannels is returned. 
 	 */
-	public Channelholder getChannelwriter(Channel channel)
+	public Channelholder getChannelholder(Channel channel)
 	{
 		Set<Channel> writerChannels = null;
 		//Search all the writers
@@ -88,7 +83,7 @@ public class Model
 		@Override
 		public Set<Channel> getChannels()
 		{
-			Set<Channel> unusedChannels = new HashSet<Channel>(getChannels());
+			Set<Channel> unusedChannels = new HashSet<Channel>(getChannelFactory().getChannels());
 			
 			for (Channelholder channelwriter : _channelwriters)
 			{
@@ -97,6 +92,11 @@ public class Model
 			
 			return unusedChannels;
 		}
-		
+
+		@Override
+		public String getChannelsDescription()
+		{
+			return "Unused Channels";
+		}
 	}
 }

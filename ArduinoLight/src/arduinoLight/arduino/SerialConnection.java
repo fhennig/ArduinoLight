@@ -107,6 +107,7 @@ public class SerialConnection
 			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
 			throw new IllegalStateException(ex);
 		}
+		debugprint("transmit", "transmitted.");
 	}
 	
 	//---------- Getters ---------------------------------------

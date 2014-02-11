@@ -11,4 +11,6 @@ public interface Channelholder
 	 * the channels that are used for writing. 
 	 */
 	public Set<Channel> getChannels();
+	
+	public String getChannelsDescription();
 }

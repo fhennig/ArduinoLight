@@ -18,18 +18,24 @@ import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
 import arduinoLight.gui.customColor.CustomColorPanel;
 import arduinoLight.model.Model;
+import arduinoLight.util.Color;
 
 public class ArduinoLight
 {
 	public static void main(String[] args)
 	{		
-		test();
+		Model.getInstance().getChannelFactory().newChannel("RED").setColor(Color.RED);
+		Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
+		Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
+		//test();
 		CustomColorsProvider provider = new CustomColorsProvider();
 		
-		AmbloneConnectionOld connection = new AmbloneConnectionOld(provider);
+		//AmbloneConnectionOld connection = new AmbloneConnectionOld(provider);
+		SerialConnection connection = new SerialConnection();
+		AmbloneTransmission amblone = new AmbloneTransmission();
 		
 		Gui.initLookAndFeel();
-		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection);
+		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
 		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
 		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
 		

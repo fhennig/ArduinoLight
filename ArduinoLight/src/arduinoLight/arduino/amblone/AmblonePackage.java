@@ -3,6 +3,7 @@ package arduinoLight.arduino.amblone;
 import java.util.ArrayList;
 import java.util.List;
 
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 
 
@@ -64,8 +65,10 @@ public class AmblonePackage
 			case 4: startFlag = AmbloneFlags.STARTFLAG4; break;
 			default:
 			{
-				throw new IllegalArgumentException("Illegal value (" + colorCount + ") for 'colorCount'."
+				IllegalArgumentException e = new IllegalArgumentException("Illegal value (" + colorCount + ") for 'colorCount'."
 												 + " Should be between 1 and 4.");
+				DebugConsole.print("AmblonePackage", "addStartflag", "IllegalColorCount:\n" + e.toString());
+				throw e;
 			}
 		}
 		

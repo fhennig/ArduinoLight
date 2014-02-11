@@ -25,10 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -41,14 +37,14 @@ import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements ActiveListener, ConnectionPanel{
+public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	
-	private SerialConnectionOld _connectionOld;
 	private SerialConnection _connection;
 	private AmbloneTransmission _amblone;
 	
 	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
 	
+	private AmbloneChannelPanel _amblonePanel;
 	private ImageIcon _refreshIcon;
 	private JComboBox<PortItem> _portComboBox;
 	private JSpinner _frequencySpinner;
@@ -58,16 +54,19 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	
 	
-	public SerialConnectionPanel(SerialConnectionOld connection)
+	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission)
 	{
-		_connectionOld = connection;
-		_connectionOld.addActiveListener(this);
+		_connection = connection;
+		_amblone = ambloneTransmission;
 		
 		initComponents();
 	}
 	
 	private void initComponents()
 	{
+		//amblonePanel
+		_amblonePanel = new AmbloneChannelPanel(_amblone);
+		
 		//refreshButton
 		initRefreshIcon();
 		_refreshButton = new JButton(_refreshIcon);
@@ -96,20 +95,16 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 		gbc.gridy = 0;
 		this.setBorder(BorderFactory.createTitledBorder("Connection Settings"));
 		this.setLayout(new GridBagLayout());
-		//this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		JPanel upperLine = new JPanel();
-			upperLine.setLayout(new BoxLayout(upperLine, BoxLayout.X_AXIS));
-			upperLine.add(new JLabel("TODO: Output-->Channel Mapping Controls"));
+
+		this.add(_amblonePanel);
 		JPanel lowerLine = new JPanel();
 			lowerLine.setLayout(new BoxLayout(lowerLine, BoxLayout.X_AXIS));
-			//lowerLine.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
 			lowerLine.add(_frequencyLabel);
 			lowerLine.add(_frequencySpinner);
 			lowerLine.add(Box.createHorizontalStrut(20));
 			lowerLine.add(_portLabel);
 			lowerLine.add(_portComboBox);
 			lowerLine.add(_refreshButton);
-		this.add(upperLine, gbc);
 		gbc.gridy = 1;
 		this.add(lowerLine, gbc);
 		gbc.gridx = 1;
@@ -154,19 +149,14 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 		}
 		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
 	}
-
-	@Override
-	public void activeChanged(Object source, boolean newActive) {
-		if(newActive){
-			_connectButton.setText("Disconnect");
-		} else {
-			_connectButton.setText("Connect");
-		}
-	}
 	
 	@Override
-	public void disconnect(){
-		_connectionOld.disconnect();
+	public void disconnect()
+	{
+		if (_amblone.isActive())
+			_amblone.stop();
+		_connection.close();
+		_connectButton.setText("Connect");
 	}
 	
 	class RefreshButtonHandler implements ActionListener{
@@ -181,10 +171,12 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 	class ConnectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(_connectButton.isSelected()){
-				try {
-					PortItem selectedItem = (PortItem) _portComboBox.getModel().getSelectedItem();
-					_connectionOld.connect(selectedItem.getPort(), 256000);
+			if(_connectButton.isSelected())
+			{
+				PortItem selectedItem = (PortItem) _portComboBox.getModel().getSelectedItem();
+				try
+				{
+					_connection.open(selectedItem.getPort(), 256000);
 				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
 					_connectButton.setSelected(false);
 					JOptionPane.showMessageDialog(null,
@@ -192,8 +184,16 @@ public class SerialConnectionPanel extends JPanel implements ActiveListener, Con
 							"Connection failed!",
 							JOptionPane.ERROR_MESSAGE);
 				}
-			} else {
-				_connectionOld.disconnect();
+				if (_connection.isOpen())
+				{
+					int frequency = ((Integer) _frequencySpinner.getValue());
+					_amblone.start(_connection, frequency);
+					_connectButton.setText("Disconnect");
+				}
+			}
+			else
+			{
+				disconnect();
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package arduinoLight.arduino.amblone;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,9 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import arduinoLight.arduino.*;
+import arduinoLight.arduino.SerialConnection;
 import arduinoLight.channel.Channel;
 import arduinoLight.util.Color;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
 import arduinoLight.util.Util;
 
@@ -27,22 +28,21 @@ public class AmbloneTransmission
 	private ConcurrentMap<Integer, Channel> _map;
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
+	private boolean _active = false;
 	
 	public AmbloneTransmission()
 	{
-		initMap();
-	}
-	
-	private void initMap()
-	{
 		_map = new ConcurrentHashMap<>();
-		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
-			_map.put(i, null);
 	}
 	
 	public Set<Integer> getPossiblePorts()
 	{
-		return Collections.unmodifiableSet(_map.keySet());
+		Set<Integer> possiblePorts = new LinkedHashSet<>();
+		
+		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
+			possiblePorts.add(i);
+		
+		return possiblePorts;
 	}
 	
 	/**
@@ -51,20 +51,34 @@ public class AmbloneTransmission
 	 */
 	public void setOutput(int port, Channel channel)
 	{
-		if (!_map.containsKey(port))
-		{
-			throw new IllegalArgumentException("Illegal Value for 'port' given: " + port);
-		}
+		validatePort(port);
+		
 		if (channel == null) //if channel == null, the key is removed (every key should have a valid channel)
 			clearOutput(port);
 		else
 			_map.put(port, channel);
+		DebugConsole.print("AmbloneTransmission", "setOutput", "Port " + port + " set to " + channel);
 	}
 	
 	/** Stops output on the specified port */
 	public void clearOutput(int port)
 	{
-		_map.put(port, null);
+		_map.remove(port);
+	}
+	
+	/**
+	 * Returns the Channel that is mapped to the given port, or null
+	 */
+	public Channel getChannel(int port)
+	{
+		validatePort(port);
+		
+		return _map.get(port);
+	}
+	
+	public boolean isActive()
+	{
+		return _active;
 	}
 	
 	/**
@@ -85,24 +99,34 @@ public class AmbloneTransmission
 		{
 			public void run()
 			{
-				AmblonePackage p = new AmblonePackage(getCurrentColors());
+				List<RGBColor> currentColors = getCurrentColors();
+				if (currentColors.size() < 1)
+					return;
+				AmblonePackage p = new AmblonePackage(currentColors);
 				_connection.transmit(p.toByteArray());
 			}
 		};
 		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
+		_active = true;
+		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + frequency);
 	}
 	
 	/**
 	 * This method stops the transission and returns the connection that
 	 * was passed in with 'start(...)'.
 	 */
-	public synchronized SerialConnection stopTransmission()
+	public synchronized SerialConnection stop()
 	{
+		if (!_active)
+			throw new IllegalStateException("The Transmission could not be stopped, because it is not active!");
+		
+		_active = false;
 		_executor.shutdown();
 		_executor = null;
 		SerialConnection c = _connection;
 		_connection = null;
 		
+		DebugConsole.print("AmbloneTransmission", "stopTransmission", "stopping successful");
 		return c;
 	}
 	
@@ -135,5 +159,11 @@ public class AmbloneTransmission
 		}
 		
 		return result;
+	}
+	
+	private void validatePort(int port)
+	{
+		if (port < 0 || port >= SUPPORTED_CHANNELS)
+			throw new IllegalArgumentException();
 	}
 }
