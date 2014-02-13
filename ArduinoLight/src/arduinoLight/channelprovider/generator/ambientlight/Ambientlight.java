@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelwriter.ModifiableChannelholder;
+import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
 

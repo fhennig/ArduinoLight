@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelwriter.ModifiableChannelholder;
+import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")

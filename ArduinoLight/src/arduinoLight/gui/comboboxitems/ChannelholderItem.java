@@ -1,6 +1,6 @@
 package arduinoLight.gui.comboboxitems;
 
-import arduinoLight.channelwriter.Channelholder;
+import arduinoLight.channelholder.Channelholder;
 
 public class ChannelholderItem
 {

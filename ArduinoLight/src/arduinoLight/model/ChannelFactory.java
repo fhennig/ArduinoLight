@@ -6,7 +6,7 @@ import java.util.Set;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channel.ThreadingChannel;
-import arduinoLight.channelwriter.Channelholder;
+import arduinoLight.channelholder.Channelholder;
 
 /**
  * This class is a Singleton. //TODO UPDATE
@@ -42,7 +42,7 @@ public class ChannelFactory implements Channelholder
 	}
 
 	/**
-	 * @see arduinoLight.channelwriter.Channelholder#getChannels()
+	 * @see arduinoLight.channelholder.Channelholder#getChannels()
 	 */
 	@Override
 	public Set<Channel> getChannels()

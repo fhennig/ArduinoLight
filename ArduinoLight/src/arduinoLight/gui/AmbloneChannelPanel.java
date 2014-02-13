@@ -18,7 +18,7 @@ import javax.swing.event.PopupMenuListener;
 
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
-import arduinoLight.channelwriter.Channelholder;
+import arduinoLight.channelholder.Channelholder;
 import arduinoLight.gui.comboboxitems.ChannelItem;
 import arduinoLight.gui.comboboxitems.ChannelholderItem;
 import arduinoLight.gui.comboboxitems.DummyChannelItem;
@@ -40,8 +40,6 @@ public class AmbloneChannelPanel extends JPanel
 	{
 		_amblone = ambloneTransmission;
 		initComponents();
-		refreshOutputCB();
-		refreshChannelholderCB();
 		refreshChannelCB();
 	}
 	
@@ -49,28 +47,19 @@ public class AmbloneChannelPanel extends JPanel
 	{
 		_outputLabel = new JLabel("Output: ");
 		
-		ComboBoxModel<Integer> outputCBModel = new DefaultComboBoxModel<Integer>();
-		_outputComboBox = new JComboBox<Integer>(outputCBModel);
+		initOutputCB();
 		SwingUtil.setPreferredWidth(_outputComboBox, 60);
-		OutputComboBoxHandler ocbHandler = new OutputComboBoxHandler();
-		_outputComboBox.addActionListener(ocbHandler);
-		//_outputComboBox.addPopupMenuListener(ocbHandler); //currently disabled, ports will never change
 
 		_channelLabel = new JLabel("Channel: ");
 		
-		ComboBoxModel<ChannelholderItem> channelHolderCBModel = new DefaultComboBoxModel<ChannelholderItem>();
-		_channelHolderComboBox = new JComboBox<ChannelholderItem>(channelHolderCBModel);
+		initChannelholderCB();
 		SwingUtil.setPreferredWidth(_channelHolderComboBox, 120);
-		ChannelholderComboBoxHandler chcbHandler = new ChannelholderComboBoxHandler();
-		_channelHolderComboBox.addActionListener(chcbHandler);
-		_channelHolderComboBox.addPopupMenuListener(chcbHandler);
 		
 		ComboBoxModel<ChannelItem> channelCBModel = new DefaultComboBoxModel<ChannelItem>();
 		_channelComboBox = new JComboBox<ChannelItem>(channelCBModel);
-		SwingUtil.setPreferredWidth(_channelComboBox, 100);
 		ChannelComboBoxHandler ccbHandler = new ChannelComboBoxHandler();
 		_channelComboBox.addActionListener(ccbHandler);
-		_channelComboBox.addPopupMenuListener(ccbHandler);
+		SwingUtil.setPreferredWidth(_channelComboBox, 100);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.add(_outputLabel);
@@ -81,6 +70,34 @@ public class AmbloneChannelPanel extends JPanel
 		this.add(_channelComboBox);
 	}
 	
+	/** Initializes the OutputComboBox with Model and Handler */
+	private void initOutputCB()
+	{
+		DefaultComboBoxModel<Integer> cbModel = new DefaultComboBoxModel<>();
+		Set<Integer> possiblePorts = AmbloneTransmission.getPossiblePorts();
+		
+		for (Integer i : possiblePorts)
+			cbModel.addElement(i);
+		
+		_outputComboBox = new JComboBox<Integer>(cbModel);
+		OutputComboBoxHandler handler = new OutputComboBoxHandler();
+		_outputComboBox.addActionListener(handler);
+	}
+	
+	/** Initializes the ChannelholderComboBox with Model and Handler */
+	private void initChannelholderCB()
+	{
+		DefaultComboBoxModel<ChannelholderItem> cbModel = new DefaultComboBoxModel<ChannelholderItem>();
+		List<Channelholder> channelholders = Model.getInstance().getChannelholders();
+		
+		for (Channelholder holder : channelholders)
+			cbModel.addElement(new ChannelholderItem(holder));
+		
+		_channelHolderComboBox = new JComboBox<ChannelholderItem>(cbModel);
+		ChannelholderComboBoxHandler chcbHandler = new ChannelholderComboBoxHandler();
+		_channelHolderComboBox.addActionListener(chcbHandler);
+	}
+	
 	@Override
 	public void setEnabled(boolean enabled)
 	{
@@ -88,39 +105,6 @@ public class AmbloneChannelPanel extends JPanel
 		{
 			comp.setEnabled(enabled);
 		}
-	}
-	
-	/** Reloads the possible ports, tries to keep current selection intact */
-	private void refreshOutputCB()
-	{
-		Object selectedItem = _outputComboBox.getSelectedItem();
-		DefaultComboBoxModel<Integer> cbModel = (DefaultComboBoxModel<Integer>) _outputComboBox.getModel();
-		cbModel.removeAllElements();
-		
-		Set<Integer> possiblePorts = AmbloneTransmission.getPossiblePorts();
-		
-		for (Integer i : possiblePorts)
-			cbModel.addElement(i);
-		
-		if (selectedItem != null)
-			_outputComboBox.setSelectedItem(selectedItem);
-	}
-	
-	/** Reloads the Channelholders, tries to keep current selection intact */
-	private void refreshChannelholderCB()
-	{
-		Object selectedItem = _channelHolderComboBox.getSelectedItem();
-		DefaultComboBoxModel<ChannelholderItem> cbModel = (DefaultComboBoxModel<ChannelholderItem>) _channelHolderComboBox.getModel();
-		cbModel.removeAllElements();
-		cbModel.addElement(new DummyChannelholderItem());
-		
-		List<Channelholder> channelholders = Model.getInstance().getChannelholders();
-		
-		for (Channelholder holder : channelholders)
-			cbModel.addElement(new ChannelholderItem(holder));
-		
-		if (selectedItem != null)
-			_channelHolderComboBox.setSelectedItem(selectedItem);  //Try to set the previously selected Item
 	}
 	
 	/**
@@ -149,7 +133,7 @@ public class AmbloneChannelPanel extends JPanel
 			_channelComboBox.setSelectedItem(selectedItem);  //Try to set the previously selected Item
 	}
 	
-	private class OutputComboBoxHandler implements ActionListener, PopupMenuListener
+	private class OutputComboBoxHandler implements ActionListener
 	{
 		/**
 		 * Is called if the selection in the OutputComboBox changed.
@@ -167,31 +151,21 @@ public class AmbloneChannelPanel extends JPanel
 				Channel associatedChannel = _amblone.getChannel(selectedPort);
 				if (associatedChannel != null)
 				{
-					Channelholder holder = Model.getInstance().getChannelholder(associatedChannel);
+					//Set other ComboBoxes to show associated Channel
+					Channelholder holder = Model.getInstance().getChannelholder(associatedChannel); 
 					_channelHolderComboBox.setSelectedItem(new ChannelholderItem(holder));
 					_channelComboBox.setSelectedItem(new ChannelItem(associatedChannel));
 					return;
 				}
 			}
 			
-			_channelHolderComboBox.setSelectedItem(new DummyChannelholderItem());
+			//If the selected Port has no channel set, display the dummys
+			_channelHolderComboBox.setSelectedItem(new ChannelholderItem(Model.getInstance().getChannelFactory()));
 			_channelComboBox.setSelectedItem(new DummyChannelItem());
 		}
-
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-		{
-			refreshOutputCB();
-		}
-
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) { }
-
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
 	}
 	
-	private class ChannelholderComboBoxHandler implements ActionListener, PopupMenuListener
+	private class ChannelholderComboBoxHandler implements ActionListener
 	{
 		/**
 		 * If the selected Channelholder changes, the ChannelComboBox is updated
@@ -202,21 +176,9 @@ public class AmbloneChannelPanel extends JPanel
 		{
 			refreshChannelCB();
 		}
-
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-		{
-			refreshChannelholderCB();
-		}
-
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) { }
-
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
 	}
 	
-	private class ChannelComboBoxHandler implements ActionListener, PopupMenuListener
+	private class ChannelComboBoxHandler implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e)
@@ -237,17 +199,5 @@ public class AmbloneChannelPanel extends JPanel
 				_amblone.setOutput(selectedPort, ((ChannelItem) selectedChannelObj).getChannel());
 			}
 		}
-		
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-		{
-			refreshChannelCB();
-		}
-
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) { }
-
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { }
 	}
 }

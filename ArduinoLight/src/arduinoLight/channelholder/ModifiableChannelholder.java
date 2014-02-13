@@ -1,4 +1,4 @@
-package arduinoLight.channelwriter;
+package arduinoLight.channelholder;
 
 import arduinoLight.channel.Channel;
 

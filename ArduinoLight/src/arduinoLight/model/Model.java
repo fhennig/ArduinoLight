@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import arduinoLight.channel.Channel;
+import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
-import arduinoLight.channelwriter.Channelholder;
 
 public class Model
 {
@@ -46,10 +46,15 @@ public class Model
 		return _ambientlight;
 	}
 	
+	/**
+	 * The returned List currently does not change, as Channelholders 
+	 * cannot be added or removed.
+	 */
 	public List<Channelholder> getChannelholders()
 	{
-		List<Channelholder> channelHolders = new ArrayList<Channelholder>(_channelwriters);
+		List<Channelholder> channelHolders = new ArrayList<Channelholder>();
 		channelHolders.add(_channelFactory);
+		channelHolders.addAll(_channelwriters);
 		channelHolders.add(_unusedChannels);
 		return channelHolders;
 	}
