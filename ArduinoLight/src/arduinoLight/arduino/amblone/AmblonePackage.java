@@ -37,7 +37,7 @@ public class AmblonePackage
 	
 	
 	/**
-	 * @return A Byte-Array representing an Amblonepackage (Startflag, colorvalues, Endflag).
+	 * @return  a byte-Array representing an Amblonepackage (Startflag, colorvalues, Endflag)
 	 */
 	public byte[] toByteArray()
 	{
