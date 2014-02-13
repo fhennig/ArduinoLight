@@ -97,7 +97,7 @@ public class AmbloneChannelPanel extends JPanel
 		DefaultComboBoxModel<Integer> cbModel = (DefaultComboBoxModel<Integer>) _outputComboBox.getModel();
 		cbModel.removeAllElements();
 		
-		Set<Integer> possiblePorts = _amblone.getPossiblePorts();
+		Set<Integer> possiblePorts = AmbloneTransmission.getPossiblePorts();
 		
 		for (Integer i : possiblePorts)
 			cbModel.addElement(i);

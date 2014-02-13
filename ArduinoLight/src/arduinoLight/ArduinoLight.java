@@ -6,7 +6,6 @@ import gnu.io.PortInUseException;
 import java.util.*;
 
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.amblone.AmbloneConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;

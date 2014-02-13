@@ -28,12 +28,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import org.omg.CORBA.FREE_MEM;
-
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.SerialConnectionOld;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
@@ -136,7 +132,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	{
 		DefaultComboBoxModel<PortItem> model = (DefaultComboBoxModel<PortItem>) _portComboBox.getModel();
 		model.removeAllElements();
-		Enumeration<CommPortIdentifier> ports = SerialConnectionOld.getAvailablePorts();
+		Enumeration<CommPortIdentifier> ports = SerialConnection.getAvailablePorts();
 		
 		while(ports.hasMoreElements()){
 			model.addElement(new PortItem(ports.nextElement()));

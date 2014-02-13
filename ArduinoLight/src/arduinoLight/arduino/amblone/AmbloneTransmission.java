@@ -35,16 +35,6 @@ public class AmbloneTransmission
 		_map = new ConcurrentHashMap<>();
 	}
 	
-	public Set<Integer> getPossiblePorts()
-	{
-		Set<Integer> possiblePorts = new LinkedHashSet<>();
-		
-		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
-			possiblePorts.add(i);
-		
-		return possiblePorts;
-	}
-	
 	/**
 	 * @param port  an integer specifying an output port. 0 <= port < 4
 	 * @param channel  a channel that should be mapped to this output.
@@ -101,7 +91,10 @@ public class AmbloneTransmission
 			{
 				List<RGBColor> currentColors = getCurrentColors();
 				if (currentColors.size() < 1)
-					return;
+				{
+					currentColors = new ArrayList<>(); //If there are currently no colors,
+					currentColors.add(Color.BLACK);	   //we transmit black, to reset all the colors that might be set.
+				}
 				AmblonePackage p = new AmblonePackage(currentColors);
 				_connection.transmit(p.toByteArray());
 			}
@@ -112,7 +105,7 @@ public class AmbloneTransmission
 	}
 	
 	/**
-	 * This method stops the transission and returns the connection that
+	 * This method stops the transmission and returns the connection that
 	 * was passed in with 'start(...)'.
 	 */
 	public synchronized SerialConnection stop()
@@ -159,6 +152,21 @@ public class AmbloneTransmission
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * static helper-method that returns a LinkedHashSet containing Integers
+	 * that represent the possible ports.
+	 * The Set is generated each time this method is called.
+	 */
+	public static Set<Integer> getPossiblePorts()
+	{
+		Set<Integer> possiblePorts = new LinkedHashSet<>();
+		
+		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
+			possiblePorts.add(i);
+		
+		return possiblePorts;
 	}
 	
 	private void validatePort(int port)
