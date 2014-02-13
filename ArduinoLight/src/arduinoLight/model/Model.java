@@ -7,6 +7,7 @@ import java.util.Set;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
+import arduinoLight.channelholder.ChannelholderListener;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
 
 public class Model
@@ -53,7 +54,7 @@ public class Model
 	public List<Channelholder> getChannelholders()
 	{
 		List<Channelholder> channelHolders = new ArrayList<Channelholder>();
-		channelHolders.add(_channelFactory);
+		channelHolders.add(_channelFactory); //ChannelFactory at the top of the list
 		channelHolders.addAll(_channelwriters);
 		channelHolders.add(_unusedChannels);
 		return channelHolders;
@@ -102,6 +103,18 @@ public class Model
 		public String getChannelsDescription()
 		{
 			return "Unused Channels";
+		}
+
+		@Override
+		public void addChannelholderListener(ChannelholderListener listener)
+		{
+			//TODO
+		}
+
+		@Override
+		public void removeChannelholderListener(ChannelholderListener listener)
+		{
+			//TODO
 		}
 	}
 }

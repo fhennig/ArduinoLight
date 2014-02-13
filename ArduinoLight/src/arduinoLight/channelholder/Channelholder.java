@@ -13,4 +13,7 @@ public interface Channelholder
 	public Set<Channel> getChannels();
 	
 	public String getChannelsDescription();
+	
+	public void addChannelholderListener(ChannelholderListener listener);
+	public void removeChannelholderListener(ChannelholderListener listener);
 }

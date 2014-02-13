@@ -2,14 +2,18 @@ package arduinoLight.channelprovider.generator.ambientlight;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import arduinoLight.channel.Channel;
+import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
@@ -23,8 +27,9 @@ public class Ambientlight implements ModifiableChannelholder
 {
 	//TODO thread safety?
 	private static final int MAX_FREQUENCY = 100;
-	private Map<Channel, Areaselection> _map = new ConcurrentHashMap<Channel, Areaselection>();
+	private final Map<Channel, Areaselection> _map = new ConcurrentHashMap<Channel, Areaselection>();
 	private ScheduledExecutorService _executor;
+	private final List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();
 
 	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
 	@Override
@@ -36,15 +41,21 @@ public class Ambientlight implements ModifiableChannelholder
 	public void addChannel(Channel channel, Areaselection selection)
 	{
 		if (channel == null || selection == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("A given argument was null.");
+		if (_map.containsKey(channel))
+			throw new IllegalArgumentException("The channel is already in use, cannot add it again!");
+		
 		_map.put(channel, selection);
+		fireChannelsChangedEvent(new ChannelsChangedEventArgs(this, null, channel));
 	}
 	
 	/** If the specified Channel is currently in use, it is removed */
 	@Override
 	public void removeChannel(Channel channel)
 	{
-		_map.remove(channel);
+		Object value = _map.remove(channel);
+		if (value != null)
+			fireChannelsChangedEvent(new ChannelsChangedEventArgs(this, channel, null));
 	}
 	
 	/**
@@ -111,5 +122,23 @@ public class Ambientlight implements ModifiableChannelholder
 	public String getChannelsDescription()
 	{
 		return "Ambientlight-Channels";
+	}
+	
+	private void fireChannelsChangedEvent(ChannelsChangedEventArgs e)
+	{
+		for (ChannelholderListener l : _listeners)
+			l.channelsChanged(e);
+	}
+
+	@Override
+	public void addChannelholderListener(ChannelholderListener listener)
+	{
+		_listeners.add(listener);		
+	}
+
+	@Override
+	public void removeChannelholderListener(ChannelholderListener listener)
+	{
+		_listeners.add(listener);
 	}
 }

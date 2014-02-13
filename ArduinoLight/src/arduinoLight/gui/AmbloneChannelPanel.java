@@ -13,8 +13,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;

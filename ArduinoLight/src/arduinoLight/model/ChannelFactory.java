@@ -2,11 +2,17 @@ package arduinoLight.model;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channel.ThreadingChannel;
 import arduinoLight.channelholder.Channelholder;
+import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedEventArgs;
+import arduinoLight.events.Event;
+import arduinoLight.events.EventDispatchHandler;
 
 /**
  * This class is a Singleton. //TODO UPDATE
@@ -20,6 +26,7 @@ public class ChannelFactory implements Channelholder
 	/** Used to generate IDs */
     private static int _instances = 0;
 	private Set<Channel> _createdChannels = new HashSet<>();
+	private List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();
 	
 	public ChannelFactory()
 	{
@@ -38,6 +45,8 @@ public class ChannelFactory implements Channelholder
 		_createdChannels.add(newChannel);
 		if (name != null)
 			newChannel.setName(name);
+		
+		fireChannelsChangedEvent(newChannel); //fires concurrently
 		return newChannel;
 	}
 
@@ -60,5 +69,32 @@ public class ChannelFactory implements Channelholder
 	public String getChannelsDescription()
 	{
 		return "All Channels";
+	}
+	
+	/** concurrent event-firing */
+	private void fireChannelsChangedEvent(Channel addedChannel)
+	{
+		final ChannelsChangedEventArgs e = new ChannelsChangedEventArgs(this, null, addedChannel);
+		EventDispatchHandler.getInstance().dispatch(new Event(this, "ChannelsChanged")
+		{
+			@Override
+			public void notifyListeners()
+			{
+				for (ChannelholderListener l : _listeners)
+					l.channelsChanged(e);
+			}
+		});
+	}
+
+	@Override
+	public void addChannelholderListener(ChannelholderListener listener)
+	{
+		_listeners.add(listener);
+	}
+
+	@Override
+	public void removeChannelholderListener(ChannelholderListener listener)
+	{
+		_listeners.remove(listener);
 	}
 }
