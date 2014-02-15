@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -17,10 +16,7 @@ import javax.swing.JPanel;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
-import arduinoLight.gui.comboboxitems.ChannelItem;
 import arduinoLight.gui.comboboxitems.ChannelholderItem;
-import arduinoLight.gui.comboboxitems.DummyChannelItem;
-import arduinoLight.gui.comboboxitems.DummyChannelholderItem;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
@@ -32,13 +28,12 @@ public class AmbloneChannelPanel extends JPanel
 	private JComboBox<Integer> _outputComboBox;
 	private JLabel _channelLabel;
 	private JComboBox<ChannelholderItem> _channelHolderComboBox;
-	private JComboBox<ChannelItem> _channelComboBox;
+	private ChannelComboBox _channelComboBox;
 	
 	public AmbloneChannelPanel(AmbloneTransmission ambloneTransmission)
 	{
 		_amblone = ambloneTransmission;
 		initComponents();
-		refreshChannelCB();
 	}
 	
 	private void initComponents()
@@ -53,8 +48,8 @@ public class AmbloneChannelPanel extends JPanel
 		initChannelholderCB();
 		SwingUtil.setPreferredWidth(_channelHolderComboBox, 120);
 		
-		ComboBoxModel<ChannelItem> channelCBModel = new DefaultComboBoxModel<ChannelItem>();
-		_channelComboBox = new JComboBox<ChannelItem>(channelCBModel);
+		Channelholder selectedChannelholder = ((ChannelholderItem) _channelHolderComboBox.getSelectedItem()).getChannelholder();
+		_channelComboBox = new ChannelComboBox(new ChannelComboBoxModel(selectedChannelholder, true));
 		ChannelComboBoxHandler ccbHandler = new ChannelComboBoxHandler();
 		_channelComboBox.addActionListener(ccbHandler);
 		SwingUtil.setPreferredWidth(_channelComboBox, 100);
@@ -66,6 +61,9 @@ public class AmbloneChannelPanel extends JPanel
 		this.add(_channelLabel);
 		this.add(_channelHolderComboBox);
 		this.add(_channelComboBox);
+		
+		//preselect something
+		_channelHolderComboBox.setSelectedItem(new ChannelholderItem(Model.getInstance().getChannelFactory()));
 	}
 	
 	/** Initializes the OutputComboBox with Model and Handler */
@@ -92,6 +90,7 @@ public class AmbloneChannelPanel extends JPanel
 			cbModel.addElement(new ChannelholderItem(holder));
 		
 		_channelHolderComboBox = new JComboBox<ChannelholderItem>(cbModel);
+		_channelHolderComboBox.setSelectedItem(new ChannelholderItem(Model.getInstance().getChannelFactory()));
 		ChannelholderComboBoxHandler chcbHandler = new ChannelholderComboBoxHandler();
 		_channelHolderComboBox.addActionListener(chcbHandler);
 	}
@@ -103,32 +102,6 @@ public class AmbloneChannelPanel extends JPanel
 		{
 			comp.setEnabled(enabled);
 		}
-	}
-	
-	/**
-	 * Loads the Channels for the currently selected Channelholder.
-	 * Tries to keep the currently selected Channel selected.
-	 **/
-	private void refreshChannelCB()
-	{
-		Object selectedItem = _channelComboBox.getSelectedItem();
-		DefaultComboBoxModel<ChannelItem> channelCBModel = (DefaultComboBoxModel<ChannelItem>) _channelComboBox.getModel();
-		channelCBModel.removeAllElements();
-		channelCBModel.addElement(new DummyChannelItem());
-		
-		Object holderObj = _channelHolderComboBox.getSelectedItem();
-		if (holderObj == null || holderObj instanceof DummyChannelholderItem)
-			return;
-		
-		ChannelholderItem holderItem = (ChannelholderItem) holderObj;
-		
-		Set<Channel> channels = holderItem.getChannelholder().getChannels();
-		
-		for (Channel c : channels)
-			channelCBModel.addElement(new ChannelItem(c));
-
-		if (selectedItem != null)
-			_channelComboBox.setSelectedItem(selectedItem);  //Try to set the previously selected Item
 	}
 	
 	private class OutputComboBoxHandler implements ActionListener
@@ -151,17 +124,19 @@ public class AmbloneChannelPanel extends JPanel
 				{
 					//Set other ComboBoxes to show associated Channel
 					Channelholder holder = Model.getInstance().getChannelholder(associatedChannel); 
+					preselectedChannel = associatedChannel;
 					_channelHolderComboBox.setSelectedItem(new ChannelholderItem(holder));
-					_channelComboBox.setSelectedItem(new ChannelItem(associatedChannel));
 					return;
 				}
 			}
 			
 			//If the selected Port has no channel set, display the dummys
+			preselectedChannel = null;
 			_channelHolderComboBox.setSelectedItem(new ChannelholderItem(Model.getInstance().getChannelFactory()));
-			_channelComboBox.setSelectedItem(new DummyChannelItem());
 		}
 	}
+	
+	private Channel preselectedChannel;
 	
 	private class ChannelholderComboBoxHandler implements ActionListener
 	{
@@ -172,7 +147,19 @@ public class AmbloneChannelPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			refreshChannelCB();
+			Object channelholderItemObj = _channelHolderComboBox.getSelectedItem();
+			if (channelholderItemObj == null)
+				return;
+			
+			Channelholder channelholder = ((ChannelholderItem) channelholderItemObj).getChannelholder();
+			boolean sameChannelholder = _channelComboBox.getModel().getItemSource() == channelholder;
+			if (sameChannelholder)
+			{
+				_channelComboBox.getModel().setSelectedChannel(preselectedChannel);
+				return;
+			}
+			
+			_channelComboBox.getModel().setItemSource(channelholder, true, preselectedChannel);
 		}
 	}
 	
@@ -182,20 +169,18 @@ public class AmbloneChannelPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			Object selectedPortObj = _outputComboBox.getSelectedItem();
-			if (selectedPortObj == null)
-				return; //If no port is selected, we do nothing
+			Channel selectedChannel = _channelComboBox.getModel().getSelectedChannel();
+			if (selectedPortObj == null || selectedChannel == null)
+				return; //If no port is selected or no channel is selected, we do nothing
 			
 			int selectedPort = ((Integer) selectedPortObj).intValue();
 			
-			Object selectedChannelObj = _channelComboBox.getSelectedItem();
-			if (selectedChannelObj instanceof DummyChannelItem)
-			{
-				_amblone.clearOutput(selectedPort);
-			}
-			else if (selectedChannelObj instanceof ChannelItem)
-			{
-				_amblone.setOutput(selectedPort, ((ChannelItem) selectedChannelObj).getChannel());
-			}
+			Channel setChannel = _amblone.getChannel(selectedPort);
+			if (selectedChannel == setChannel)
+				return; //If the channel is already set, the 'actionPerformed' was probably not called,
+						//because of user input, rather because the displayed item should change.
+			
+			_amblone.setOutput(selectedPort, selectedChannel);
 		}
 	}
 }

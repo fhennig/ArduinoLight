@@ -30,32 +30,32 @@ public class ChannelItem
 		return _channel.getName() + " [" + Integer.toString(_channel.getId()) + "]";
 	}
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null)
-		{
-			return false;
-		}
-		if (!(obj instanceof ChannelItem))
-		{
-			return false;
-		}
-		ChannelItem other = (ChannelItem) obj;
-		if (_channel == null)
-		{
-			if (other._channel != null)
-			{
-				return false;
-			}
-		} else if (!_channel.equals(other._channel))
-		{
-			return false;
-		}
-		return true;
-	}
+//	@Override
+//	public boolean equals(Object obj)
+//	{
+//		if (this == obj)
+//		{
+//			return true;
+//		}
+//		if (obj == null)
+//		{
+//			return false;
+//		}
+//		if (!(obj instanceof ChannelItem))
+//		{
+//			return false;
+//		}
+//		ChannelItem other = (ChannelItem) obj;
+//		if (_channel == null)
+//		{
+//			if (other._channel != null)
+//			{
+//				return false;
+//			}
+//		} else if (!_channel.equals(other._channel))
+//		{
+//			return false;
+//		}
+//		return true;
+//	}
 }

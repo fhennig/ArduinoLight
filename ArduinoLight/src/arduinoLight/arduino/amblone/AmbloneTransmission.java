@@ -38,6 +38,7 @@ public class AmbloneTransmission
 	/**
 	 * @param port  an integer specifying an output port. 0 <= port < 4
 	 * @param channel  a channel that should be mapped to this output.
+	 * If channel == null, the selected port is cleared.
 	 */
 	public void setOutput(int port, Channel channel)
 	{
@@ -54,6 +55,7 @@ public class AmbloneTransmission
 	public void clearOutput(int port)
 	{
 		_map.remove(port);
+		DebugConsole.print("AmbloneTransmission", "clearOutput", "Port " + port + " cleared.");
 	}
 	
 	/**
@@ -63,7 +65,7 @@ public class AmbloneTransmission
 	{
 		validatePort(port);
 		
-		return _map.get(port);
+		return _map.get((Integer)port);
 	}
 	
 	public boolean isActive()
