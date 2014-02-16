@@ -3,6 +3,7 @@ package arduinoLight.gui.channelcombobox;
 import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingUtilities;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
@@ -107,8 +108,17 @@ public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> impl
 	 * This method gets called by the _itemSource if the list of channels changed.
 	 */
 	@Override
-	public void channelsChanged(ChannelsChangedEventArgs e)
+	public void channelsChanged(final ChannelsChangedEventArgs e)
 	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				@Override public void run() { channelsChanged(e); }
+			});
+			return;
+		}
+		
 		if (e.getSource() != _itemSource)
 			return; //for safety
 		

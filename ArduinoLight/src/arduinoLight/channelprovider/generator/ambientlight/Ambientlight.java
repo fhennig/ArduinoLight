@@ -15,6 +15,9 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ChannelholderListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ModifiableChannelholder;
+import arduinoLight.events.Event;
+import arduinoLight.events.EventDispatchHandler;
+import arduinoLight.interfaces.propertyListeners.ActiveListener;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
 
@@ -29,7 +32,9 @@ public class Ambientlight implements ModifiableChannelholder
 	public static final int MAX_FREQUENCY = 100;
 	private final Map<Channel, Areaselection> _map = new ConcurrentHashMap<Channel, Areaselection>();
 	private ScheduledExecutorService _executor;
-	private final List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();
+	private final List<ChannelholderListener> _channelholderListeners = new CopyOnWriteArrayList<>();
+	private final List<ActiveListener> _activeListeners = new CopyOnWriteArrayList<>();
+	private volatile boolean _active;
 
 	/** Adds a new Channel with a default 2x2 Screenselection that has no selected Parts. */
 	@Override
@@ -69,6 +74,9 @@ public class Ambientlight implements ModifiableChannelholder
 	
 	public synchronized void start(int frequency)
 	{
+		if (_active)
+			throw new IllegalStateException("Already active!");
+		
 		Runnable colorSetLoop = new Runnable()
 		{
 			public void run()
@@ -97,19 +105,29 @@ public class Ambientlight implements ModifiableChannelholder
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					synchronized (Ambientlight.this)
+					{
+						_active = false;
+						fireActiveChangedEvent(_active);
+					}
 				}
 			}
 		};
 		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
 		_executor = Executors.newSingleThreadScheduledExecutor();
 		_executor.scheduleAtFixedRate(colorSetLoop, 0, period, TimeUnit.NANOSECONDS);
+		_active = true;
+		fireActiveChangedEvent(_active);
 	}
 	
 	public synchronized void stop()
 	{
+		if (!_active)
+			return;
 		_executor.shutdown();
 		_executor = null;
+		_active = false;
+		fireActiveChangedEvent(_active);
 	}
 
 	/** @see arduinoLight.channelwriter.Channelwriter#getChannels() */
@@ -125,21 +143,44 @@ public class Ambientlight implements ModifiableChannelholder
 		return "Ambientlight-Channels";
 	}
 	
+	private void fireActiveChangedEvent(final boolean newActive)
+	{
+		EventDispatchHandler.getInstance().dispatch(new Event(this, "ActiveChanged")
+		{
+			@Override
+			public void notifyListeners()
+			{
+				for (ActiveListener l : _activeListeners)
+					l.activeChanged(Ambientlight.this, newActive);
+			}
+		});
+	}
+	
 	private void fireChannelsChangedEvent(ChannelsChangedEventArgs e)
 	{
-		for (ChannelholderListener l : _listeners)
+		for (ChannelholderListener l : _channelholderListeners)
 			l.channelsChanged(e);
 	}
 
 	@Override
 	public void addChannelholderListener(ChannelholderListener listener)
 	{
-		_listeners.add(listener);		
+		_channelholderListeners.add(listener);		
 	}
 
 	@Override
 	public void removeChannelholderListener(ChannelholderListener listener)
 	{
-		_listeners.add(listener);
+		_channelholderListeners.add(listener);
+	}
+	
+	public void addActiveListener(ActiveListener listener)
+	{
+		_activeListeners.add(listener);
+	}
+	
+	public void removeActiveListener(ActiveListener listener)
+	{
+		_activeListeners.remove(listener);
 	}
 }

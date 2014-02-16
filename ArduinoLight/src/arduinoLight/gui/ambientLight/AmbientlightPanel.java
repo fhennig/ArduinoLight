@@ -6,14 +6,17 @@
 package arduinoLight.gui.ambientLight;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.border.TitledBorder;
 
+import arduinoLight.channel.Channel;
 import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
 import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
 import arduinoLight.gui.ChannelPanel;
@@ -26,54 +29,67 @@ public class AmbientlightPanel extends TabPanel{
 	
 	Ambientlight _ambientLight = Model.getInstance().getAmbientlight();
 	
+	ScreenSelectionPanel _screenSelectionPanel;
+	JPanel _rgbPanel;
+	JPanel _activationPanel;
 	ChannelPanel _channelPanel = new ChannelPanel(_ambientLight);
-	JPanel _screenSelectionPanel = new ScreenSelectionPanel(new Areaselection(2, 2));
 
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
 	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
 	ColorSlider _blueSlider = new ColorSlider("B", 0, 100, 100);
 	ColorSlider _brightnessSlider = new ColorSlider("B", 0, 100, 100);
 	
-	JPanel _rgbPanel = new JPanel();
-	
-	JPanel _performancePanel = new JPanel();
-	JCheckBox _fpsBox = new JCheckBox("Limit FPS");
-	JSlider _fpsSlider = new JSlider();
 	
 	
-	public AmbientlightPanel(String title){
-		initComponents();
+	public AmbientlightPanel(String title)
+	{
 		_title = title;
+		initComponents();
 	}
 	
-	private void initComponents(){
-		//
-		// Layouts
-		//
-		JPanel mainPanel = new JPanel();
-		JPanel leftPanel = new JPanel();
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
-		_performancePanel.setLayout(new BoxLayout(_performancePanel, BoxLayout.LINE_AXIS));
-
+	private void initComponents()
+	{
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		_screenSelectionPanel = new ScreenSelectionPanel(new Areaselection(2, 2));
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridwidth = 2;
+		gbc.weighty = 1;
+		gbc.weightx = 1;
+		this.add(_screenSelectionPanel, gbc);
+		
+		initRGBPanel();
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.gridx = 2;
+		gbc.gridwidth = 1;
+		gbc.weightx = 0;
+		this.add(_rgbPanel, gbc);
+		
+		gbc.gridy = 1;
+		_activationPanel = new AmbientlightStartStopPanel(_ambientLight);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.weighty = 0;
+		this.add(_activationPanel, gbc);
+		
+		_channelPanel = new ChannelPanel(_ambientLight);
+		_channelPanel.addActionListener(new ChannelPanelHandler());
+		gbc.gridx = 1;
+		gbc.gridwidth = 2;
+		this.add(_channelPanel, gbc);
+	}
+	
+	private void initChannelPanel()
+	{
+		//TODO selectionchanged handlers
+	}
+	
+	private void initRGBPanel()
+	{
+		_rgbPanel = new JPanel();
 		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
-		//
-		// Borders
-		//
-		_performancePanel.setBorder(new TitledBorder(null, "Performance", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		_rgbPanel.setBorder(new TitledBorder(null, "Color Correction", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		
-		//
-		// Adding the Components
-		//
-		leftPanel.add(_screenSelectionPanel);
-		leftPanel.add(_performancePanel);
-		
-		_performancePanel.add(_fpsBox);
-		_performancePanel.add(Box.createRigidArea(new Dimension(10, 0)));
-		_performancePanel.add(_fpsSlider);
+		_rgbPanel.setBorder(BorderFactory.createTitledBorder("Color Correction"));
 		
 		_rgbPanel.add(_redSlider);
 		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -82,11 +98,16 @@ public class AmbientlightPanel extends TabPanel{
 		_rgbPanel.add(_blueSlider);
 		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_rgbPanel.add(_brightnessSlider);
-		
-		mainPanel.add(leftPanel);
-		mainPanel.add(_rgbPanel);
-		
-		this.add(mainPanel);
-		this.add(_channelPanel);
+	}
+	
+	private class ChannelPanelHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			Channel selectedChannel = _channelPanel.getSelectedChannel();
+			Areaselection associatedSelection = _ambientLight.getScreenselection(selectedChannel);
+			//ScreenSelectionPanel.setScreenselection(associatedSelection); TODO
+		}
 	}
 }

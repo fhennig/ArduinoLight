@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -28,9 +27,6 @@ public class ScreenSelectionPanel extends JPanel {
 	JSpinner _rowBox;
 	JLabel _colLabel = new JLabel("Coloumns: ");
 	JSpinner _colBox;
-	JLabel _channelLabel = new JLabel("Channel: ");
-	@SuppressWarnings("rawtypes")
-	JComboBox _channelSpinner = new JComboBox();
 	JPanel _table;
 	GridLayout _grid;
 	
@@ -38,6 +34,11 @@ public class ScreenSelectionPanel extends JPanel {
 	{
 		_selection = selection;
 		initComponents();
+	}
+	
+	public void setScreenselection(Areaselection selection)
+	{
+		//TODO should accept null (grey out the components)
 	}
 	
 	private void initComponents()
@@ -59,8 +60,6 @@ public class ScreenSelectionPanel extends JPanel {
 		this.add(_screenOptionPanel, BorderLayout.NORTH);
 		this.add(_table, BorderLayout.CENTER);
 		
-		_screenOptionPanel.add(_channelLabel);
-		_screenOptionPanel.add(_channelSpinner);
 		_screenOptionPanel.add(Box.createHorizontalGlue());
 		_screenOptionPanel.add(_rowLabel);
 		_screenOptionPanel.add(_rowBox);
