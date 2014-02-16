@@ -1,7 +1,5 @@
 package arduinoLight.channelprovider.generator.ambientlight;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -63,26 +61,26 @@ public class ImageTest
 		Assert.assertEquals(4, i.getHeight());
 	}
 	
-	@Test
-	public void testGetSelectedPixelsWithCoordinates()
-	{
-		Image i = new Image(3, 3, Color.BLACK);
-		i.setPixel(0, 0, Color.RED);
-		List<Color> selectedPixels = i.getSelectedPixels(0, 0, 0, 0);
-		
-		Assert.assertEquals(1, selectedPixels.size());
-		Assert.assertEquals(Color.RED, selectedPixels.get(0));
-		
-
-		selectedPixels = i.getSelectedPixels(0, 0, 2, 0);
-		Assert.assertEquals("one row selected, 3 values expected", 3, selectedPixels.size());
-		
-		selectedPixels = i.getSelectedPixels(0, 0, 0, 2);
-		Assert.assertEquals("one column selected, 3 values expected", 3, selectedPixels.size());
-		
-		selectedPixels = i.getSelectedPixels(0, 0, 2, 2);
-		Assert.assertEquals(9, selectedPixels.size());
-	}
+//	@Test
+//	public void testGetSelectedPixelsWithCoordinates()
+//	{
+//		Image i = new Image(3, 3, Color.BLACK);
+//		i.setPixel(0, 0, Color.RED);
+//		List<Color> selectedPixels = i.getSelectedPixels(0, 0, 0, 0);
+//		
+//		Assert.assertEquals(1, selectedPixels.size());
+//		Assert.assertEquals(Color.RED, selectedPixels.get(0));
+//		
+//
+//		selectedPixels = i.getSelectedPixels(0, 0, 2, 0);
+//		Assert.assertEquals("one row selected, 3 values expected", 3, selectedPixels.size());
+//		
+//		selectedPixels = i.getSelectedPixels(0, 0, 0, 2);
+//		Assert.assertEquals("one column selected, 3 values expected", 3, selectedPixels.size());
+//		
+//		selectedPixels = i.getSelectedPixels(0, 0, 2, 2);
+//		Assert.assertEquals(9, selectedPixels.size());
+//	}
 	
 //	private Image get3x3Image()
 //	{

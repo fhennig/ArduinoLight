@@ -80,11 +80,17 @@ public class Areaselection
 	/**
 	 * Sets every cell of the matrix to false.
 	 */
-	public void clear()
+	public void setAll(boolean flag)
 	{
 		synchronized (_matrix)
 		{
-			_matrix = new boolean[_matrix.length][_matrix[0].length];
+			for (int y = 0; y < getRows(); y++)
+			{
+				for (int x = 0; x < getColumns(); x++)
+				{
+					_matrix[y][x] = flag;
+				}
+			}
 		}
 	}
 	

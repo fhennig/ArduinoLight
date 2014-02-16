@@ -81,17 +81,18 @@ public class Ambientlight implements ModifiableChannelholder
 						screenshot = ScreenshotHelper.getScreenshot();
 					} catch (Exception e) { e.printStackTrace();}
 					DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
-					Iterator<Channel> map = _map.keySet().iterator();
-					while (map.hasNext())
+					AverageColorGetter avgGetter = new AverageColorGetter(screenshot);
+					Iterator<Channel> channels = _map.keySet().iterator();
+					while (channels.hasNext())
 					{
 						Channel channel;
 						Areaselection selection;
 						synchronized (_map)
 						{
-							channel = map.next();
+							channel = channels.next();
 							selection = _map.get(channel);
 						}
-						channel.setColor(screenshot.getAverageColor(selection));
+						channel.setColor(avgGetter.getAverageColor(selection));
 					}
 				}
 				catch (Exception e)
