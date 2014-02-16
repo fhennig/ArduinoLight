@@ -1,4 +1,4 @@
-package arduinoLight.gui.comboboxitems;
+package arduinoLight.gui.channelcombobox;
 
 import arduinoLight.channel.Channel;
 

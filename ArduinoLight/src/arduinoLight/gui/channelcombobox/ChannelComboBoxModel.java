@@ -1,4 +1,4 @@
-package arduinoLight.gui;
+package arduinoLight.gui.channelcombobox;
 
 import java.util.Set;
 
@@ -8,8 +8,6 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelholder.ChannelholderListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
-import arduinoLight.gui.comboboxitems.ChannelItem;
-import arduinoLight.gui.comboboxitems.DummyChannelItem;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")

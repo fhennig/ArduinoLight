@@ -26,7 +26,7 @@ import arduinoLight.util.Util;
 public class Ambientlight implements ModifiableChannelholder
 {
 	//TODO thread safety?
-	private static final int MAX_FREQUENCY = 100;
+	public static final int MAX_FREQUENCY = 100;
 	private final Map<Channel, Areaselection> _map = new ConcurrentHashMap<Channel, Areaselection>();
 	private ScheduledExecutorService _executor;
 	private final List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();

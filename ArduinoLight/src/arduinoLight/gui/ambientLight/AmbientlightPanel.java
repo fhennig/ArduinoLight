@@ -19,16 +19,14 @@ import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.TabPanel;
+import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends TabPanel{
 	
-	Ambientlight _ambientLight = new Ambientlight();
+	Ambientlight _ambientLight = Model.getInstance().getAmbientlight();
 	
-	JPanel _mainPanel = new JPanel();
-	JPanel _leftPanel = new JPanel();
-	
-	ChannelPanel _statusPanel = new ChannelPanel(_ambientLight);
+	ChannelPanel _channelPanel = new ChannelPanel(_ambientLight);
 	JPanel _screenSelectionPanel = new ScreenSelectionPanel(new Areaselection(2, 2));
 
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
@@ -52,11 +50,13 @@ public class AmbientlightPanel extends TabPanel{
 		//
 		// Layouts
 		//
-		_leftPanel.setLayout(new BoxLayout(_leftPanel, BoxLayout.PAGE_AXIS));
+		JPanel mainPanel = new JPanel();
+		JPanel leftPanel = new JPanel();
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
 		_performancePanel.setLayout(new BoxLayout(_performancePanel, BoxLayout.LINE_AXIS));
 
 		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
-		_mainPanel.setLayout(new BoxLayout(_mainPanel, BoxLayout.LINE_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		//
@@ -68,8 +68,8 @@ public class AmbientlightPanel extends TabPanel{
 		//
 		// Adding the Components
 		//
-		_leftPanel.add(_screenSelectionPanel);
-		_leftPanel.add(_performancePanel);
+		leftPanel.add(_screenSelectionPanel);
+		leftPanel.add(_performancePanel);
 		
 		_performancePanel.add(_fpsBox);
 		_performancePanel.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -83,10 +83,10 @@ public class AmbientlightPanel extends TabPanel{
 		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		_rgbPanel.add(_brightnessSlider);
 		
-		_mainPanel.add(_leftPanel);
-		_mainPanel.add(_rgbPanel);
+		mainPanel.add(leftPanel);
+		mainPanel.add(_rgbPanel);
 		
-		this.add(_mainPanel);
-		this.add(_statusPanel);
+		this.add(mainPanel);
+		this.add(_channelPanel);
 	}
 }

@@ -1,7 +1,7 @@
-package arduinoLight.gui;
+package arduinoLight.gui.channelcombobox;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.gui.comboboxitems.ChannelItem;
+
 
 
 @SuppressWarnings("serial")
@@ -17,5 +17,15 @@ public class ChannelComboBox extends javax.swing.JComboBox<ChannelItem>
 	public ChannelComboBoxModel getModel()
 	{
 		return (ChannelComboBoxModel) super.getModel();
+	}
+	
+	public void setSelectedChannel(Channel channel)
+	{
+		getModel().setSelectedChannel(channel);
+	}
+	
+	public Channel getSelectedChannel()
+	{
+		return getModel().getSelectedChannel();
 	}
 }

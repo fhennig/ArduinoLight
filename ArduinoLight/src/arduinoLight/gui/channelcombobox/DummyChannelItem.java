@@ -1,4 +1,5 @@
-package arduinoLight.gui.comboboxitems;
+package arduinoLight.gui.channelcombobox;
+
 
 public class DummyChannelItem extends ChannelItem
 {
