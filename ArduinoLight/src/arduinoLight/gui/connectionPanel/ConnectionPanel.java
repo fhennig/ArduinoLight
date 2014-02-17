@@ -1,4 +1,4 @@
-package arduinoLight.gui;
+package arduinoLight.gui.connectionPanel;
 
 public interface ConnectionPanel{
 

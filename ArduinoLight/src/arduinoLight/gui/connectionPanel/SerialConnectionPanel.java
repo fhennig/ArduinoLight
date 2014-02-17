@@ -1,4 +1,4 @@
-package arduinoLight.gui;
+package arduinoLight.gui.connectionPanel;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;

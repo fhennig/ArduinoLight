@@ -1,4 +1,4 @@
-package arduinoLight.gui;
+package arduinoLight.gui.connectionPanel;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -16,9 +16,10 @@ import javax.swing.JPanel;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
+import arduinoLight.gui.ChannelholderItem;
+import arduinoLight.gui.SwingUtil;
 import arduinoLight.gui.channelcombobox.ChannelComboBox;
 import arduinoLight.gui.channelcombobox.ChannelComboBoxModel;
-import arduinoLight.gui.comboboxitems.ChannelholderItem;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")

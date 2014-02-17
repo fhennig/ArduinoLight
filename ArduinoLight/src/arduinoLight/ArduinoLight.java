@@ -11,9 +11,9 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.channelholder.ambientlight.Areaselection;
 import arduinoLight.gui.Gui;
-import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
+import arduinoLight.gui.connectionPanel.SerialConnectionPanel;
 import arduinoLight.model.Model;
 import arduinoLight.util.Color;
 

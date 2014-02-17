@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.JTabbedPane;
 
+import arduinoLight.gui.connectionPanel.ConnectionPanel;
+
 public class Gui{
 
 	private JFrame _frame = new JFrame("Arduino Light");
