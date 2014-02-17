@@ -1,5 +1,6 @@
 package arduinoLight.gui.ambientLight;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -8,7 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
+import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
 
 @SuppressWarnings("serial")
@@ -23,6 +24,7 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 	public AmbientlightStartStopPanel(Ambientlight ambientlight)
 	{
 		_ambientlight = ambientlight;
+		_ambientlight.addActiveListener(this);
 		initComponents();
 	}
 	
@@ -39,13 +41,27 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 		gbc.gridx = 1;
 		this.add(_refreshrateSpinner, gbc);
 		
-		_startButton = new JButton("Start");
+		if (_ambientlight.isActive())
+			_startButton = new JButton("Stop");
+		else
+			_startButton = new JButton("Start");
 		_startButton.addActionListener(new StartButtonHandler());
 		gbc.gridx = 2;
 		gbc.weightx = 1;
+		gbc.ipadx = 18;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0, 10, 0, 0);
 		this.add(_startButton, gbc);
+	}
+	
+	private int getSelectedRefreshRate()
+	{
+		return (Integer) _refreshrateSpinner.getValue();
+	}
+	
+	private class StartButton
+	{
+		
 	}
 	
 	private class StartButtonHandler implements ActionListener
@@ -53,7 +69,16 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			//TODO
+			if (_ambientlight.isActive())
+			{
+				_ambientlight.stop();
+				_refreshrateSpinner.setEnabled(true);
+			}
+			else
+			{
+				_refreshrateSpinner.setEnabled(false);
+				_ambientlight.start(getSelectedRefreshRate());
+			}
 		}
 	}
 
@@ -68,7 +93,14 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 				@Override public void run() { activeChanged(source, newActive); }
 			});
 		}
-		
-		//TODO actual reaction
+		System.out.println("asdf");
+		if (newActive)
+		{
+			_startButton.setText("Stop");
+		}
+		else
+		{
+			_startButton.setText("Start");
+		}
 	}
 }

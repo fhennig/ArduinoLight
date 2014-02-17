@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider;
+package arduinoLight;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;

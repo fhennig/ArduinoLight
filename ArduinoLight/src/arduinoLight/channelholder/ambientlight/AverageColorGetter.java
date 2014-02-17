@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.generator.ambientlight;
+package arduinoLight.channelholder.ambientlight;
 
 import java.util.ArrayList;
 import java.util.List;

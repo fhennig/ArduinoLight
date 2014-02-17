@@ -1,7 +1,10 @@
-package arduinoLight.channelprovider.generator.ambientlight;
+package arduinoLight.channelholder.ambientlight;
 
 import org.junit.Test;
 
+import arduinoLight.channelholder.ambientlight.Areaselection;
+import arduinoLight.channelholder.ambientlight.AverageColorGetter;
+import arduinoLight.channelholder.ambientlight.ScreenshotHelper;
 import arduinoLight.util.Color;
 
 /**

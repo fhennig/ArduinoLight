@@ -15,7 +15,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
+import arduinoLight.channelholder.ambientlight.Areaselection;
 
 @SuppressWarnings("serial")
 public class ScreenSelectionPanel extends JPanel {

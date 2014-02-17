@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.generator.ambientlight;
+package arduinoLight.channelholder.ambientlight;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -128,6 +128,11 @@ public class Ambientlight implements ModifiableChannelholder
 		_executor = null;
 		_active = false;
 		fireActiveChangedEvent(_active);
+	}
+	
+	public boolean isActive()
+	{
+		return _active;
 	}
 
 	/** @see arduinoLight.channelwriter.Channelwriter#getChannels() */

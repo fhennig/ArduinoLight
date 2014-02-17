@@ -17,8 +17,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
-import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
+import arduinoLight.channelholder.ambientlight.Ambientlight;
+import arduinoLight.channelholder.ambientlight.Areaselection;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.TabPanel;

@@ -8,14 +8,12 @@ import java.util.*;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
-import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
-import arduinoLight.channelprovider.generator.ambientlight.Areaselection;
-import arduinoLight.channelprovider.generator.customColors.CustomColorsProvider;
+import arduinoLight.channelholder.ambientlight.Ambientlight;
+import arduinoLight.channelholder.ambientlight.Areaselection;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.SerialConnectionPanel;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
-import arduinoLight.gui.customColor.CustomColorPanel;
 import arduinoLight.model.Model;
 import arduinoLight.util.Color;
 
@@ -27,22 +25,16 @@ public class ArduinoLight
 		Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
 		Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
 		//test();
-		CustomColorsProvider provider = new CustomColorsProvider();
 		
-		//AmbloneConnectionOld connection = new AmbloneConnectionOld(provider);
 		SerialConnection connection = new SerialConnection();
 		AmbloneTransmission amblone = new AmbloneTransmission();
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
 		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
-		TabPanel colorPanel = new CustomColorPanel(provider, "Custom Color");
-		
-		provider.addChannelcolorsListener((arduinoLight.channelprovider.ChannelcolorsListener)colorPanel);
 		
 		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 		panels.add(ambiPanel);
-		panels.add(colorPanel);
 		
 		new Gui(panels, connectionPanel);
 	}

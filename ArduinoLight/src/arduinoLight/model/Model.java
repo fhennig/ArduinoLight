@@ -8,7 +8,7 @@ import java.util.Set;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelholder.ChannelholderListener;
-import arduinoLight.channelprovider.generator.ambientlight.Ambientlight;
+import arduinoLight.channelholder.ambientlight.Ambientlight;
 
 public class Model
 {

@@ -1,4 +1,4 @@
-package arduinoLight.channelprovider.generator.ambientlight;
+package arduinoLight.channelholder.ambientlight;
 
 
 /**

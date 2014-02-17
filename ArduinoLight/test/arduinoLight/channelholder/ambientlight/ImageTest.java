@@ -1,8 +1,9 @@
-package arduinoLight.channelprovider.generator.ambientlight;
+package arduinoLight.channelholder.ambientlight;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import arduinoLight.channelholder.ambientlight.Image;
 import arduinoLight.util.Color;
 
 public class ImageTest
