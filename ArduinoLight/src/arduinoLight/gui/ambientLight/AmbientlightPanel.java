@@ -15,6 +15,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
@@ -30,10 +32,10 @@ public class AmbientlightPanel extends TabPanel
 	Ambientlight _ambientLight = Model.getInstance().getAmbientlight();
 	
 	ScreenSelectionPanel _screenSelectionPanel;
-	JPanel _rgbPanel;
 	JPanel _activationPanel;
-	ChannelPanel _channelPanel = new ChannelPanel(_ambientLight);
+	ChannelPanel _channelPanel;
 
+	JPanel _rgbPanel;
 	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
 	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
 	ColorSlider _blueSlider = new ColorSlider("B", 0, 100, 100);
@@ -51,7 +53,7 @@ public class AmbientlightPanel extends TabPanel
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		_screenSelectionPanel = new ScreenSelectionPanel(null); //TODO add default constructor
+		_screenSelectionPanel = new ScreenSelectionPanel();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridwidth = 2;
 		gbc.weighty = 1;
@@ -106,7 +108,7 @@ public class AmbientlightPanel extends TabPanel
 		{
 			Channel selectedChannel = _channelPanel.getSelectedChannel();
 			Areaselection associatedSelection = _ambientLight.getScreenselection(selectedChannel);
-			//ScreenSelectionPanel.setScreenselection(associatedSelection); TODO
+			_screenSelectionPanel.setScreenselection(associatedSelection);
 		}
 	}
 

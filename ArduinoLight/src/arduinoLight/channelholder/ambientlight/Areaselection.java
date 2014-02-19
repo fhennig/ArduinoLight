@@ -54,8 +54,11 @@ public class Areaselection
 	 * @param newColCount new Amount of Columns
 	 * @param newRowCount new Amount of Rows
 	 */
-	public void changeSize(int newColCount, int newRowCount)
+	public synchronized void changeSize(int newColCount, int newRowCount)
 	{
+		if (newColCount == getColumns() && newRowCount == getRows())
+			return;
+		
 		if (newColCount < 1 || newRowCount < 1)
 		{
 			throw new IllegalArgumentException();
@@ -64,17 +67,14 @@ public class Areaselection
 		int smallestColCount = Math.min(newColCount, getColumns());
 		int smallestRowCount = Math.min(newRowCount, getRows());
 		
-		synchronized (_matrix)
+		for (int r = 0; r < smallestRowCount; r++)
 		{
-			for (int r = 0; r < smallestRowCount; r++)
+			for (int c = 0; c < smallestColCount; c++)
 			{
-				for (int c = 0; c < smallestColCount; c++)
-				{
-					newMatrix[r][c] = _matrix[r][c];
-				}
+				newMatrix[r][c] = _matrix[r][c];
 			}
-			_matrix = newMatrix;
 		}
+		_matrix = newMatrix;
 	}
 
 	/**

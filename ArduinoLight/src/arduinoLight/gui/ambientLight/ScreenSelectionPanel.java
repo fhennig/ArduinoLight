@@ -11,12 +11,16 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultFormatter;
 
 import arduinoLight.channelholder.ambientlight.Areaselection;
 
@@ -45,10 +49,9 @@ public class ScreenSelectionPanel extends JPanel
 	
 	private void initComponents()
 	{		
-		_rowBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
-		_colBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+		initSpinners();
 		_clearBtn = new JButton("Clear");
-		//TODO clearBtn Handler
+		_clearBtn.addActionListener(new ClearHandler());
 		_tablePanel = new JPanel();
 		
 		this.setLayout(new BorderLayout());
@@ -80,8 +83,6 @@ public class ScreenSelectionPanel extends JPanel
 			initTable();
 			return;
 		}
-		
-		
 
 		//TODO here we change the size of the model, just because it does not fit
 		//	   to the screen. Is this the appropriate action?
@@ -100,9 +101,34 @@ public class ScreenSelectionPanel extends JPanel
 	
 	private void componentsSetEnable(boolean b)
 	{
-		Component[] components = getComponents();
-		for (Component comp : components)
-			comp.setEnabled(b);
+		_rowBox.setEnabled(b);
+		_colBox.setEnabled(b);
+		_clearBtn.setEnabled(b);
+		
+		Component[] tableBtns = _tablePanel.getComponents();
+		for (Component tableBtn : tableBtns)
+		{
+			tableBtn.setEnabled(b);
+		}
+	}
+	
+	private void initSpinners()
+	{
+		_rowBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+		_colBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+		SpinnerHandler handler = new SpinnerHandler();
+		_rowBox.addChangeListener(handler);
+		_colBox.addChangeListener(handler);
+		activateCommitOnEdit(_rowBox);
+		activateCommitOnEdit(_colBox);
+	}
+	
+	private void activateCommitOnEdit(JSpinner spinner)
+	{
+	    JComponent comp = spinner.getEditor();
+	    JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
+	    DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
+	    formatter.setCommitsOnValidEdit(true);
 	}
 	
 
@@ -125,6 +151,34 @@ public class ScreenSelectionPanel extends JPanel
 				cBtn.setSelected(_selection.getCell(c, r));
 				_tablePanel.add(cBtn);
 			}
+	}
+	
+	private class ClearHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			_selection.setAll(false);
+			Component[] tableComps = _tablePanel.getComponents();
+			for (Component cb : tableComps)
+			{
+				if (cb instanceof CellButton)
+					((CellButton) cb).setSelected(false);
+			}
+		}
+	}
+	
+	private class SpinnerHandler implements ChangeListener
+	{
+		@Override
+		public void stateChanged(ChangeEvent e)
+		{
+			int rows = (int) _rowBox.getValue();
+			int cols = (int) _colBox.getValue();
+			
+			_selection.changeSize(cols, rows);
+			initTable();
+		}
 	}
 	
 	private class CellButton extends JToggleButton implements ActionListener
