@@ -8,11 +8,7 @@ package arduinoLight.gui;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class TabPanel extends JPanel{
-	
-	protected String _title;
-	
-	public String getTitle(){
-		return _title;
-	}
+public abstract class TabPanel extends JPanel
+{
+	public abstract String getTitle();
 }

@@ -72,11 +72,9 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 			if (_ambientlight.isActive())
 			{
 				_ambientlight.stop();
-				_refreshrateSpinner.setEnabled(true);
 			}
 			else
 			{
-				_refreshrateSpinner.setEnabled(false);
 				_ambientlight.start(getSelectedRefreshRate());
 			}
 		}
@@ -93,14 +91,16 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 				@Override public void run() { activeChanged(source, newActive); }
 			});
 		}
-		System.out.println("asdf");
+		
 		if (newActive)
 		{
 			_startButton.setText("Stop");
+			_refreshrateSpinner.setEnabled(false);
 		}
 		else
 		{
 			_startButton.setText("Start");
+			_refreshrateSpinner.setEnabled(true);
 		}
 	}
 }

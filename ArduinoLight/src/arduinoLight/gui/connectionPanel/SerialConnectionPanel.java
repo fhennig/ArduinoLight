@@ -38,7 +38,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	private SerialConnection _connection;
 	private AmbloneTransmission _amblone;
 	
-	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("images/view_refresh.png");
+	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("/arduinoLight/gui/images/view_refresh.png");
 	
 	private AmbloneChannelPanel _amblonePanel;
 	private ImageIcon _refreshIcon;

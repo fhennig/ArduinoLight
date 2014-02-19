@@ -10,6 +10,7 @@ import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.channelholder.ambientlight.Areaselection;
+import arduinoLight.gui.ChannelModifyPanel;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
@@ -31,10 +32,12 @@ public class ArduinoLight
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
-		TabPanel ambiPanel = new AmbientlightPanel("AmbientLight");
+		TabPanel ambiPanel = new AmbientlightPanel();
+		TabPanel chanModPanel = new ChannelModifyPanel();
 		
 		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 		panels.add(ambiPanel);
+		panels.add(chanModPanel);
 		
 		new Gui(panels, connectionPanel);
 	}

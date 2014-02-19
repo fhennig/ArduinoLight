@@ -1,6 +1,7 @@
 package arduinoLight.gui.ambientLight;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -18,87 +21,131 @@ import javax.swing.border.TitledBorder;
 import arduinoLight.channelholder.ambientlight.Areaselection;
 
 @SuppressWarnings("serial")
-public class ScreenSelectionPanel extends JPanel {
-
+public class ScreenSelectionPanel extends JPanel
+{
 	private Areaselection _selection;
 	
-	JPanel _screenOptionPanel = new JPanel();
-	JLabel _rowLabel = new JLabel("Rows: ");
-	JSpinner _rowBox;
-	JLabel _colLabel = new JLabel("Coloumns: ");
-	JSpinner _colBox;
-	JPanel _table;
-	GridLayout _grid;
+	private JLabel _rowLabel = new JLabel("Rows: ");
+	private JSpinner _rowBox;
+	private JLabel _colLabel = new JLabel("Coloumns: ");
+	private JSpinner _colBox;
+	private JPanel  _tablePanel;
+	private JButton _clearBtn;
+	
+	public ScreenSelectionPanel()
+	{
+		this(null);
+	}
 	
 	public ScreenSelectionPanel(Areaselection selection)
 	{
-		_selection = selection;
 		initComponents();
+		setScreenselection(selection);
+	}
+	
+	private void initComponents()
+	{		
+		_rowBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+		_colBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+		_clearBtn = new JButton("Clear");
+		//TODO clearBtn Handler
+		_tablePanel = new JPanel();
+		
+		this.setLayout(new BorderLayout());
+		this.setBorder(new TitledBorder(null, "Screen Selection", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
+		
+		JPanel screenOptionPanel = new JPanel();
+		screenOptionPanel.setLayout(new BoxLayout(screenOptionPanel, BoxLayout.LINE_AXIS));
+		
+		screenOptionPanel.add(_rowLabel);
+		screenOptionPanel.add(_rowBox);
+		screenOptionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		screenOptionPanel.add(_colLabel);
+		screenOptionPanel.add(_colBox);
+		screenOptionPanel.add(Box.createHorizontalGlue());
+		screenOptionPanel.add(_clearBtn);
+		
+		this.add(screenOptionPanel, BorderLayout.NORTH);
+		this.add(_tablePanel, BorderLayout.CENTER);
 	}
 	
 	public void setScreenselection(Areaselection selection)
 	{
-		//TODO should accept null (grey out the components)
-	}
-	
-	private void initComponents()
-	{
-		int currentRows = _selection.getRows();
-		int currentColumns = _selection.getColumns();
-		
-		_rowBox = new JSpinner(new SpinnerNumberModel(currentRows, 1, 10, 1));
-		_colBox = new JSpinner(new SpinnerNumberModel(currentColumns, 1, 10, 1));
-		
-		_grid = new GridLayout(currentRows, currentColumns);
-		
-		_table = new JPanel();
-		_table.setLayout(_grid);
-		_screenOptionPanel.setLayout(new BoxLayout(_screenOptionPanel, BoxLayout.LINE_AXIS));
-		
-		this.setLayout(new BorderLayout());
-		this.setBorder(new TitledBorder(null, "Screen Selection", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP));
-		this.add(_screenOptionPanel, BorderLayout.NORTH);
-		this.add(_table, BorderLayout.CENTER);
-		
-		_screenOptionPanel.add(Box.createHorizontalGlue());
-		_screenOptionPanel.add(_rowLabel);
-		_screenOptionPanel.add(_rowBox);
-		_screenOptionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_screenOptionPanel.add(_colLabel);
-		_screenOptionPanel.add(_colBox);
-
-		fillTable(_table);
-	}
-	
-	private void fillTable(JPanel table){
-		for(int r = 0; r < _grid.getRows();r++){
-			for(int c = 0; c < _grid.getColumns(); c++){
-				JToggleButton button = new JToggleButton();
-				button.addActionListener(new FieldButtonHandler(c, r));
-				table.add(button);
-			}
+		_selection = selection;
+		if (_selection == null)
+		{
+			_colBox.setValue(1);
+			_rowBox.setValue(1);
+			componentsSetEnable(false);
+			initTable();
+			return;
 		}
+		
+		
+
+		//TODO here we change the size of the model, just because it does not fit
+		//	   to the screen. Is this the appropriate action?
+		int rows = Math.min(Math.max(1, _selection.getRows()), 10);
+		int columns = Math.min(Math.max(1, _selection.getColumns()), 10);
+		
+		_selection.changeSize(columns, rows);
+		
+		_rowBox.setValue(rows);
+		_colBox.setValue(columns);
+		
+		componentsSetEnable(true);
+		
+		initTable();
 	}
 	
-	private class FieldButtonHandler implements ActionListener
+	private void componentsSetEnable(boolean b)
+	{
+		Component[] components = getComponents();
+		for (Component comp : components)
+			comp.setEnabled(b);
+	}
+	
+
+	private void initTable()
+	{
+		_tablePanel.removeAll();
+		
+		if (_selection == null)
+			return;
+		
+		int rows = _selection.getRows();
+		int cols = _selection.getColumns();
+		
+		_tablePanel.setLayout(new GridLayout(rows, cols));
+		
+		for (int r = 0; r < rows; r++)
+			for (int c = 0; c <cols; c++)
+			{
+				CellButton cBtn = new CellButton(c, r);
+				cBtn.setSelected(_selection.getCell(c, r));
+				_tablePanel.add(cBtn);
+			}
+	}
+	
+	private class CellButton extends JToggleButton implements ActionListener
 	{
 		private final int _x;
 		private final int _y;
 		
-		
-		public FieldButtonHandler(int x, int y)
+		public CellButton(int x,int y)
 		{
 			_x = x;
 			_y = y;
+			this.addActionListener(this);
 		}
-		
 
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void actionPerformed(ActionEvent arg0)
 		{
-			JToggleButton button = (JToggleButton)e.getSource();
-			_selection.setCell(_x, _y, button.isSelected());
+			if (arg0.getSource() != this)
+				return;
+			
+			_selection.setCell(_x, _y, isSelected());
 		}
-		
 	}
 }

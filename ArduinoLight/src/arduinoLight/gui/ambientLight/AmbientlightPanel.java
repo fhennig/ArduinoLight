@@ -25,8 +25,8 @@ import arduinoLight.gui.TabPanel;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
-public class AmbientlightPanel extends TabPanel{
-	
+public class AmbientlightPanel extends TabPanel
+{
 	Ambientlight _ambientLight = Model.getInstance().getAmbientlight();
 	
 	ScreenSelectionPanel _screenSelectionPanel;
@@ -38,12 +38,11 @@ public class AmbientlightPanel extends TabPanel{
 	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
 	ColorSlider _blueSlider = new ColorSlider("B", 0, 100, 100);
 	ColorSlider _brightnessSlider = new ColorSlider("B", 0, 100, 100);
+
 	
 	
-	
-	public AmbientlightPanel(String title)
+	public AmbientlightPanel()
 	{
-		_title = title;
 		initComponents();
 	}
 	
@@ -52,7 +51,7 @@ public class AmbientlightPanel extends TabPanel{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		_screenSelectionPanel = new ScreenSelectionPanel(new Areaselection(2, 2));
+		_screenSelectionPanel = new ScreenSelectionPanel(null); //TODO add default constructor
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridwidth = 2;
 		gbc.weighty = 1;
@@ -109,5 +108,11 @@ public class AmbientlightPanel extends TabPanel{
 			Areaselection associatedSelection = _ambientLight.getScreenselection(selectedChannel);
 			//ScreenSelectionPanel.setScreenselection(associatedSelection); TODO
 		}
+	}
+
+	@Override
+	public String getTitle()
+	{
+		return "Ambientlight";
 	}
 }
