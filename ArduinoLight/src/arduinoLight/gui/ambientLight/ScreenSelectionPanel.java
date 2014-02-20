@@ -119,18 +119,7 @@ public class ScreenSelectionPanel extends JPanel
 		SpinnerHandler handler = new SpinnerHandler();
 		_rowBox.addChangeListener(handler);
 		_colBox.addChangeListener(handler);
-		activateCommitOnEdit(_rowBox);
-		activateCommitOnEdit(_colBox);
-	}
-	
-	private void activateCommitOnEdit(JSpinner spinner)
-	{
-	    JComponent comp = spinner.getEditor();
-	    JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
-	    DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
-	    formatter.setCommitsOnValidEdit(true);
-	}
-	
+	}	
 
 	private void initTable()
 	{
@@ -151,6 +140,8 @@ public class ScreenSelectionPanel extends JPanel
 				cBtn.setSelected(_selection.getCell(c, r));
 				_tablePanel.add(cBtn);
 			}
+		
+		_tablePanel.revalidate();
 	}
 	
 	private class ClearHandler implements ActionListener
