@@ -13,7 +13,17 @@ public class AreaselectionTest
 		Areaselection as = new Areaselection(2, 2);
 		boolean[][] expected = new boolean[2][2];
 		
-		Assert.assertArrayEquals(expected, as.toBooleanArray());
+		Assert.assertArrayEquals(expected, getArrayFromAreaselection(as));
+	}
+	
+	@Test
+	public void testXandYareDefinedCorrectly()
+	{
+		Areaselection as = new Areaselection(1, 2);
+		as.setCell(1, 0, true);
+		
+		Assert.assertEquals(true, as.getCell(1, 0));
+		Assert.assertEquals(false, as.getCell(0, 0));
 	}
 	
 	@Test
@@ -24,7 +34,7 @@ public class AreaselectionTest
 		boolean[][] expected = new boolean[2][2];
 		expected[1][1] = true;
 		
-		Assert.assertArrayEquals(expected, as.toBooleanArray());
+		Assert.assertArrayEquals(expected, getArrayFromAreaselection(as));
 		Assert.assertEquals(true, as.getCell(1, 1));
 		Assert.assertEquals(false, as.getCell(0, 0));
 	}
@@ -38,7 +48,7 @@ public class AreaselectionTest
 		boolean[][] expected = new boolean[3][3];
 		expected[1][1] = true;
 		
-		Assert.assertArrayEquals(expected, as.toBooleanArray());
+		Assert.assertArrayEquals(expected, getArrayFromAreaselection(as));
 		Assert.assertEquals(true, as.getCell(1, 1));
 		Assert.assertEquals(false, as.getCell(0, 0));
 		Assert.assertEquals(false, as.getCell(2, 2));
@@ -58,7 +68,7 @@ public class AreaselectionTest
 			}
 		}
 		
-		Assert.assertArrayEquals(expected, as.toBooleanArray());
+		Assert.assertArrayEquals(expected, getArrayFromAreaselection(as));
 		
 		as.setAll(false);
 		for (int y = 0; y < 2; y++)
@@ -69,6 +79,21 @@ public class AreaselectionTest
 			}
 		}
 		
-		Assert.assertArrayEquals(expected, as.toBooleanArray());
+		Assert.assertArrayEquals(expected, getArrayFromAreaselection(as));
+	}
+	
+	private boolean[][] getArrayFromAreaselection(Areaselection selection)
+	{
+		boolean[][] array = new boolean[selection.getRows()][selection.getColumns()];
+		
+		for (int r = 0; r < selection.getRows(); r++)
+		{
+			for (int c = 0; c < selection.getColumns(); c++)
+			{
+				array[r][c] = selection.getCell(c, r);
+			}
+		}
+		
+		return array;
 	}
 }

@@ -12,8 +12,8 @@ import arduinoLight.util.RGBColor;
 /**
  * On construction, this class takes a List of RGBColor and creates a byte-package consisting of
  * a Byte-Array from the first 4 colors in the list, a startflag and an endflag.
- * These Bytes can then be used to send them over a serialconnection. Get the bytes with 'toByteArray()'.
- * This call is thread-safe, because it is immutable.
+ * These Bytes can then be used to send them over a serialconnection. Get the bytes with 'toByteArray()'. <br>
+ * thread-safety: This class is immutable.
  */
 public class AmblonePackage
 {	

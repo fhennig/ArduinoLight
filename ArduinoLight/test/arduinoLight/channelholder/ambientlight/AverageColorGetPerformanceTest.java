@@ -14,21 +14,7 @@ import arduinoLight.util.Color;
  */
 public class AverageColorGetPerformanceTest
 {
-	private final int _iterations = 100;
-
-//	@Test
-//	public void testAvgColor1x1a()
-//	{
-//		Areaselection selection = new Areaselection(1, 1);
-//		selection.setAll(true);
-//		
-//		Color avg;
-//		for (int i = 0; i < _iterations; i++)
-//		{
-//			avg = ScreenshotHelper.getScreenshot().getAverageColor(selection);
-//			printColor(avg);
-//		}
-//	}
+	private final int _iterations = 1; //Use 100 for actual testing
 
 	@Test
 	public void testAvgColor1x1b()

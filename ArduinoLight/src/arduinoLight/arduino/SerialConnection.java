@@ -13,18 +13,20 @@ import arduinoLight.util.DebugConsole;
 
 
 /**
- * This class encapsulates a serial connection. It provides a simple interface (open, close, transmit). 
+ * This class encapsulates a serial connection. It provides a simple interface (open, close, transmit). <br>
+ * thread-safety: There is no need for this class to be thread-safe.
  */
 public class SerialConnection
 {
-	private static final int TIME_OUT = 2000; //TODO Understand this ...
+	private static final int _TIME_OUT = 2000; //TODO Understand this ...
+	private static final String _APPNAME = "ArduinoLight";
 	
 	protected SerialPort _serialPort;
 	protected BufferedOutputStream _serialOutputStream;
 	protected boolean _open = false;
 	
 	/**
-	 * Gives an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
+	 * Returns an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
 	 */
 	public static Enumeration<CommPortIdentifier> getAvailablePorts()
 	{
@@ -35,8 +37,8 @@ public class SerialConnection
 	
 	
 	/**
-	 * Tries to establish a serialconnection with the given portId and baudRate and set the _serialOutputStream.
-	 * If the connection could be established, _active is set to true.
+	 * Tries to establish a serial connection with the given portId and baudRate and set the _serialOutputStream.
+	 * If the connection could be established, _open is set to true.
 	 * @param portId a CommPortIdentifier-object, used for identifying and connecting to a port.
 	 * @param baudRate This has to match the settings in the arduino-code. Recommended value: 256000.
 	 * @throws PortInUseException, IllegalArgumentException
@@ -45,24 +47,22 @@ public class SerialConnection
 	public void open(CommPortIdentifier portId, int baudRate) throws PortInUseException
 	{
 		if (_open)
-		{
-			//'connect' not possible, there is already a connection set up.
-			throw new IllegalStateException("There is already a connection established");
-		}
+			throw new IllegalStateException("This SerialConnection is already opened.");
 		
 		try
 		{
-			_serialPort = (SerialPort) portId.open("ArduinoLight", TIME_OUT); //"ArduinoLight" is the appName //throws PortInUse
+			_serialPort = (SerialPort) portId.open(_APPNAME, _TIME_OUT); //throws PortInUse
 			_serialPort.setSerialPortParams(baudRate,
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 			_serialOutputStream = new BufferedOutputStream(_serialPort.getOutputStream());
 			_open = true;
-			DebugConsole.print("SerialConnection", "connect", "Connecting successful!");
+			DebugConsole.print("SerialConnection", "open", "Connecting successful!");
 		}
 		catch (UnsupportedCommOperationException | IOException ex)
 		{
+			DebugConsole.print("SerialConnection", "open", ex.toString());
 			throw new IllegalArgumentException(ex);
 		}
 		
@@ -79,7 +79,7 @@ public class SerialConnection
 		try { _serialOutputStream.close(); } catch (IOException ignored) { ignored.printStackTrace(); }
 		_serialOutputStream = null;
 		_open = false;
-		DebugConsole.print("SerialConnection", "disconnect", "Disconnecting successful!");
+		DebugConsole.print("SerialConnection", "close", "Disconnecting successful!");
 	}
 	
 	/**

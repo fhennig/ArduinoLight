@@ -5,28 +5,29 @@ import java.util.List;
 
 import arduinoLight.util.Color;
 
+/**
+ * This class is used to get the average color of a specified part of a given image. 
+ * This classes focus is on performance, as its methods are needed very frequently. <br>
+ * thread-safety: This class is immutable.
+ */
 public class AverageColorGetter
 {
-	private Image _image;
+	private final Image _image;
 
 	public AverageColorGetter(Image image)
 	{
 		_image = image;
 	}
 	
-	public void setImage(Image image)
+	/** Returns the average color of the image in the area that is specified by the given selection. */
+	public Color getAverageColor(Areaselection selection) //TODO write a testclass for this
 	{
-		_image = image;
+		List<Color> averageColorsForCells = getAverageColors(selection);
+		return Color.getAverageColor(averageColorsForCells);
 	}
 	
-	public Color getAverageColor(Areaselection selection)
-	{
-		List<Color> selectedPixels = getAverageColors(selection);
-		
-		return Color.getAverageColor(selectedPixels);
-	}
-	
-	public List<Color> getAverageColors(Areaselection selection)
+	/** Returns a List of the average colors for each cell of the selection */
+	private List<Color> getAverageColors(Areaselection selection)
 	{
 		if (selection == null)
 			return new ArrayList<Color>();
@@ -34,9 +35,6 @@ public class AverageColorGetter
 		List<Color> averageColors = new ArrayList<>(selection.getColumns() * selection.getRows());
 		double partWidth = (double)_image.getWidth() / selection.getColumns();
 		double partHeight = (double)_image.getHeight() / selection.getRows();
-		//DebugConsole.print("Image", "getSelectedPixels", "width: " + getWidth() + "   sel-cols: " + selection.getColumns() + "   partW: " + partWidth);
-		//DebugConsole.print("Image", "getSelectedPixels", "height: " + getHeight() + "   sel-rows: " + selection.getRows() + "   partH: " + partHeight);
-		System.out.println();
 		for (int y = 0; y < selection.getRows(); y++)
 		{
 			for (int x = 0; x < selection.getColumns(); x++)
@@ -57,11 +55,11 @@ public class AverageColorGetter
 	}
 	
 	/**
-	 * Returns a List of Colors that contains the Colors that are inside
+	 * Returns the average color of the part of the image that is specified by
 	 * the rectangle that is specified by the given points (x1|y1), (x2|y2).
 	 * The given points are included in the rectangle.
 	 */
-	public Color getAverageColor(int x1, int y1, int x2, int y2)
+	private Color getAverageColor(int x1, int y1, int x2, int y2)
 	{
 		_image.validateCoordinates(x1, y1);
 		_image.validateCoordinates(x2, y2);

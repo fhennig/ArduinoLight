@@ -20,8 +20,8 @@ import arduinoLight.util.Util;
 /**
  * This class maps channels to output ports. If the transmission is active, the colors of
  * the channels are transmitted through a given connection periodically.
- * to encode the colors, the amblone protocol is used (http://amblone.com).
- * thread-safety: in part, thread-safety is delegated to the ConcurrentMap.
+ * to encode the colors, the amblone protocol is used (http://amblone.com). <br>
+ * thread-safety: In part, thread-safety is delegated to the ConcurrentMap, other methods are synchronized.
  */
 public class AmbloneTransmission
 {

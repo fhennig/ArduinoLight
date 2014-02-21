@@ -99,7 +99,7 @@ public class ScreenSelectionPanel extends JPanel
 			rows = Math.min(_selection.getRows(), _MAX_ROWS);
 			cols = Math.min(_selection.getColumns(), _MAX_COLS);
 			//Change the selection dimensions to fit the values supported by the UI
-			_selection.changeSize(cols, rows);
+			_selection.changeSize(rows, cols);
 			
 			uiEnabled = true;
 		}
@@ -182,7 +182,7 @@ public class ScreenSelectionPanel extends JPanel
 			int rows = (int) _rowBox.getValue();
 			int cols = (int) _colBox.getValue();
 			
-			_selection.changeSize(cols, rows);
+			_selection.changeSize(rows, cols);
 			repaintTable();
 		}
 	}

@@ -18,13 +18,13 @@ import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.events.Event;
 import arduinoLight.events.EventDispatchHandler;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
-import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
 
 /**
- * This class contains channels and screen selections.
+ * This class contains channels and screen selections which are mapped to the channels.
  * If it is started, it refreshes the channel-colors periodically,
- * using the screen selection for each channel and and applying them to a taken screenshot. 
+ * using the screen selection for each channel and and applying them to a taken screenshot. <br>
+ * thread-safety: yes, though this class is not intended to be used concurrently.
  */
 public class Ambientlight implements ModifiableChannelholder
 {
@@ -40,9 +40,10 @@ public class Ambientlight implements ModifiableChannelholder
 	@Override
 	public void addChannel(Channel channel)
 	{
-		addChannel(channel, new Areaselection(2, 2));
+		addChannel(channel, new Areaselection(2, 1));
 	}
 	
+	/** @param channel  a channel that is not already added. */
 	public void addChannel(Channel channel, Areaselection selection)
 	{
 		if (channel == null || selection == null)
@@ -64,31 +65,34 @@ public class Ambientlight implements ModifiableChannelholder
 	}
 	
 	/**
-	 * Returns the Screenselection assigned to that Channel.
-	 * If this class does not use the given Channel, null is returned.
+	 * Returns the Screenselection assigned to the given Channel.
+	 * If the given channel is not used, null is returned.
 	 */
 	public Areaselection getScreenselection(Channel channel)
 	{
 		return _map.get(channel);
 	}
 	
-	public synchronized void start(int frequency)
+	/**
+	 * Starts the periodic recalculation of the channel colors.
+	 * @param refreshRate the frequency of refreshing in Hz.
+	 */
+	public synchronized void start(int refreshRate)
 	{
 		if (_active)
 			throw new IllegalStateException("Already active!");
 		
-		Runnable colorSetLoop = new Runnable()
+		Runnable colorSetLoop = new Runnable() //TODO add possiblity to interrupt
 		{
 			public void run()
 			{
 				try
 				{
-					DebugConsole.print("Ambientlight", "colorsetloop", "Taking screenshot");
 					Image screenshot = null;
 					try {
+						//TODO somewhere before, check if permission to take screenshot is given
 						screenshot = ScreenshotHelper.getScreenshot();
 					} catch (Exception e) { e.printStackTrace();}
-					DebugConsole.print("Ambientlight", "colorsetloop", "Screenshot taken");
 					AverageColorGetter avgGetter = new AverageColorGetter(screenshot);
 					Iterator<Channel> channels = _map.keySet().iterator();
 					while (channels.hasNext())
@@ -113,7 +117,8 @@ public class Ambientlight implements ModifiableChannelholder
 				}
 			}
 		};
-		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
+		//TODO shutdown hook
+		long period = Util.getPeriod(refreshRate, MAX_FREQUENCY);
 		_executor = Executors.newSingleThreadScheduledExecutor();
 		_executor.scheduleAtFixedRate(colorSetLoop, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
@@ -148,6 +153,7 @@ public class Ambientlight implements ModifiableChannelholder
 		return "Ambientlight-Channels";
 	}
 	
+	/** Event is fired concurrently */
 	private void fireActiveChangedEvent(final boolean newActive)
 	{
 		EventDispatchHandler.getInstance().dispatch(new Event(this, "ActiveChanged")
@@ -161,6 +167,7 @@ public class Ambientlight implements ModifiableChannelholder
 		});
 	}
 	
+	/** Event is not fired concurrently */
 	private void fireChannelsChangedEvent(ChannelsChangedEventArgs e)
 	{
 		for (ChannelholderListener l : _channelholderListeners)

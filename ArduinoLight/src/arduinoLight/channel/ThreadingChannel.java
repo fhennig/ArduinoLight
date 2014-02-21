@@ -10,9 +10,8 @@ import arduinoLight.interfaces.propertyListeners.NameListener;
 import arduinoLight.util.Color;
 
 /**
- * This class is threadsafe!
- * This implementation of the IChannel interface delegates Event firing to a different Thread.
- * This way, the swing-thread is blocked for shorter amount of times.
+ * Implementation of the Channel interface. <br>
+ * thread-safety: Delegation to thread-safe collections; final fields; volatile, immutable fields.
  */
 public class ThreadingChannel implements Channel
 {
@@ -27,9 +26,7 @@ public class ThreadingChannel implements Channel
 	private final List<ColorListener> _colorListeners = new CopyOnWriteArrayList<>();
 	private final List<NameListener> _nameListeners = new CopyOnWriteArrayList<>();
 	
-	/**
-	 * @param id  a unique integer.
-	 */
+	/** @param id  a unique integer. */
 	public ThreadingChannel(int id)
 	{
 		_id = id;
@@ -72,6 +69,7 @@ public class ThreadingChannel implements Channel
 	/**
 	 * Color needs to get passed in as a parameter, to ensure that the correct color
 	 * is sent to the listeners.
+	 * Events are fired concurrently via the EventDispatchHandler.
 	 */
 	private void raiseColorChangedEvent(final Color color)
 	{

@@ -2,6 +2,10 @@ package arduinoLight.channelholder.ambientlight;
 
 import arduinoLight.util.Color;
 
+/**
+ * This class encapsulates a two dimensional array which represents an image. <br>
+ * thread-safety: This class is not thread-safe. 
+ */
 public class Image
 {
 	private final Color[][] _pixels;
@@ -13,11 +17,12 @@ public class Image
 	 */
 	public Image(Color[][] pixels)
 	{
-		if (pixels.length <= 0 || pixels[0].length <= 0)
-			throw new IllegalArgumentException();
-
 		int width = pixels[0].length;
 		int height = pixels.length;
+		
+		if (width <= 0 || height <= 0)
+			throw new IllegalArgumentException();
+
 		
 		_pixels = new Color[height][width];
 		
@@ -66,6 +71,7 @@ public class Image
 	
 	public Color getPixel(int x, int y)
 	{
+		validateCoordinates(x, y);
 		return _pixels[y][x];
 	}
 	
@@ -79,10 +85,7 @@ public class Image
 		return _pixels.length;
 	}
 	
-	/**
-	 * Throws IllegalArgumentException if the given coordinates are out of bounds.
-	 * 
-	 */
+	/** Throws IllegalArgumentException if the given coordinates are out of bounds. */
 	public void validateCoordinates(int x, int y)
 	{
 		if (x < 0 || x >= getWidth())

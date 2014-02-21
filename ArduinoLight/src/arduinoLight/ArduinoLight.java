@@ -49,8 +49,8 @@ public class ArduinoLight
 		Channel channel1 = Model.getInstance().getChannelFactory().newChannel();
 		Channel channel2 = Model.getInstance().getChannelFactory().newChannel();
 		
-		Areaselection selectionTop = new Areaselection(1, 2);
-		Areaselection selectionBot = new Areaselection(1, 2);
+		Areaselection selectionTop = new Areaselection(2, 1);
+		Areaselection selectionBot = new Areaselection(2, 1);
 		selectionTop.setCell(0, 0, true);
 		selectionBot.setCell(0, 1, true);
 		

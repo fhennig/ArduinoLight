@@ -2,8 +2,8 @@ package arduinoLight.channelholder.ambientlight;
 
 
 /**
- * Represents a relative part of a 2D Area (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)).
- * This class is thread-safe (Java-monitor-pattern).
+ * Represents a relative part of a 2D Area (i.e. 'top left quarter' == (r0c0 = true)(r0c1 = false)(... = false)). <br>
+ * thread-safety: yes, methods are synchronized.
  */
 public class Areaselection
 {
@@ -11,13 +11,13 @@ public class Areaselection
 	
 	
 	/**
-	 * Creates a new Areaselection with the specified Amount of Rows and Columns.
+	 * Creates a new Areaselection with the specified Amount of rows and columns.
 	 */
-	public Areaselection(int columns, int rows)
+	public Areaselection(int rows, int columns)
 	{
 		if (columns < 1 || rows < 1)
 		{
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Arguments cannot be less than or equal to 0.");
 		}
 		
 		_matrix = new boolean[rows][columns];
@@ -36,7 +36,7 @@ public class Areaselection
 	}
 	
 	/**
-	 * Returns the value of a cell.
+	 * Returns the flag of a cell which is specified through the given coordinates
 	 * @param x the Column of the cell
 	 * @param y the Row of the cell
 	 */
@@ -51,10 +51,10 @@ public class Areaselection
 	 * Creates a new matrix that contains the old matrix as good as possible.
 	 * If the new one is bigger, the old one is copied into the new one.
 	 * If the new one is smaller, the new one is a subsection of the old one.
-	 * @param newColCount new Amount of Columns
 	 * @param newRowCount new Amount of Rows
+	 * @param newColCount new Amount of Columns
 	 */
-	public synchronized void changeSize(int newColCount, int newRowCount)
+	public synchronized void changeSize(int newRowCount, int newColCount)
 	{
 		if (newColCount == getColumns() && newRowCount == getRows())
 			return;
@@ -110,29 +110,9 @@ public class Areaselection
 		return _matrix.length;
 	}
 	
-	/**
-	 * Returns a boolean Array that represents the selections made.
-	 */
-	public boolean[][] toBooleanArray()
-	{
-		boolean[][] copy = new boolean[_matrix.length][_matrix[0].length];
-		
-		synchronized (_matrix)
-		{
-			for (int y = 0; y < getRows(); y++)
-			{
-				for (int x = 0; x < getColumns(); x++)
-				{
-					copy[y][x] = _matrix[y][x];
-				}
-			}
-		}
-		
-		return copy;
-	}
 	
 	
-	
+	/** private helper-method that is used to throw events if given arguments are invalid */
 	private void validateCoordinates(int x, int y)
 	{
 		if (x < 0 || x >= getColumns())
