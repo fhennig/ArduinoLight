@@ -15,8 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
@@ -79,11 +77,6 @@ public class AmbientlightPanel extends TabPanel
 		gbc.gridx = 1;
 		gbc.gridwidth = 2;
 		this.add(_channelPanel, gbc);
-	}
-	
-	private void initChannelPanel()
-	{
-		//TODO selectionchanged handlers
 	}
 	
 	private void initRGBPanel()

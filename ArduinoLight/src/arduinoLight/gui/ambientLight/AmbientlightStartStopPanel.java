@@ -1,13 +1,18 @@
 package arduinoLight.gui.ambientLight;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.interfaces.propertyListeners.ActiveListener;
@@ -57,11 +62,6 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 	private int getSelectedRefreshRate()
 	{
 		return (Integer) _refreshrateSpinner.getValue();
-	}
-	
-	private class StartButton
-	{
-		
 	}
 	
 	private class StartButtonHandler implements ActionListener
