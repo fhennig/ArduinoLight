@@ -92,7 +92,7 @@ public class SerialConnection
 	{
 		if (!_open)
 		{
-			debugprint("transmit", "open = false! transmission not possible.");
+			debugprint("transmit", "SerialConnection is not open, transmission not possible.");
 			throw new IllegalStateException("There is no connection established for transmission!");
 		}
 		
@@ -108,7 +108,6 @@ public class SerialConnection
 			//TODO add an UncheckedExceptionHandler to the containing thread so the UI will be notified if an error occurs
 			throw new IllegalStateException(ex);
 		}
-		debugprint("transmit", "transmitted.");
 	}
 	
 	//---------- Getters ---------------------------------------

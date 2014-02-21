@@ -173,16 +173,19 @@ public class AmbloneChannelPanel extends JPanel
 		{
 			Object selectedPortObj = _outputComboBox.getSelectedItem();
 			Channel selectedChannel = _channelComboBox.getModel().getSelectedChannel();
-			if (selectedPortObj == null || selectedChannel == null)
-				return; //If no port is selected or no channel is selected, we do nothing
+			if (selectedPortObj == null)
+				return; //If no port is selected, we do nothing
 			
 			int selectedPort = ((Integer) selectedPortObj).intValue();
 			
 			Channel setChannel = _amblone.getChannel(selectedPort);
+			
 			if (selectedChannel == setChannel)
 				return; //If the channel is already set, the 'actionPerformed' was probably not called,
 						//because of user input, rather because the displayed item should change.
 			
+			//selectedChannel might be null, but that means that the output should be cleared.
+			//setOutput supports this.
 			_amblone.setOutput(selectedPort, selectedChannel);
 		}
 	}

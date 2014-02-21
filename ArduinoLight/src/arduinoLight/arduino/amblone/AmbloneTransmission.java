@@ -18,22 +18,21 @@ import arduinoLight.util.RGBColor;
 import arduinoLight.util.Util;
 
 /**
- * This class handles the periodic transmission of colors through a serial connection
- * using the amblone protocol. 
+ * This class maps channels to output ports. If the transmission is active, the colors of
+ * the channels are transmitted through a given connection periodically.
+ * to encode the colors, the amblone protocol is used (http://amblone.com).
+ * thread-safety: in part, thread-safety is delegated to the ConcurrentMap.
  */
 public class AmbloneTransmission
 {
-	public static final int MAX_FREQUENCY = 240;
-	private static final int SUPPORTED_CHANNELS = 4;
-	private ConcurrentMap<Integer, Channel> _map;
+	public static final int MAX_REFRESHRATE = 240;
+	private static final int _SUPPORTED_CHANNELS = 4;
+	private final ConcurrentMap<Integer, Channel> _map = new ConcurrentHashMap<>(_SUPPORTED_CHANNELS);
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
-	private boolean _active = false;
+	private volatile boolean _active = false;
 	
-	public AmbloneTransmission()
-	{
-		_map = new ConcurrentHashMap<>();
-	}
+
 	
 	/**
 	 * @param port  an integer specifying an output port. 0 <= port < 4
@@ -59,7 +58,8 @@ public class AmbloneTransmission
 	}
 	
 	/**
-	 * Returns the Channel that is mapped to the given port, or null
+	 * Returns the Channel that is mapped to the given port,
+	 * or null if currently no channel is mapped to the port.
 	 */
 	public Channel getChannel(int port)
 	{
@@ -68,6 +68,7 @@ public class AmbloneTransmission
 		return _map.get((Integer)port);
 	}
 	
+	/** Indicates if transmission is currently active. */
 	public boolean isActive()
 	{
 		return _active;
@@ -77,33 +78,42 @@ public class AmbloneTransmission
 	 * This method expects an already opened connection.
 	 * Configuring a SerialConnection is not the purpose of this class.
 	 * @param connection  an open connection
-	 * @param frequency  the amount of refreshes per second (Hz)
+	 * @param refreshRate  the amount of refreshes per second (Hz)
+ 	 * If the given refreshRate is greater than MAX_REFRESHRATE, MAX_REFRESHRATE is used instead.
 	 */
-	public synchronized void start(SerialConnection connection, int frequency)
+	public synchronized void start(SerialConnection connection, int refreshRate)
 	{
 		if (connection.isOpen() == false)
 			throw new IllegalArgumentException("the connection must be open!");
 
 		_connection = connection;
 		_executor = Executors.newSingleThreadScheduledExecutor();
-		long period = Util.getPeriod(frequency, MAX_FREQUENCY);
+		long period = Util.getPeriod(refreshRate, MAX_REFRESHRATE);
 		Runnable transmission = new Runnable()
 		{
+			private int currentlySetPortsAtArduino = _SUPPORTED_CHANNELS;
 			public void run()
 			{
-				List<RGBColor> currentColors = getCurrentColors();
-				if (currentColors.size() < 1)
+				int currentlySetPortsInMap = getAmountPortsUsed();
+				DebugConsole.print("AmbloneTransmission", "transmission", "Map: " + currentlySetPortsInMap + "\t Ard: " + currentlySetPortsAtArduino);
+				List<RGBColor> colorsForTransmission = getColorsForTransmission(Math.max(currentlySetPortsInMap, currentlySetPortsAtArduino));
+				if (colorsForTransmission.size() < 1) 
 				{
-					currentColors = new ArrayList<>(); //If there are currently no colors,
-					currentColors.add(Color.BLACK);	   //we transmit black, to reset all the colors that might be set.
+					return;
+					//TODO every output that has no channel mapped should be black. this is currently not the case.
+//					currentColors = new ArrayList<>(); //If there are currently no colors,
+//					currentColors.add(Color.BLACK);	   //we transmit black, to reset all the colors that might be set.
 				}
-				AmblonePackage p = new AmblonePackage(currentColors);
+				AmblonePackage p = new AmblonePackage(colorsForTransmission);
 				_connection.transmit(p.toByteArray());
+				currentlySetPortsAtArduino = currentlySetPortsInMap;
 			}
 		};
+		//TODO uncaughtexceptionhandler
+		//TODO shutdownhook
 		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
-		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + frequency);
+		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + refreshRate);
 	}
 	
 	/**
@@ -126,25 +136,32 @@ public class AmbloneTransmission
 	}
 	
 	/**
+	 * Searches for the highest port that is currently set.
+	 * Example: If port 0 ist not set, but 1 is set, 2 is returned.
+	 */
+	private int getAmountPortsUsed()
+	{
+		int portsUsed = 0;
+		for (int i = _SUPPORTED_CHANNELS - 1; i >= 0; i--)
+		{
+			if (_map.get(i) != null)
+			{
+				portsUsed = i + 1;
+				break;
+			}
+		}
+		return portsUsed;
+	}
+	
+	/**
 	 * Returns a list of the colors of the channels that are currently mapped to the output ports.
 	 * The list is used for transmission. For every output port that is unmapped, black is added to the list.
 	 * @return  a list of colors taken from the currently mapped channels
 	 */
-	private List<RGBColor> getCurrentColors()
-	{
-		//Find out how much channels are in use:
-		int channelsUsed = 0;
-		for (int i = SUPPORTED_CHANNELS - 1; i >= 0; i--)
-		{
-			if (_map.get(i) != null)
-			{
-				channelsUsed = i + 1;
-				break;
-			}
-		}
-		
-		List<RGBColor> result = new ArrayList<>(channelsUsed);
-		for (int i = 0; i < channelsUsed; i++)
+	private List<RGBColor> getColorsForTransmission(int usedPorts)
+	{		
+		List<RGBColor> result = new ArrayList<>(usedPorts);
+		for (int i = 0; i < usedPorts; i++)
 		{
 			Channel channel = _map.get(i);
 			
@@ -167,7 +184,7 @@ public class AmbloneTransmission
 	{
 		Set<Integer> possiblePorts = new LinkedHashSet<>();
 		
-		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
+		for (int i = 0; i < _SUPPORTED_CHANNELS; i++)
 			possiblePorts.add(i);
 		
 		return possiblePorts;
@@ -176,8 +193,8 @@ public class AmbloneTransmission
 	/** Throws IllegalArgumentException if the given port number is not supported by the protocol */
 	private void validatePort(int port)
 	{
-		if (port < 0 || port >= SUPPORTED_CHANNELS)
+		if (port < 0 || port >= _SUPPORTED_CHANNELS)
 			throw new IllegalArgumentException("Port '" + port + "' not supported. " + 
-											   "Must be between 0 and " + SUPPORTED_CHANNELS + ".");
+											   "Must be between 0 and " + _SUPPORTED_CHANNELS + ".");
 	}
 }

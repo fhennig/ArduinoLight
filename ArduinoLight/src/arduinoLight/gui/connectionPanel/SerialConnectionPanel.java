@@ -71,7 +71,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 		
 		//frequencySpinner
 		_frequencySpinner = new JSpinner();
-		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_FREQUENCY, 1));
+		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_REFRESHRATE, 1));
 		
 		//portComboBox
 		ComboBoxModel<PortItem> cbModel = new DefaultComboBoxModel<PortItem>();
