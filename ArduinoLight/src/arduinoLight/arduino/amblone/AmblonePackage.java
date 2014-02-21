@@ -1,7 +1,9 @@
 package arduinoLight.arduino.amblone;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
@@ -121,16 +123,31 @@ public class AmblonePackage
 		public static final byte STARTFLAG4 = (byte) 244;
 		public static final byte ENDFLAG = 51;
 		public static final byte ESCFLAG = (byte) 0x99;
-		public static final byte[] RESERVED_FLAGS = {STARTFLAG1, STARTFLAG2, STARTFLAG3, STARTFLAG4, ENDFLAG, ESCFLAG};
+		private static Set<Byte> _reservedFlags = null;
 		
-		public static final boolean isReservedValue(byte b) //TODO this has really bad performance and is called very often
+		/**
+		 * This method is backed by a Set and therefore has O(1) complexity.
+		 * @param b  the byte that should be tested
+		 * @return  true if the given byte is a 'keyword' used by the protocol, else false
+		 */
+		public static final boolean isReservedValue(byte b)
 		{
-			for(int i = 0; i < RESERVED_FLAGS.length; i++)
-			{
-				if (b == RESERVED_FLAGS[i])
-					return true;
-			}
-			return false;
+			if (_reservedFlags == null)
+				initReservedFlags();
+			
+			return _reservedFlags.contains(b);
+		}
+		
+		private static void initReservedFlags()
+		{
+			_reservedFlags = new HashSet<Byte>();
+			
+			_reservedFlags.add(STARTFLAG1);
+			_reservedFlags.add(STARTFLAG2);
+			_reservedFlags.add(STARTFLAG3);
+			_reservedFlags.add(STARTFLAG4);
+			_reservedFlags.add(ENDFLAG);
+			_reservedFlags.add(ESCFLAG);
 		}
 	}
 }

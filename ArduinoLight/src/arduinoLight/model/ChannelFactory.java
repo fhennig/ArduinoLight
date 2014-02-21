@@ -15,23 +15,19 @@ import arduinoLight.events.Event;
 import arduinoLight.events.EventDispatchHandler;
 
 /**
- * This class is a Singleton. //TODO UPDATE
- * This has also some kind of "blackboard" functionality (Needs a lot of work).
- * Could probably be a singleton (Or should we be able to have multiple factories? Think of the ids!). TODO
- * threadsafety-policy: make all methods 'synchronized'. Simple and safe.
+ * Can be used to get new Channel objects.
+ * Stores all created Channels internally.
+ * threadsafety-policy: make most methods 'synchronized' and delegate to thread-safe objects (CopyOnWriteArrayList).
+ * Is thread-safe (2014-02-21)
  */
 public class ChannelFactory implements Channelholder
 {
-	//TODO thread safety?
 	/** Used to generate IDs */
     private static int _instances = 0;
 	private Set<Channel> _createdChannels = new HashSet<>();
 	private List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();
 	
-	public ChannelFactory()
-	{
-		
-	}
+
 	
 	public synchronized Channel newChannel()
 	{
@@ -40,6 +36,7 @@ public class ChannelFactory implements Channelholder
 	
 	public synchronized Channel newChannel(String name)
 	{
+		//The synchronization here may be too much, but performance is not an issue.
 		Channel newChannel = new ThreadingChannel(_instances);
 		_instances++;
 		_createdChannels.add(newChannel);
@@ -49,28 +46,16 @@ public class ChannelFactory implements Channelholder
 		fireChannelsChangedEvent(newChannel); //fires concurrently
 		return newChannel;
 	}
+	
 
-	/**
-	 * @see arduinoLight.channelholder.Channelholder#getChannels()
-	 */
+	//---------- Channelholder-Interface -----------------------
+	/** @see arduinoLight.channelholder.Channelholder#getChannels() */
 	@Override
 	public Set<Channel> getChannels()
 	{
 		return Collections.unmodifiableSet(_createdChannels);
 	}
-	
-	@Override
-	public String toString()
-	{
-		return "ChannelFactory";
-	}
 
-	@Override
-	public String getChannelsDescription()
-	{
-		return "All Channels";
-	}
-	
 	/** concurrent event-firing */
 	private void fireChannelsChangedEvent(Channel addedChannel)
 	{
@@ -87,6 +72,14 @@ public class ChannelFactory implements Channelholder
 	}
 
 	@Override
+	public String getChannelsDescription()
+	{
+		return "All Channels";
+		//TODO this is not all channels, just the channels of this factory.
+		//	   add a channelcontainer in the model that holds all the channels
+	}
+	
+	@Override
 	public void addChannelholderListener(ChannelholderListener listener)
 	{
 		_listeners.add(listener);
@@ -96,5 +89,12 @@ public class ChannelFactory implements Channelholder
 	public void removeChannelholderListener(ChannelholderListener listener)
 	{
 		_listeners.remove(listener);
+	}
+	
+	//---------- overridden from object ------------------------
+	@Override
+	public String toString()
+	{
+		return "ChannelFactory";
 	}
 }

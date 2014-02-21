@@ -104,7 +104,8 @@ public class SerialConnection
 		catch(IOException ex)
 		{
 			debugprint("transmit", "IOException" + ex.toString());
-			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception. possibly TODO ...
+			//Convert checked Exception in unchecked Exception, as there is currently no way to recover from the exception.
+			//TODO add an UncheckedExceptionHandler to the containing thread so the UI will be notified if an error occurs
 			throw new IllegalStateException(ex);
 		}
 		debugprint("transmit", "transmitted.");

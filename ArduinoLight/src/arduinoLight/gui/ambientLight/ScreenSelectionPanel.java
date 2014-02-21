@@ -24,6 +24,9 @@ import arduinoLight.channelholder.ambientlight.Areaselection;
 @SuppressWarnings("serial")
 public class ScreenSelectionPanel extends JPanel
 {
+	private static final int _MAX_ROWS = 10;
+	private static final int _MAX_COLS = 10;
+	
 	private Areaselection _selection;
 	
 	private JLabel _rowLabel = new JLabel("Rows: ");
@@ -69,31 +72,42 @@ public class ScreenSelectionPanel extends JPanel
 		this.add(_tablePanel, BorderLayout.CENTER);
 	}
 	
+	/** Initializes the row and column spinners */
+	private void initSpinners()
+	{
+		_rowBox = new JSpinner(new SpinnerNumberModel(1, 1, _MAX_ROWS, 1));
+		_colBox = new JSpinner(new SpinnerNumberModel(1, 1, _MAX_COLS, 1));
+		SpinnerHandler handler = new SpinnerHandler();
+		_rowBox.addChangeListener(handler);
+		_colBox.addChangeListener(handler);
+	}	
+	
+	/**
+	 * Sets the currently displayed selection to the given selection.
+	 * null is also a supported value. If null is given, the UI will be grayed out.
+	 */
 	public void setScreenselection(Areaselection selection)
 	{
 		_selection = selection;
-		if (_selection == null)
-		{
-			_colBox.setValue(1);
-			_rowBox.setValue(1);
-			componentsSetEnable(false);
-			initTable();
-			return;
-		}
-
-		//TODO here we change the size of the model, just because it does not fit
-		//	   to the screen. Is this the appropriate action?
-		int rows = Math.min(Math.max(1, _selection.getRows()), 10);
-		int columns = Math.min(Math.max(1, _selection.getColumns()), 10);
 		
-		_selection.changeSize(columns, rows);
+		int rows = 1;
+		int cols = 1;
+		boolean uiEnabled = false;
+		
+		if (_selection != null)
+		{
+			rows = Math.min(_selection.getRows(), _MAX_ROWS);
+			cols = Math.min(_selection.getColumns(), _MAX_COLS);
+			//Change the selection dimensions to fit the values supported by the UI
+			_selection.changeSize(cols, rows);
+			
+			uiEnabled = true;
+		}
 		
 		_rowBox.setValue(rows);
-		_colBox.setValue(columns);
-		
-		componentsSetEnable(true);
-		
-		initTable();
+		_colBox.setValue(cols);
+		componentsSetEnable(uiEnabled);
+		repaintTable();
 	}
 	
 	private void componentsSetEnable(boolean b)
@@ -108,17 +122,13 @@ public class ScreenSelectionPanel extends JPanel
 			tableBtn.setEnabled(b);
 		}
 	}
-	
-	private void initSpinners()
-	{
-		_rowBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
-		_colBox = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
-		SpinnerHandler handler = new SpinnerHandler();
-		_rowBox.addChangeListener(handler);
-		_colBox.addChangeListener(handler);
-	}	
 
-	private void initTable()
+	/**
+	 * Creates the grid with the toggle buttons in it.
+	 * The dimensions of the table are determined by the dimensions of the screen selection.
+	 * This method should be called after the selection changed or its dimensions changed.
+	 */
+	private void repaintTable()
 	{
 		_tablePanel.removeAll();
 		
@@ -141,18 +151,26 @@ public class ScreenSelectionPanel extends JPanel
 		_tablePanel.revalidate();
 	}
 	
+	
 	private class ClearHandler implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			_selection.setAll(false);
-			Component[] tableComps = _tablePanel.getComponents();
-			for (Component cb : tableComps)
-			{
-				if (cb instanceof CellButton)
-					((CellButton) cb).setSelected(false);
-			}
+			selectionSetAllCells(false);
+		}
+	}
+	
+	private void selectionSetAllCells(boolean b)
+	{
+		//_selection.setAll(b) is not used, because the UI needs to be updated anyway.
+		//cleaner would be an event thrown by the selection, however the overhead produced
+		//by that would be out of proportion to the gained architectural improvements.
+		Component[] tableComps = _tablePanel.getComponents();
+		for (Component cb : tableComps)
+		{
+			if (cb instanceof CellButton)
+				((CellButton) cb).setSelected(b);
 		}
 	}
 	
@@ -165,7 +183,7 @@ public class ScreenSelectionPanel extends JPanel
 			int cols = (int) _colBox.getValue();
 			
 			_selection.changeSize(cols, rows);
-			initTable();
+			repaintTable();
 		}
 	}
 	

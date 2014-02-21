@@ -126,7 +126,8 @@ public class AmbloneTransmission
 	}
 	
 	/**
-	 * Returns a list of colors. //TODO write proper documentation
+	 * Returns a list of the colors of the channels that are currently mapped to the output ports.
+	 * The list is used for transmission. For every output port that is unmapped, black is added to the list.
 	 * @return  a list of colors taken from the currently mapped channels
 	 */
 	private List<RGBColor> getCurrentColors()
@@ -159,6 +160,7 @@ public class AmbloneTransmission
 	/**
 	 * static helper-method that returns a LinkedHashSet containing Integers
 	 * that represent the possible ports.
+	 * The Integers are returned in an ascending order, if the set is iterated.
 	 * The Set is generated each time this method is called.
 	 */
 	public static Set<Integer> getPossiblePorts()
@@ -171,9 +173,11 @@ public class AmbloneTransmission
 		return possiblePorts;
 	}
 	
+	/** Throws IllegalArgumentException if the given port number is not supported by the protocol */
 	private void validatePort(int port)
 	{
 		if (port < 0 || port >= SUPPORTED_CHANNELS)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Port '" + port + "' not supported. " + 
+											   "Must be between 0 and " + SUPPORTED_CHANNELS + ".");
 	}
 }
