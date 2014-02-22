@@ -5,11 +5,16 @@ package arduinoLight.events;
 /**
  * Abstract Event-class.
  * This class can be easily implemented as an anonymous class in a typical 'raise...Event()'-method.
+ * Subclasses have to implement the notifyListeners method that gets raised if the Event is dispatched
+ * to the EventDispatchHandler.
  */
 public abstract class Event implements Runnable
 {
+	//TODO event: hashcode has no use currently.
 	private final int _hashCode;
-	private final String _name; //Currently only used for debugging
+	private final String _eventDescription;
+	
+	
 	
 	/**
 	 * The constructor takes a source object and a string as parameters.
@@ -22,23 +27,29 @@ public abstract class Event implements Runnable
 	public Event(Object source, String eventName)
 	{
 		_hashCode = source.hashCode() + eventName.hashCode();
-		_name = eventName + " in: '" + source.toString() + "'";
+		_eventDescription = eventName + " in: '" + source.toString() + "'";
 	}
 	
+	
+	
 	/**
-	 * This method is usually implemented with a foreach loop where all the subscribers are notified.
+	 * This method is usually implemented with a foreach loop where
+	 * all the subscribers of the given Event are notified.
 	 */
 	public abstract void notifyListeners();
 
+	
+	
 	/**
 	 * Implemented for Runnable, redirects to {@link #notifyListeners()}
 	 */
 	@Override
 	public void run()
 	{
-		//DebugConsole.print("Event", "run", "firing Event: " + _name);
 		notifyListeners();
 	}
+	
+	
 	
 	@Override
 	public int hashCode()
@@ -52,6 +63,6 @@ public abstract class Event implements Runnable
 	@Override
 	public String toString()
 	{
-		return _name;
+		return _eventDescription;
 	}
 }

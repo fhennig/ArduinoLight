@@ -7,22 +7,32 @@ import java.util.Set;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
-import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 
+/**
+ * An important core class of this project.
+ * Is a singleton an provides access to a ChannelFactory and other important Model objects.
+ * @author Felix
+ *
+ */
 public class Model
 {
 	public static Model _instance = null;
+	
 	private ChannelFactory _channelFactory = new ChannelFactory();
 	private Ambientlight _ambientlight = new Ambientlight();
-	private UnusedChannels _unusedChannels = new UnusedChannels();
+	private Channelholder _unusedChannels = new UnusedChannels();
 	private List<Channelholder> _channelwriters = new ArrayList<>();
 	
+	/** private constructor because this is a singleton */
 	private Model()
 	{
+		//Initialize the List of Channelwriters:
 		_channelwriters.add(_ambientlight);
 	}
 	
+	/** static method to get the current instance of this singleton */
 	public static Model getInstance()
 	{
 		if (_instance == null)
@@ -37,7 +47,7 @@ public class Model
 		return _channelFactory;
 	}
 	
-	public UnusedChannels getUnusedChannels()
+	public Channelholder getUnusedChannels()
 	{
 		return _unusedChannels;
 	}
@@ -54,7 +64,7 @@ public class Model
 	public List<Channelholder> getChannelholders()
 	{
 		List<Channelholder> channelHolders = new ArrayList<Channelholder>();
-		channelHolders.add(_channelFactory); //ChannelFactory at the top of the list
+		channelHolders.add(_channelFactory); //ChannelFactory at the beginning of the list
 		channelHolders.addAll(_channelwriters);
 		channelHolders.add(_unusedChannels);
 		return channelHolders;
@@ -66,19 +76,10 @@ public class Model
 	 */
 	public Channelholder getChannelholder(Channel channel)
 	{
-		Set<Channel> writerChannels = null;
-		//Search all the writers
 		for (Channelholder cwriter : _channelwriters)
 		{
-			writerChannels = cwriter.getChannels();
-			//Search Channels for each writer
-			for (Channel ch : writerChannels)
-			{
-				if (ch.equals(channel))
-				{
-					return cwriter;
-				}
-			}
+			if (cwriter.getChannels().contains(channel))
+				return cwriter;
 		}
 		
 		return _unusedChannels;
@@ -106,13 +107,13 @@ public class Model
 		}
 
 		@Override
-		public void addChannelholderListener(ChannelholderListener listener)
+		public void addChannelsChangedListener(ChannelsChangedListener listener)
 		{
 			//TODO
 		}
 
 		@Override
-		public void removeChannelholderListener(ChannelholderListener listener)
+		public void removeChannelsChangedListener(ChannelsChangedListener listener)
 		{
 			//TODO
 		}

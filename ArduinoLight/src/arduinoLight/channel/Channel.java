@@ -1,7 +1,5 @@
 package arduinoLight.channel;
 
-import arduinoLight.interfaces.propertyListeners.ColorListener;
-import arduinoLight.interfaces.propertyListeners.NameListener;
 import arduinoLight.util.Color;
 
 

@@ -5,8 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import arduinoLight.events.Event;
 import arduinoLight.events.EventDispatchHandler;
-import arduinoLight.interfaces.propertyListeners.ColorListener;
-import arduinoLight.interfaces.propertyListeners.NameListener;
 import arduinoLight.util.Color;
 
 /**
@@ -19,7 +17,7 @@ public class ThreadingChannel implements Channel
 	private final int _id;
 	
 	/** immutable objects + volatile used to ensure visibility of changes across all threads */
-	private volatile Color _color = new Color();
+	private volatile Color _color = Color.BLACK;
 	private volatile String _name = "Channel";
 	
 	/** final CopyOnWriteArrayList used for save concurrent access / thread-safety */

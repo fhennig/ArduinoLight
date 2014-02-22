@@ -88,22 +88,19 @@ public class AmbloneTransmission
 
 		_connection = connection;
 		_executor = Executors.newSingleThreadScheduledExecutor();
-		long period = Util.getPeriod(refreshRate, MAX_REFRESHRATE);
+		refreshRate = Math.min(refreshRate, MAX_REFRESHRATE);
+		long period = Util.getPeriod(refreshRate);
 		Runnable transmission = new Runnable()
 		{
 			private int currentlySetPortsAtArduino = _SUPPORTED_CHANNELS;
 			public void run()
 			{
 				int currentlySetPortsInMap = getAmountPortsUsed();
-				DebugConsole.print("AmbloneTransmission", "transmission", "Map: " + currentlySetPortsInMap + "\t Ard: " + currentlySetPortsAtArduino);
-				List<RGBColor> colorsForTransmission = getColorsForTransmission(Math.max(currentlySetPortsInMap, currentlySetPortsAtArduino));
-				if (colorsForTransmission.size() < 1) 
-				{
-					return;
-					//TODO every output that has no channel mapped should be black. this is currently not the case.
-//					currentColors = new ArrayList<>(); //If there are currently no colors,
-//					currentColors.add(Color.BLACK);	   //we transmit black, to reset all the colors that might be set.
-				}
+				int currentlyUsedPorts = Math.max(currentlySetPortsInMap, currentlySetPortsAtArduino);
+				if (currentlyUsedPorts < 1)
+					return; //If there are no ports in use, there is nothing to transmit.
+				
+				List<RGBColor> colorsForTransmission = getColorsForTransmission(currentlyUsedPorts);
 				AmblonePackage p = new AmblonePackage(colorsForTransmission);
 				_connection.transmit(p.toByteArray());
 				currentlySetPortsAtArduino = currentlySetPortsInMap;

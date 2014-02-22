@@ -3,23 +3,23 @@ package arduinoLight.util;
 import java.util.Collection;
 
 /**
- * Immutable!
- * @author Felix
+ * This class represents a color, consisting of 4 values; alpha, red, green and blue. <br>
+ * thread-safety: This class is immutable and therefore thread-safe.
  */
 public class Color implements RGBColor
 {
-	public static final Color BLACK = new Color(255, 0, 0, 0);
+	public static final Color BLACK = new Color(255,   0,   0,   0);
 	public static final Color WHITE = new Color(255, 255, 255, 255);
-	public static final Color RED = new Color(255, 255, 0, 0);
-	public static final Color GREEN = new Color(255, 0, 255, 0);
-	public static final Color BLUE = new Color(255, 0, 0, 255);
+	public static final Color RED   = new Color(255, 255,   0,   0);
+	public static final Color GREEN = new Color(255,   0, 255,   0);
+	public static final Color BLUE  = new Color(255,   0,   0, 255);
+	
+	
 	
 	private final int _argb; 
 	
-	public Color()
-	{
-		_argb = 0xff000000; //Initialize Black with 100% Alpha
-	}
+	
+	
 	
 	public Color(int argb)
 	{
@@ -34,7 +34,7 @@ public class Color implements RGBColor
 		b = getNormalizedInt(b);
 		
 		int argb = 0;
-		argb = (argb & 0x00ffffff) | (a << 24);
+		argb =         0x00ffffff  | (a << 24);
 		argb = (argb & 0xff00ffff) | (r << 16);
 		argb = (argb & 0xffff00ff) | (g << 8);
 		argb = (argb & 0xffffff00) | b;
@@ -97,6 +97,8 @@ public class Color implements RGBColor
 	//---------- static-helper-methods -------------------------
 	/**
 	 * Directly calculates the alpha-value into the color and returns the color as a byte.
+	 * @param alpha  an 8-bit value (0 to 255)
+	 * @param color  an 8-bit value (0 to 255)
 	 */
 	private static byte getAdjustedColor(int alpha, int color)
 	{
@@ -109,18 +111,14 @@ public class Color implements RGBColor
 	 */
 	private static int getNormalizedInt(int i)
 	{
-		if (i > 255)
-			i = 255;
-		else if (i < 0)
-			i = 0;
-		
-		return i;
+		return Util.getInBounds(i, 0, 255);
 	}
 	
 	/**
 	 * Returns the average color of the given colors.
+	 * if the Collection is empty, Color.BLACK is returned.
 	 */
-	public static Color getAverageColor(Collection<Color> colors)
+	public static Color getAverageColor(Collection<Color> colors) //TODO this should probably be in the Util class
 	{
 		if (colors.size() == 0)
 			return Color.BLACK;
@@ -149,10 +147,7 @@ public class Color implements RGBColor
 	//---------- overridden from object ------------------------
 	@Override
 	public int hashCode() {
-		final int prime = 47;
-		int result = 1;
-		result = prime * result + _argb;
-		return result;
+		return _argb;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package arduinoLight.interfaces.propertyListeners;
+package arduinoLight.channel;
 
 public interface NameListener
 {

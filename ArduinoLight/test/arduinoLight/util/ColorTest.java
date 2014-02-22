@@ -23,20 +23,6 @@ public class ColorTest
 		assertEquals(40,  c.getG());
 		assertEquals(75,  c.getB());
 	}
-	
-	/**
-	 * Tests if the default constructed color is black with full alpha.
-	 */
-	@Test
-	public void testColorDefaultContructor()
-	{
-		Color c = new Color();
-		
-		assertEquals(255, c.getA());
-		assertEquals(0,   c.getR());
-		assertEquals(0,   c.getG());
-		assertEquals(0,   c.getB());
-	}
 
 	/**
 	 * Tests if too high values are handled correctly.

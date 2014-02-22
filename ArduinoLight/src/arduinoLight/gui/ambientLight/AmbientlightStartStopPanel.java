@@ -14,8 +14,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
+import arduinoLight.channelholder.ambientlight.ActiveListener;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
-import arduinoLight.interfaces.propertyListeners.ActiveListener;
 
 @SuppressWarnings("serial")
 public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
@@ -42,7 +42,7 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 		_refreshrateLabel = new JLabel("Refresh Rate: ");
 		this.add(_refreshrateLabel, gbc);
 		
-		_refreshrateSpinner = new JSpinner(new SpinnerNumberModel(30, 1, Ambientlight.MAX_FREQUENCY, 1));
+		_refreshrateSpinner = new JSpinner(new SpinnerNumberModel(30, 1, Ambientlight.MAX_REFRESHRATE, 1));
 		gbc.gridx = 1;
 		this.add(_refreshrateSpinner, gbc);
 		

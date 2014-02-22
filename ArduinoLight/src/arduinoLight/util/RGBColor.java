@@ -1,9 +1,8 @@
 package arduinoLight.util;
 
 /**
- * This interface is used by the Amblone-Part to get colors.
+ * This Interface is used by the AmblonePackage to get colors.
  * (Gets implemented by 'Color')
- * @author felix
  */
 public interface RGBColor
 {

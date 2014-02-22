@@ -18,21 +18,26 @@ import arduinoLight.gui.connectionPanel.SerialConnectionPanel;
 import arduinoLight.model.Model;
 import arduinoLight.util.Color;
 
+/**
+ * Main class containing the main method.
+ * Only used to start the application.
+ */
 public class ArduinoLight
 {
 	public static void main(String[] args)
 	{		
+		//Add some Channels for testing purposes:
 		Model.getInstance().getChannelFactory().newChannel("RED").setColor(Color.RED);
 		Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
 		Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
-		//test();
 		
 		SerialConnection connection = new SerialConnection();
 		AmbloneTransmission amblone = new AmbloneTransmission();
+		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
 		
 		Gui.initLookAndFeel();
 		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
-		TabPanel ambiPanel = new AmbientlightPanel();
+		TabPanel ambiPanel = new AmbientlightPanel(ambientlight);
 		TabPanel chanModPanel = new ChannelModifyPanel();
 		
 		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();

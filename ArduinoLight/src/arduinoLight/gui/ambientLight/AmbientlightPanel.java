@@ -22,27 +22,31 @@ import arduinoLight.channelholder.ambientlight.Areaselection;
 import arduinoLight.gui.ChannelPanel;
 import arduinoLight.gui.ColorSlider;
 import arduinoLight.gui.TabPanel;
-import arduinoLight.model.Model;
 
+/**
+ * This class is a TabPanel that provides a UI to control an Ambientlight object.
+ */
 @SuppressWarnings("serial")
 public class AmbientlightPanel extends TabPanel
 {
-	Ambientlight _ambientLight = Model.getInstance().getAmbientlight();
+	private final Ambientlight _ambientLight;
 	
-	ScreenSelectionPanel _screenSelectionPanel;
-	JPanel _activationPanel;
-	ChannelPanel _channelPanel;
+	private ScreenSelectionPanel _screenSelectionPanel;
+	private JPanel _activationPanel;
+	private ChannelPanel _channelPanel;
 
-	JPanel _rgbPanel;
-	ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
-	ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
-	ColorSlider _blueSlider = new ColorSlider("B", 0, 100, 100);
-	ColorSlider _brightnessSlider = new ColorSlider("B", 0, 100, 100);
+	private JPanel _colorCorrectionPanel; //TODO this has currently no functionality,
+										  //	 also it is too big and should be in its own panel.
+	private ColorSlider _redSlider = new ColorSlider("R", 0, 100, 100);
+	private ColorSlider _greenSlider = new ColorSlider("G", 0, 100, 100);
+	private ColorSlider _blueSlider = new ColorSlider("B", 0, 100, 100);
+	private ColorSlider _brightnessSlider = new ColorSlider("B", 0, 100, 100);
 
 	
 	
-	public AmbientlightPanel()
+	public AmbientlightPanel(Ambientlight ambientlight)
 	{
+		_ambientLight = ambientlight;
 		initComponents();
 	}
 	
@@ -63,7 +67,7 @@ public class AmbientlightPanel extends TabPanel
 		gbc.gridx = 2;
 		gbc.gridwidth = 1;
 		gbc.weightx = 0;
-		this.add(_rgbPanel, gbc);
+		this.add(_colorCorrectionPanel, gbc);
 		
 		gbc.gridy = 1;
 		_activationPanel = new AmbientlightStartStopPanel(_ambientLight);
@@ -81,21 +85,30 @@ public class AmbientlightPanel extends TabPanel
 	
 	private void initRGBPanel()
 	{
-		_rgbPanel = new JPanel();
-		_rgbPanel.setLayout(new BoxLayout(_rgbPanel, BoxLayout.LINE_AXIS));
-		_rgbPanel.setBorder(BorderFactory.createTitledBorder("Color Correction"));
+		_colorCorrectionPanel = new JPanel();
+		_colorCorrectionPanel.setLayout(new BoxLayout(_colorCorrectionPanel, BoxLayout.LINE_AXIS));
+		_colorCorrectionPanel.setBorder(BorderFactory.createTitledBorder("Color Correction"));
 		
-		_rgbPanel.add(_redSlider);
-		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_rgbPanel.add(_greenSlider);
-		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_rgbPanel.add(_blueSlider);
-		_rgbPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-		_rgbPanel.add(_brightnessSlider);
+		_colorCorrectionPanel.add(_redSlider);
+		_colorCorrectionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_colorCorrectionPanel.add(_greenSlider);
+		_colorCorrectionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_colorCorrectionPanel.add(_blueSlider);
+		_colorCorrectionPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+		_colorCorrectionPanel.add(_brightnessSlider);
 	}
 	
+	
+	
+	/**
+	 * This class acts upon the event that the selected channel changed.
+	 */
 	private class ChannelPanelHandler implements ActionListener
 	{
+		/**
+		 * If the selected Channel changes, we update the screenSelectionPanel
+		 * to display the Areaselection object that the Channel is mapped to.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
@@ -105,6 +118,12 @@ public class AmbientlightPanel extends TabPanel
 		}
 	}
 
+	
+	
+	/**
+	 * This is a method for the TabPanel.
+	 * It returns the title used in the tab.
+	 */
 	@Override
 	public String getTitle()
 	{

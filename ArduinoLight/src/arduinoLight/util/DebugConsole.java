@@ -2,7 +2,6 @@ package arduinoLight.util;
 
 /**
  * Encapsulates the printing to the console for debugging-purposes.
- * @author Felix
  */
 public class DebugConsole
 {

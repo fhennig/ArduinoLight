@@ -1,4 +1,4 @@
-package arduinoLight.interfaces.propertyListeners;
+package arduinoLight.channelholder.ambientlight;
 
 public interface ActiveListener
 {

@@ -1,7 +1,26 @@
 package arduinoLight.util;
 
+/**
+ * This class contains various static methods which provide some generally useful functionality. <br>
+ * thread-safety: This class is stateless, therefore thread-safe.
+ */
 public class Util
 {
+	/**
+	 * If value is greater than high, high is returned.
+	 * If value is lower than low, low is returned.
+	 * If value is in bounds, value is returned.
+	 */
+	public static int getInBounds(int value, int low, int high)
+	{
+		if (low > high)
+			throw new IllegalArgumentException("lower bound was greater than upper bound.");
+		int inBounds = Math.min(Math.max(low, value), high);
+		return inBounds;
+	}
+	
+
+	
 	/**
 	 * @param frequency  amount per second (Hz)
 	 * @return  the period in nanoseconds
@@ -11,20 +30,14 @@ public class Util
 		return Math.round(1000000000.0 / frequency);
 	}
 	
-	/**
-	 * If frequency > maxFrequency, the Period for maxFrequency is returned
-	 * @param frequency  amount per second (Hz)
-	 * @param maxFrequency  the max supported frequency
-	 * @return  the period in nanoseconds
-	 */
-	public static long getPeriod(double frequency, double maxFrequency)
-	{
-		if (frequency > maxFrequency)
-			frequency = maxFrequency;
-		
-		return Math.round(1000000000.0 / frequency);
-	}
 	
+	
+	/**
+	 * @param string  the String that should be padded.
+	 * @param desiredLength  the desired Length of the String.
+	 * @return  the String followed by spaces to match the desired Length.
+	 * If the String is already the desiredLenght or even longer, the String is returned.
+	 */
 	public static String getRightPaddedString(String string, int desiredLength)
 	{
 		if (string.length() >= desiredLength)

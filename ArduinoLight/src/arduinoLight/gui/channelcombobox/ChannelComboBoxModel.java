@@ -7,12 +7,12 @@ import javax.swing.SwingUtilities;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
-import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
-public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> implements ChannelholderListener
+public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> implements ChannelsChangedListener
 {
 	private Channelholder _itemSource;
 	
@@ -49,7 +49,7 @@ public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> impl
 		DebugConsole.print("", "", "" + preselectedChannel);
 		printItems(1);
 		if (_itemSource != null)
-			_itemSource.removeChannelholderListener(this);
+			_itemSource.removeChannelsChangedListener(this);
 		
 		_itemSource = source;
 		
@@ -79,7 +79,7 @@ public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> impl
 			this.removeElementAt(insertionIndex);
 		}
 		printItems(4);
-		_itemSource.addChannelholderListener(this);
+		_itemSource.addChannelsChangedListener(this);
 	}
 	
 	public void setSelectedChannel(Channel channel)

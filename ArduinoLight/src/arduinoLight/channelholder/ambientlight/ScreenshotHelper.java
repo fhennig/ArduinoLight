@@ -10,6 +10,10 @@ import java.awt.image.DataBufferInt;
 import arduinoLight.util.Color;
 import arduinoLight.util.DebugConsole;
 
+/**
+ * This class encapsulates the functionality to take a screenshot. <br> 
+ * thread-safety: This class has not state, is immutable and therefore thread-safe.
+ */
 public class ScreenshotHelper
 {
 	/**
@@ -24,7 +28,7 @@ public class ScreenshotHelper
 	}
 	
 	/**
-	 * Used to get a Screenshot of the Main Screen of the user.
+	 * Used to get a Screenshot of the primary screen of the user.
 	 */
 	private static BufferedImage getBufferedImageScreenshot()
 	{

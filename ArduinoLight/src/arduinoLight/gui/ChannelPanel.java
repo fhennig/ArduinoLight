@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.gui.channelcombobox.ChannelComboBox;
@@ -26,7 +26,7 @@ import arduinoLight.gui.channelcombobox.ChannelComboBoxModel;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
-public class ChannelPanel extends JPanel implements ChannelholderListener
+public class ChannelPanel extends JPanel implements ChannelsChangedListener
 {
 	private ModifiableChannelholder _provider;
 	
@@ -40,7 +40,7 @@ public class ChannelPanel extends JPanel implements ChannelholderListener
 	{
 		_provider = provider;
 		initComponents();
-		_provider.addChannelholderListener(this);
+		_provider.addChannelsChangedListener(this);
 	}
 	
 	private void initComponents()

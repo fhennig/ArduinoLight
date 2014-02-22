@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import arduinoLight.channel.Channel;
 import arduinoLight.channel.ThreadingChannel;
 import arduinoLight.channelholder.Channelholder;
-import arduinoLight.channelholder.ChannelholderListener;
+import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.events.Event;
 import arduinoLight.events.EventDispatchHandler;
@@ -17,15 +17,14 @@ import arduinoLight.events.EventDispatchHandler;
 /**
  * Can be used to get new Channel objects.
  * Stores all created Channels internally.
- * threadsafety-policy: make most methods 'synchronized' and delegate to thread-safe objects (CopyOnWriteArrayList).
- * Is thread-safe (2014-02-21)
+ * thread-safety: Most methods are synchronized and in part, thread-safety is delegated.
  */
 public class ChannelFactory implements Channelholder
 {
 	/** Used to generate IDs */
     private static int _instances = 0;
 	private Set<Channel> _createdChannels = new HashSet<>();
-	private List<ChannelholderListener> _listeners = new CopyOnWriteArrayList<>();
+	private List<ChannelsChangedListener> _listeners = new CopyOnWriteArrayList<>();
 	
 
 	
@@ -65,7 +64,7 @@ public class ChannelFactory implements Channelholder
 			@Override
 			public void notifyListeners()
 			{
-				for (ChannelholderListener l : _listeners)
+				for (ChannelsChangedListener l : _listeners)
 					l.channelsChanged(e);
 			}
 		});
@@ -80,13 +79,13 @@ public class ChannelFactory implements Channelholder
 	}
 	
 	@Override
-	public void addChannelholderListener(ChannelholderListener listener)
+	public void addChannelsChangedListener(ChannelsChangedListener listener)
 	{
 		_listeners.add(listener);
 	}
 
 	@Override
-	public void removeChannelholderListener(ChannelholderListener listener)
+	public void removeChannelsChangedListener(ChannelsChangedListener listener)
 	{
 		_listeners.remove(listener);
 	}

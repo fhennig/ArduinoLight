@@ -5,11 +5,12 @@ import java.util.concurrent.*;
 
 /**
  * This class is a singleton and provides global access to dispatch Events. 
- * A ThreadPool is used to fire dispatched Events.
+ * A thread pool is used to fire dispatched Events.
  * Listeners to events are notified from the threads in the thread pool, 
  * not from the thread where the event originated. This leads to faster execution in
  * performance-critcal code sections.
  * Events are fired FIFO.
+ * thread-safety: This class is thread-safe through delegation.
  */
 public class EventDispatchHandler
 {
@@ -38,7 +39,6 @@ public class EventDispatchHandler
 	 */
 	public void dispatch(Event event)
 	{
-		//DebugConsole.print("EventDispatchHandler", "dispatch", "dispatching Event: " + event.toString());
 		_executor.execute(event);
 	}
 }
