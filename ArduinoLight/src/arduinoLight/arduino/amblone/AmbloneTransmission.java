@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.channel.Channel;
+import arduinoLight.framework.ShutdownHandler;
 import arduinoLight.util.Color;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
@@ -31,6 +32,7 @@ public class AmbloneTransmission
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	private volatile boolean _active = false;
+	private final ShutdownHook _shutdownHook = new ShutdownHook();
 	
 
 	
@@ -110,24 +112,27 @@ public class AmbloneTransmission
 		//TODO shutdownhook
 		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
+		ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
 		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + refreshRate);
 	}
 	
 	/**
-	 * This method stops the transmission and returns the connection that
-	 * was passed in with 'start(...)'.
+	 * This method stops the transmission.
+	 * the connection that was used is passed gets returned.
+	 * If the connection is already stopped, null is returned.
+	 * @returns  the used connection or null if transmission was already stopped.
 	 */
 	public synchronized SerialConnection stop()
 	{
 		if (!_active)
-			throw new IllegalStateException("The Transmission could not be stopped, because it is not active!");
+			return null;
 		
 		_active = false;
+		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
 		_executor.shutdown();
 		_executor = null;
 		SerialConnection c = _connection;
 		_connection = null;
-		
 		DebugConsole.print("AmbloneTransmission", "stopTransmission", "stopping successful");
 		return c;
 	}
@@ -193,5 +198,16 @@ public class AmbloneTransmission
 		if (port < 0 || port >= _SUPPORTED_CHANNELS)
 			throw new IllegalArgumentException("Port '" + port + "' not supported. " + 
 											   "Must be between 0 and " + _SUPPORTED_CHANNELS + ".");
+	}
+	
+	
+	
+	private class ShutdownHook implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			stop();
+		}
 	}
 }

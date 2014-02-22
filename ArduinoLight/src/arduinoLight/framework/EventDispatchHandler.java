@@ -15,12 +15,16 @@ import java.util.concurrent.*;
 public class EventDispatchHandler
 {
 	private static EventDispatchHandler _instance;
-	private ExecutorService _executor = Executors.newCachedThreadPool();
+	private final ExecutorService _executor = Executors.newCachedThreadPool();
 	
 	/**
 	 * private constructor because this is a singleton.
 	 */
-	private EventDispatchHandler() { }
+	private EventDispatchHandler()
+	{
+		Runnable shutdownHook = new ShutdownHook();
+		ShutdownHandler.getInstance().pushShutdownHook(shutdownHook);
+	}
 	
 	/**
 	 * Returns the instance of this Singleton.
@@ -40,5 +44,24 @@ public class EventDispatchHandler
 	public void dispatch(Event event)
 	{
 		_executor.execute(event);
+	}
+	
+	
+	
+	
+	private class ShutdownHook implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			_executor.shutdown();
+		}
+		
+		//For debugging:
+		@Override
+		public String toString()
+		{
+			return "EventDispatchHandler.ShutdownHook";
+		}
 	}
 }

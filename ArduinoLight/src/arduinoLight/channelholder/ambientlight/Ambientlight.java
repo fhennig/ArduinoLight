@@ -17,6 +17,7 @@ import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.framework.Event;
 import arduinoLight.framework.EventDispatchHandler;
+import arduinoLight.framework.ShutdownHandler;
 import arduinoLight.util.Util;
 
 /**
@@ -34,6 +35,7 @@ public class Ambientlight implements ModifiableChannelholder
 	private final List<ChannelsChangedListener> _channelholderListeners = new CopyOnWriteArrayList<>();
 	private final List<ActiveListener> _activeListeners = new CopyOnWriteArrayList<>();
 	private volatile boolean _active;
+	private final ShutdownHook _shutdownHook = new ShutdownHook();
 
 	
 	
@@ -135,6 +137,7 @@ public class Ambientlight implements ModifiableChannelholder
 		_executor = Executors.newSingleThreadScheduledExecutor();
 		_executor.scheduleAtFixedRate(colorSetLoop, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
+		ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
 		fireActiveChangedEvent(_active);
 	}
 	
@@ -147,6 +150,7 @@ public class Ambientlight implements ModifiableChannelholder
 	{
 		if (!_active)
 			return;
+		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
 		_executor.shutdown();
 		_executor = null;
 		_active = false;
@@ -225,5 +229,16 @@ public class Ambientlight implements ModifiableChannelholder
 	public void removeActiveListener(ActiveListener listener)
 	{
 		_activeListeners.remove(listener);
+	}
+	
+	
+	
+	private class ShutdownHook implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			stop();
+		}
 	}
 }

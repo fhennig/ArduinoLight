@@ -9,6 +9,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import arduinoLight.framework.ShutdownHandler;
 import arduinoLight.util.DebugConsole;
 
 
@@ -21,9 +22,11 @@ public class SerialConnection
 	private static final int _TIME_OUT = 2000; //TODO Understand this ...
 	private static final String _APPNAME = "ArduinoLight";
 	
-	protected SerialPort _serialPort;
-	protected BufferedOutputStream _serialOutputStream;
-	protected boolean _open = false;
+	private SerialPort _serialPort;
+	private BufferedOutputStream _serialOutputStream;
+	private boolean _open = false;
+	
+	private final ShutdownHook _shutdownHook = new ShutdownHook();
 	
 	/**
 	 * Returns an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
@@ -44,7 +47,7 @@ public class SerialConnection
 	 * @throws PortInUseException, IllegalArgumentException
 	 * @throws IllegalStateException if there is already a connection active
 	 */
-	public void open(CommPortIdentifier portId, int baudRate) throws PortInUseException
+	public synchronized void open(CommPortIdentifier portId, int baudRate) throws PortInUseException
 	{
 		if (_open)
 			throw new IllegalStateException("This SerialConnection is already opened.");
@@ -58,6 +61,7 @@ public class SerialConnection
 					SerialPort.PARITY_NONE);
 			_serialOutputStream = new BufferedOutputStream(_serialPort.getOutputStream());
 			_open = true;
+			ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
 			DebugConsole.print("SerialConnection", "open", "Connecting successful!");
 		}
 		catch (UnsupportedCommOperationException | IOException ex)
@@ -68,12 +72,15 @@ public class SerialConnection
 		
 	}
 	
+	
+	
 	/** Closes the connection. */
-	public void close()
+	public synchronized void close()
 	{
 		if (!_open)
 			return; //the connection is already closed.
 		
+		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
 		_serialPort.close();
 		_serialPort = null;
 		try { _serialOutputStream.close(); } catch (IOException ignored) { ignored.printStackTrace(); }
@@ -88,7 +95,7 @@ public class SerialConnection
 	 * @throws IllegalStateException if transmission failed, or the connection is closed.
 	 * @param bytes the bytes to transmit.
 	 */
-	public void transmit(byte[] bytes)
+	public synchronized void transmit(byte[] bytes)
 	{
 		if (!_open)
 		{
@@ -111,23 +118,36 @@ public class SerialConnection
 	}
 	
 	//---------- Getters ---------------------------------------
-	public String getPortName()
+	public synchronized String getPortName()
 	{
 		if (_serialPort == null)
 			return "";
 		return _serialPort.getName();
 	}
 	
-	public int getBaudRate()
+	public synchronized int getBaudRate()
 	{
 		if (_serialPort == null)
 			return 0;
 		return _serialPort.getBaudRate();
 	}
 	
-	public boolean isOpen()
+	public synchronized boolean isOpen()
 	{
 		return _open;
+	}
+	
+	//----------------------------------------------------------
+	private class ShutdownHook implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			synchronized(SerialConnection.this)
+			{
+				close();
+			}
+		}
 	}
 
 	//---------- Debug-Console-printing ------------------------
