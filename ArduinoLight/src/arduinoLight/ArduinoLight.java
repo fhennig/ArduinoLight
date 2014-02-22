@@ -5,6 +5,8 @@ import gnu.io.PortInUseException;
 
 import java.util.*;
 
+import javax.swing.SwingUtilities;
+
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channel.Channel;
@@ -31,20 +33,28 @@ public class ArduinoLight
 		Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
 		Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
 		
-		SerialConnection connection = new SerialConnection();
-		AmbloneTransmission amblone = new AmbloneTransmission();
-		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
-		
-		Gui.initLookAndFeel();
-		SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
-		TabPanel ambiPanel = new AmbientlightPanel(ambientlight);
-		TabPanel chanModPanel = new ChannelModifyPanel();
-		
-		Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
-		panels.add(ambiPanel);
-		panels.add(chanModPanel);
-		
-		new Gui(panels, connectionPanel);
+		//Initialize GUI in Swing event dispatch thread
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				SerialConnection connection = new SerialConnection();
+				AmbloneTransmission amblone = new AmbloneTransmission();
+				Ambientlight ambientlight = Model.getInstance().getAmbientlight();
+				
+				Gui.initLookAndFeel();
+				SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
+				TabPanel ambiPanel = new AmbientlightPanel(ambientlight);
+				TabPanel chanModPanel = new ChannelModifyPanel();
+				
+				Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
+				panels.add(ambiPanel);
+				panels.add(chanModPanel);
+				
+				new Gui(panels, connectionPanel);
+			}
+		});
 	}
 	
 	
