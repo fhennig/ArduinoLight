@@ -3,8 +3,8 @@ package arduinoLight.channel;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import arduinoLight.events.Event;
-import arduinoLight.events.EventDispatchHandler;
+import arduinoLight.framework.Event;
+import arduinoLight.framework.EventDispatchHandler;
 import arduinoLight.util.Color;
 
 /**

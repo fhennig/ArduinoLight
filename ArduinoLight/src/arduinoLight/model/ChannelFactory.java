@@ -11,8 +11,8 @@ import arduinoLight.channel.ThreadingChannel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
-import arduinoLight.events.Event;
-import arduinoLight.events.EventDispatchHandler;
+import arduinoLight.framework.Event;
+import arduinoLight.framework.EventDispatchHandler;
 
 /**
  * Can be used to get new Channel objects.

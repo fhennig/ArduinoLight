@@ -1,4 +1,4 @@
-package arduinoLight.events;
+package arduinoLight.framework;
 
 import java.util.concurrent.*;
 

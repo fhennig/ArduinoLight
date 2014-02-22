@@ -15,8 +15,8 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ModifiableChannelholder;
-import arduinoLight.events.Event;
-import arduinoLight.events.EventDispatchHandler;
+import arduinoLight.framework.Event;
+import arduinoLight.framework.EventDispatchHandler;
 import arduinoLight.util.Util;
 
 /**
