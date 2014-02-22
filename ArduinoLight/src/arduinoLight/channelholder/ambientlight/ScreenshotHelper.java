@@ -1,6 +1,6 @@
 package arduinoLight.channelholder.ambientlight;
 
-import java.awt.AWTException;
+import java.awt.AWTPermission;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -17,6 +17,19 @@ import arduinoLight.util.DebugConsole;
 public class ScreenshotHelper
 {
 	/**
+	 * Checks if it is permitted to take a screenshot.
+	 * @throws SecurityException  if it is not permitted to take a screenshot.
+	 */
+	public static void checkScreenshotPermission() throws SecurityException
+	{
+		SecurityManager security = System.getSecurityManager();
+		if (security != null)
+			security.checkPermission(new AWTPermission("readDisplayPixels"));
+	}
+	
+	
+	
+	/**
 	 * Returns a screenshot of the Users main screen
 	 */
 	public static Image getScreenshot()
@@ -27,21 +40,26 @@ public class ScreenshotHelper
 		return image;
 	}
 	
+	
+	
 	/**
 	 * Used to get a Screenshot of the primary screen of the user.
 	 */
 	private static BufferedImage getBufferedImageScreenshot()
 	{
 		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-		BufferedImage capture = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage capture = null;
 		try {
 			capture = new Robot().createScreenCapture(screenRect);
-		} catch (AWTException e) {
-			//TODO AWTEXception handlen
+		} catch (Exception e) {
+			//TODO handle AWTEXception and possible SecurityException 
 			DebugConsole.print("AmbientlightLogic", "getScreenshot", "Exception:\n\n" + e.toString());
+			throw new IllegalStateException(e); //throw unchecked Ex.
 		}
 		return capture;
 	}
+	
+
 	
 	private static Color[][] getArrayFromImage(BufferedImage image)
 	{

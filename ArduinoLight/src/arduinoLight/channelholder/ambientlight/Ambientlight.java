@@ -84,12 +84,15 @@ public class Ambientlight implements ModifiableChannelholder
 	
 	/**
 	 * Starts the periodic recalculation of the Channel Colors.
-	 * @param refreshRate the frequency of refreshing in Hz.
+	 * @param refreshRate  the frequency of refreshing in Hz.
+	 * @throws SecurityException  if it is not permitted to take a screenshot. 
 	 */
 	public synchronized void start(int refreshRate)
 	{
 		if (_active)
 			throw new IllegalStateException("Already active!");
+		
+		ScreenshotHelper.checkScreenshotPermission();
 		
 		Runnable colorSetLoop = new Runnable() //TODO add possiblity to interrupt
 		{

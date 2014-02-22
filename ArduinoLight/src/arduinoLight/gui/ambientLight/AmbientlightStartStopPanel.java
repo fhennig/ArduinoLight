@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -75,7 +76,16 @@ public class AmbientlightStartStopPanel extends JPanel implements ActiveListener
 			}
 			else
 			{
-				_ambientlight.start(getSelectedRefreshRate());
+				try
+				{
+					_ambientlight.start(getSelectedRefreshRate());
+				}
+				catch (SecurityException e)
+				{
+					JOptionPane.showMessageDialog(null,
+							"Permission to take screenshot not granted!",
+							"Permission not granted", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}
