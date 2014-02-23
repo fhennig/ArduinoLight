@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.channel.Channel;
 import arduinoLight.framework.ShutdownHandler;
+import arduinoLight.framework.ShutdownListener;
 import arduinoLight.util.Color;
 import arduinoLight.util.DebugConsole;
 import arduinoLight.util.RGBColor;
@@ -24,7 +25,7 @@ import arduinoLight.util.Util;
  * to encode the colors, the amblone protocol is used (http://amblone.com). <br>
  * thread-safety: In part, thread-safety is delegated to the ConcurrentMap, other methods are synchronized.
  */
-public class AmbloneTransmission
+public class AmbloneTransmission implements ShutdownListener
 {
 	public static final int MAX_REFRESHRATE = 240;
 	private static final int _SUPPORTED_CHANNELS = 4;
@@ -32,7 +33,6 @@ public class AmbloneTransmission
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	private volatile boolean _active = false;
-	private final ShutdownHook _shutdownHook = new ShutdownHook();
 	
 
 	
@@ -109,10 +109,9 @@ public class AmbloneTransmission
 			}
 		};
 		//TODO uncaughtexceptionhandler
-		//TODO shutdownhook
 		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
-		ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
+		ShutdownHandler.getInstance().addShutdownListener(this);
 		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + refreshRate);
 	}
 	
@@ -128,7 +127,7 @@ public class AmbloneTransmission
 			return null;
 		
 		_active = false;
-		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
+		ShutdownHandler.getInstance().removeShutdownListener(this);
 		_executor.shutdown();
 		_executor = null;
 		SerialConnection c = _connection;
@@ -191,6 +190,13 @@ public class AmbloneTransmission
 		
 		return possiblePorts;
 	}
+
+	@Override
+	public void onShutdown()
+	{
+		ShutdownHandler.getInstance().verifyShutdown();
+		stop();
+	}
 	
 	/** Throws IllegalArgumentException if the given port number is not supported by the protocol */
 	private void validatePort(int port)
@@ -200,14 +206,10 @@ public class AmbloneTransmission
 											   "Must be between 0 and " + _SUPPORTED_CHANNELS + ".");
 	}
 	
-	
-	
-	private class ShutdownHook implements Runnable
+	//----------------------------------------------------------
+	@Override
+	public String toString()
 	{
-		@Override
-		public void run()
-		{
-			stop();
-		}
+		return "AmbloneTransmission";
 	}
 }

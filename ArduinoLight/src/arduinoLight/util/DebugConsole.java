@@ -5,8 +5,8 @@ package arduinoLight.util;
  */
 public class DebugConsole
 {
-	private static int classLength = 0;
-	private static int methodLength = 0;
+	private static int classLength = 15;
+	private static int methodLength = 15;
 	
 	public static boolean isEnabled()
 	{
@@ -23,12 +23,22 @@ public class DebugConsole
 	}
 	
 	
+	public static void printh(String containingClass, String method, String message)
+	{
+		StringBuilder newMessage = new StringBuilder();
+		newMessage.append("-------------- ");
+		message = Util.getRightPaddedString(message + " ", '-', 50);
+		newMessage.append(message);
+		print(containingClass, method, newMessage.toString());
+	}
+	
+	
 	private static String padClass(String containingClass)
 	{
 		if (containingClass.length() > classLength)
 			classLength = containingClass.length();
 		
-		return Util.getRightPaddedString(containingClass, classLength);
+		return Util.getRightPaddedString(containingClass, ' ', classLength);
 	}
 	
 	private static String padMethod(String method)
@@ -36,6 +46,6 @@ public class DebugConsole
 		if (method.length() > methodLength)
 			methodLength = method.length();
 		
-		return Util.getRightPaddedString(method, methodLength);
+		return Util.getRightPaddedString(method, ' ', methodLength);
 	}
 }

@@ -12,12 +12,13 @@ import arduinoLight.util.DebugConsole;
 public class ShutdownHandler
 {
 	private static ShutdownHandler _instance = null;
-	private ConcurrentLinkedDeque<Runnable> _shutdownHooks = new ConcurrentLinkedDeque<>();
-	
+	private ConcurrentLinkedDeque<ShutdownListener> _shutdownListeners = new ConcurrentLinkedDeque<>();
+	private volatile boolean _shuttingDown = false;
 	
 	
 	private ShutdownHandler()
 	{
+		DebugConsole.printh("ShutdownHandler", "<init>", "initializing ShutdownHandler");
 		Runtime.getRuntime().addShutdownHook(new ActualShutdownHook());
 	}
 	
@@ -36,13 +37,24 @@ public class ShutdownHandler
 	
 	
 	/**
+	 * @throws IllegalStateException  if the application is currently not shutting down.
+	 */
+	public void verifyShutdown()
+	{
+		if (!_shuttingDown)
+			throw new IllegalStateException("Currently not shutting down!");
+	}
+	
+	
+	
+	/**
 	 * Pushes the given shutdownHook on the Stack.
 	 * @param hook  the Runnable that should be executed on shutdown.
 	 */
-	public void pushShutdownHook(Runnable hook)
+	public void addShutdownListener(ShutdownListener listener)
 	{
-		_shutdownHooks.push(hook);
-		DebugConsole.print("ShutdownHandler", "pushShutdownHook", "ShutdownHook pushed: " + hook.toString());
+		_shutdownListeners.push(listener);
+		DebugConsole.print("ShutdownHandler", "pushShutdownListener", "ShutdownListener pushed: " + listener.toString());
 	}	
 	
 	
@@ -51,10 +63,10 @@ public class ShutdownHandler
 	 * Removes the first occurrence of the given shutdownHook,
 	 * starting search from the first shutdownHook that was pushed on the Stack.
 	 */
-	public void removeShutdownHook(Runnable hook)
+	public void removeShutdownListener(ShutdownListener listener)
 	{
-		_shutdownHooks.remove(hook);
-		DebugConsole.print("ShutdownHandler", "removeShutdownHook", "ShutdownHook removed: " + hook.toString());
+		if (_shutdownListeners.remove(listener))
+			DebugConsole.print("ShutdownHandler", "removeShutdownHook", "ShutdownListener removed: " + listener.toString());
 		
 	}
 	
@@ -72,27 +84,28 @@ public class ShutdownHandler
 		@Override
 		public void run()
 		{
-			DebugConsole.print("ShutdownHandler", "actualShutdown", "shutting down!");
-			synchronized (_shutdownHooks)
+			_shuttingDown = true;
+			DebugConsole.printh("ShutdownHandler", "actualShutdown", "shutdown started");
+			synchronized (_shutdownListeners)
 			{
-				while (!_shutdownHooks.isEmpty())
+				while (!_shutdownListeners.isEmpty())
 				{
-					Runnable hook = _shutdownHooks.pop();
+					ShutdownListener listener = _shutdownListeners.pop();
 					try
 					{
-						
-						hook.run();
-						DebugConsole.print("ShutdownHandler", "actualShutdown", "successful: " + hook);
+						DebugConsole.print("ShutdownHandler", "actualShutdown", "shutting down '" + listener + "'");
+						listener.onShutdown();
+						DebugConsole.print("ShutdownHandler", "actualShutdown", "successful!");
 						
 					}
-					catch (Exception e)
+					catch (Exception e) //Catch all Exceptions to ensure that the shutdown thread does not terminate unexpectedly
 					{
-						DebugConsole.print("ShutdownHandler", "actualShutdown", "Exception in: " + hook);
+						DebugConsole.print("ShutdownHandler", "actualShutdown", "Exception in: " + listener);
 						e.printStackTrace();
 					}
 				}
 			}
-			DebugConsole.print("ShutdownHandler", "actualShutdown", "shutdown completed.");
+			DebugConsole.printh("ShutdownHandler", "actualShutdown", "shutdown completed");
 		}
 	}
 }

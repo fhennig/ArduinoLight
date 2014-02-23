@@ -18,6 +18,8 @@ import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.framework.Event;
 import arduinoLight.framework.EventDispatchHandler;
 import arduinoLight.framework.ShutdownHandler;
+import arduinoLight.framework.ShutdownListener;
+import arduinoLight.util.DebugConsole;
 import arduinoLight.util.Util;
 
 /**
@@ -26,7 +28,7 @@ import arduinoLight.util.Util;
  * using the screen selection for each channel and and applying them to a taken screenshot. <br>
  * thread-safety: yes, though this class is not intended to be used concurrently.
  */
-public class Ambientlight implements ModifiableChannelholder
+public class Ambientlight implements ModifiableChannelholder, ShutdownListener
 {
 	//TODO thread safety?
 	public static final int MAX_REFRESHRATE = 100;
@@ -35,7 +37,6 @@ public class Ambientlight implements ModifiableChannelholder
 	private final List<ChannelsChangedListener> _channelholderListeners = new CopyOnWriteArrayList<>();
 	private final List<ActiveListener> _activeListeners = new CopyOnWriteArrayList<>();
 	private volatile boolean _active;
-	private final ShutdownHook _shutdownHook = new ShutdownHook();
 
 	
 	
@@ -131,13 +132,13 @@ public class Ambientlight implements ModifiableChannelholder
 				}
 			}
 		};
-		//TODO shutdown hook
 		refreshRate = Math.min(refreshRate, MAX_REFRESHRATE);
 		long period = Util.getPeriod(refreshRate);
 		_executor = Executors.newSingleThreadScheduledExecutor();
 		_executor.scheduleAtFixedRate(colorSetLoop, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
-		ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
+		DebugConsole.print("Ambientlight", "start", "starting successful");
+		ShutdownHandler.getInstance().addShutdownListener(this);
 		fireActiveChangedEvent(_active);
 	}
 	
@@ -150,10 +151,11 @@ public class Ambientlight implements ModifiableChannelholder
 	{
 		if (!_active)
 			return;
-		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
 		_executor.shutdown();
 		_executor = null;
 		_active = false;
+		DebugConsole.print("Ambientlight", "stop", "stopping successful");
+		ShutdownHandler.getInstance().removeShutdownListener(this);
 		fireActiveChangedEvent(_active);
 	}
 	
@@ -231,14 +233,17 @@ public class Ambientlight implements ModifiableChannelholder
 		_activeListeners.remove(listener);
 	}
 	
-	
-	
-	private class ShutdownHook implements Runnable
+	//---------- Shutdown --------------------------------------
+	@Override
+	public void onShutdown()
 	{
-		@Override
-		public void run()
-		{
-			stop();
-		}
+		stop();
+	}
+	
+	//----------------------------------------------------------
+	@Override
+	public String toString()
+	{
+		return "Ambientlight";
 	}
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import arduinoLight.framework.ShutdownHandler;
+import arduinoLight.framework.ShutdownListener;
 import arduinoLight.util.DebugConsole;
 
 
@@ -17,7 +18,7 @@ import arduinoLight.util.DebugConsole;
  * This class encapsulates a serial connection. It provides a simple interface (open, close, transmit). <br>
  * thread-safety: There is no need for this class to be thread-safe.
  */
-public class SerialConnection
+public class SerialConnection implements ShutdownListener
 {
 	private static final int _TIME_OUT = 2000; //TODO Understand this ...
 	private static final String _APPNAME = "ArduinoLight";
@@ -25,8 +26,6 @@ public class SerialConnection
 	private SerialPort _serialPort;
 	private BufferedOutputStream _serialOutputStream;
 	private boolean _open = false;
-	
-	private final ShutdownHook _shutdownHook = new ShutdownHook();
 	
 	/**
 	 * Returns an Enumeration of CommPortIdentifiers from which one can be used as a parameter in the 'connect'-method.
@@ -61,7 +60,7 @@ public class SerialConnection
 					SerialPort.PARITY_NONE);
 			_serialOutputStream = new BufferedOutputStream(_serialPort.getOutputStream());
 			_open = true;
-			ShutdownHandler.getInstance().pushShutdownHook(_shutdownHook);
+			ShutdownHandler.getInstance().addShutdownListener(this);
 			DebugConsole.print("SerialConnection", "open", "Connecting successful!");
 		}
 		catch (UnsupportedCommOperationException | IOException ex)
@@ -80,7 +79,7 @@ public class SerialConnection
 		if (!_open)
 			return; //the connection is already closed.
 		
-		ShutdownHandler.getInstance().removeShutdownHook(_shutdownHook);
+		ShutdownHandler.getInstance().removeShutdownListener(this);
 		_serialPort.close();
 		_serialPort = null;
 		try { _serialOutputStream.close(); } catch (IOException ignored) { ignored.printStackTrace(); }
@@ -116,6 +115,13 @@ public class SerialConnection
 			throw new IllegalStateException(ex);
 		}
 	}
+
+	@Override
+	public void onShutdown()
+	{
+		ShutdownHandler.getInstance().verifyShutdown();
+		close();
+	}
 	
 	//---------- Getters ---------------------------------------
 	public synchronized String getPortName()
@@ -137,19 +143,6 @@ public class SerialConnection
 		return _open;
 	}
 	
-	//----------------------------------------------------------
-	private class ShutdownHook implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			synchronized(SerialConnection.this)
-			{
-				close();
-			}
-		}
-	}
-
 	//---------- Debug-Console-printing ------------------------
 	/**
 	 * prints, uses the DebugConsole.
@@ -158,5 +151,12 @@ public class SerialConnection
 	private void debugprint(String method, String message)
 	{
 		DebugConsole.print("SerialConnection", method, message);
+	}
+	
+	//----------------------------------------------------------
+	@Override
+	public String toString()
+	{
+		return "SerialConnection";
 	}
 }

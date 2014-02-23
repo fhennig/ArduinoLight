@@ -2,8 +2,6 @@ package arduinoLight.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -47,17 +45,14 @@ public class Gui
 
 	private void initComponents()
 	{
+		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		buildModuleTabs(_modulePanels);
-
-		_frame.addWindowListener(new WindowHandler());
-		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		_frame.setLayout(new BorderLayout());
 		_frame.add(_menuTabs, BorderLayout.CENTER);
 		_frame.add((JPanel) _connectionPanel, BorderLayout.SOUTH);
 		_frame.setMinimumSize(new Dimension(600, 450));
-		// _frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		_frame.setLocationRelativeTo(null);
 		_frame.setVisible(true);
 		_frame.pack();
@@ -72,17 +67,6 @@ public class Gui
 		for (TabPanel panel : panels)
 		{
 			_menuTabs.addTab(panel.getTitle(), panel);
-		}
-	}
-
-	class WindowHandler extends WindowAdapter
-	{
-
-		@Override
-		public void windowClosing(WindowEvent e)
-		{
-			//TODO this should be replaced by a shutdown hook
-			_connectionPanel.disconnect();
 		}
 	}
 }

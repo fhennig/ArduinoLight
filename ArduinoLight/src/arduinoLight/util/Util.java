@@ -31,14 +31,15 @@ public class Util
 	}
 	
 	
-	
+		
 	/**
-	 * @param string  the String that should be padded.
-	 * @param desiredLength  the desired Length of the String.
-	 * @return  the String followed by spaces to match the desired Length.
-	 * If the String is already the desiredLenght or even longer, the String is returned.
+	 * @param string  the String that should be padded
+	 * @param pad  the char that should be used for padding
+	 * @param desiredLength  the desired Length of the String
+	 * @return  the String followed by [pad] to match the desired Length.
+	 * If the String is already the desiredLength or even longer, the String is returned.
 	 */
-	public static String getRightPaddedString(String string, int desiredLength)
+	public static String getRightPaddedString(String string, char pad, int desiredLength)
 	{
 		if (string.length() >= desiredLength)
 			return string;
@@ -47,7 +48,7 @@ public class Util
 		StringBuilder spaces = new StringBuilder(spacesNeeded);
 		for (int i = 0; i < spacesNeeded; i++)
 		{
-			spaces.append(' ');
+			spaces.append(pad);
 		}
 		return string.concat(spaces.toString());
 	}

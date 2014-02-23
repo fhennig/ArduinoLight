@@ -2,6 +2,8 @@ package arduinoLight.framework;
 
 import java.util.concurrent.*;
 
+import arduinoLight.util.DebugConsole;
+
 
 /**
  * This class is a singleton and provides global access to dispatch Events. 
@@ -12,24 +14,28 @@ import java.util.concurrent.*;
  * Events are fired FIFO.
  * thread-safety: This class is thread-safe through delegation.
  */
-public class EventDispatchHandler
+public class EventDispatchHandler implements ShutdownListener
 {
 	private static EventDispatchHandler _instance;
 	private final ExecutorService _executor = Executors.newCachedThreadPool();
+	
+	
 	
 	/**
 	 * private constructor because this is a singleton.
 	 */
 	private EventDispatchHandler()
 	{
-		Runnable shutdownHook = new ShutdownHook();
-		ShutdownHandler.getInstance().pushShutdownHook(shutdownHook);
+		DebugConsole.printh("EventDispatchHandler", "<init>", "initializing EventDispatchHandler");
+		ShutdownHandler.getInstance().addShutdownListener(this);
 	}
+	
+	
 	
 	/**
 	 * Returns the instance of this Singleton.
 	 */
-	public static EventDispatchHandler getInstance()
+	public synchronized static EventDispatchHandler getInstance()
 	{
 		if (_instance == null) //Lazy Initialize.
 		{
@@ -37,6 +43,8 @@ public class EventDispatchHandler
 		}
 		return _instance;
 	}
+	
+	
 	
 	/**
 	 * Dispatches a given Event for later concurrent execution. 
@@ -48,20 +56,19 @@ public class EventDispatchHandler
 	
 	
 	
-	
-	private class ShutdownHook implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			_executor.shutdown();
-		}
+	@Override
+	public synchronized void onShutdown()
+	{		
+		ShutdownHandler.getInstance().verifyShutdown();
 		
-		//For debugging:
-		@Override
-		public String toString()
-		{
-			return "EventDispatchHandler.ShutdownHook";
-		}
+		_executor.shutdown();
+		_instance = null;
+	}
+	
+	//----------------------------------------------------------
+	@Override
+	public String toString()
+	{
+		return "EventDispatchHandler";
 	}
 }

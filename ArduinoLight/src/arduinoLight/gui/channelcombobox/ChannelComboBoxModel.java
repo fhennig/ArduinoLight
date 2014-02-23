@@ -9,7 +9,6 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
-import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
 public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> implements ChannelsChangedListener
@@ -35,18 +34,9 @@ public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> impl
 	public synchronized void setItemSource(Channelholder source, boolean includeDummy, Channel preselectedChannel)
 	{
 		if (source == _itemSource)
-		{
-//			boolean dummyExists = this.getElementAt(0) instanceof DummyChannelItem;
-//			if (includeDummy && !dummyExists)
-//			{
-//				this.insertElementAt(new DummyChannelItem(), 0);
-//			}
-//			if (preselectedItem != null)
-//				this.setSelectedItem(preselectedItem);
-//			
+		{			
 			return;
 		}
-		DebugConsole.print("", "", "" + preselectedChannel);
 		printItems(1);
 		if (_itemSource != null)
 			_itemSource.removeChannelsChangedListener(this);
@@ -133,11 +123,11 @@ public class ChannelComboBoxModel extends DefaultComboBoxModel<ChannelItem> impl
 	
 	private void printItems(int prefix)
 	{
-		StringBuilder channels = new StringBuilder();
-		for (int i = 0; i < this.getSize(); i++)
-		{
-			channels.append(this.getElementAt(i).toString() + ", ");
-		}
-		DebugConsole.print("ChannelCBModel", "debug-print", prefix + ": " + _itemSource + ": " + channels);
+//		StringBuilder channels = new StringBuilder();
+//		for (int i = 0; i < this.getSize(); i++)
+//		{
+//			channels.append(this.getElementAt(i).toString() + ", ");
+//		}
+//		DebugConsole.print("ChannelCBModel", "debug-print", prefix + ": " + _itemSource + ": " + channels);
 	}
 }
