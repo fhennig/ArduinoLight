@@ -5,6 +5,13 @@ import gnu.io.PortInUseException;
 
 import java.util.*;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
 import javax.swing.SwingUtilities;
 
 import arduinoLight.arduino.SerialConnection;
@@ -24,16 +31,30 @@ import arduinoLight.util.Color;
  * Main class containing the main method.
  * Only used to start the application.
  */
-public class ArduinoLight
+public class ArduinoLight extends Application
 {
-	public static void main(String[] args)
-	{		
-		//Add some Channels for testing purposes:
-		Model.getInstance().getChannelFactory().newChannel("RED").setColor(Color.RED);
-		Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
-		Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
+	
+	@Override
+	public void start(Stage stage) throws Exception {
+		stage.setTitle("ArduinoLight");
 		
-		//Initialize GUI in Swing event dispatch thread
+		Parent root = FXMLLoader.load(getClass().getResource("res/MainPane.fxml"));
+		Scene scene = new Scene(root,400,400);
+		stage.setScene(scene);
+		stage.show();
+		
+		//Add some Channels for testing purposes:
+		//Model.getInstance().getChannelFactory().newChannel("RED").setColor(Color.RED);
+		//Model.getInstance().getChannelFactory().newChannel("GREEN").setColor(Color.GREEN);
+		//Model.getInstance().getChannelFactory().newChannel("BLUE").setColor(Color.BLUE);
+	}
+	
+	//public static void main(String[] args)
+	//{		
+	//	launch(args);
+	//}
+		
+	/**	//Initialize GUI in Swing event dispatch thread
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			@Override
@@ -55,7 +76,7 @@ public class ArduinoLight
 				new Gui(panels, connectionPanel);
 			}
 		});
-	}
+	}**/
 	
 	
 	
@@ -111,4 +132,7 @@ public class ArduinoLight
 		amblone.start(connection, 100);
 		ambientlight.start(10);
 	}
+
+
+
 }
