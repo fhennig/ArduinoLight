@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Button mnemonicParsing="false" prefHeight="-1.0" prefWidth="100.0" text="Button" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+    <HBox id="HBox" alignment="CENTER" prefWidth="350.0" spacing="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="20.0">
+      <children>
+        <Label maxHeight="-1.0" maxWidth="-1.0" text="Channel:" HBox.hgrow="ALWAYS" />
+        <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+        <Label maxHeight="-1.0" maxWidth="-1.0" text="Set to:" HBox.hgrow="ALWAYS" />
+        <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+        <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+      </children>
+    </HBox>
+    <HBox id="HBox" alignment="CENTER" prefWidth="350.0" spacing="5.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="140.0">
+      <children>
+        <Label text="Frequency:" HBox.hgrow="ALWAYS" />
+        <Slider maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="117.0" HBox.hgrow="ALWAYS" />
+        <Label text="COM-Port:" HBox.hgrow="ALWAYS" />
+        <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+              <String fx:value="Item 1" />
+              <String fx:value="Item 2" />
+              <String fx:value="Item 3" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+      </children>
+    </HBox>
+  </children>
+</AnchorPane>
