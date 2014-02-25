@@ -23,14 +23,15 @@ public class AmblonePackage
 	
 	
 	/**
-	 * Constructs an AmblonePackage from the given colors. If the list contains more than 4 colors,
-	 * only the first 4 are used. The list should not change while the package is constructed.
-	 * @param colors  the colors that should be used to construct the package.
+	 * Constructs an AmblonePackage from the given colors.
+	 * @param colors  List with at least one and maximum 4 Colors
+	 * @throws IllegalArgumentException  if more than 4 Colors or no Colors are given
 	 */
 	public AmblonePackage(List<RGBColor> colors)
 	{
-		if (colors.size() > 4)
-			colors = colors.subList(0, 4);
+		if (colors.size() > 4 || colors.size() == 0)
+			throw new IllegalArgumentException("Only 1 to 4 Colors supported. Given: " + colors.size());
+		
 		_colors = colors;
 		colorCount = _colors.size();
 		
