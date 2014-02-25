@@ -137,7 +137,7 @@ public class AmbloneTransmission implements ShutdownListener
 	}
 	
 	/**
-	 * Searches for the highest port that is currently set.
+	 * Searches for the highest port that is currently set. <br>
 	 * Example: If port 0 ist not set, but 1 is set, 2 is returned.
 	 */
 	private int getAmountPortsUsed()
