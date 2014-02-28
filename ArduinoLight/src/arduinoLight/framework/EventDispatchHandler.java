@@ -17,7 +17,7 @@ import arduinoLight.util.DebugConsole;
 public class EventDispatchHandler implements ShutdownListener
 {
 	private static EventDispatchHandler _instance;
-	private final ExecutorService _executor = Executors.newCachedThreadPool();
+	private final ExecutorService _executor = Executors.newCachedThreadPool(); //TODO error handling in pool threads
 	
 	
 	
