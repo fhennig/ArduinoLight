@@ -26,16 +26,16 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 	@FXML
 	private Button removeButton;
 	private List<ActionListener> _listeners = new ArrayList<ActionListener>();
+	@FXML
+	private ResourceBundle resources;
+	
+	@FXML
+	private URL location;
 	 
-	public ChannelSelectionController(ModifiableChannelholder provider){
-		_provider = provider;
+	
+	public ChannelSelectionController(){
+		//_provider = provider;
 	}
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
 
     @FXML
@@ -52,7 +52,6 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 
     @FXML
     void refreshRateChanged(ActionEvent event) {
-    	
     	
     }
 
@@ -71,6 +70,10 @@ public class ChannelSelectionController implements ChannelsChangedListener {
     void initialize() {
 
 
+    }
+    
+    public void addModel(ModifiableChannelholder provider){
+    	_provider = provider;
     }
 
 	@Override
