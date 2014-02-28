@@ -49,6 +49,10 @@ public class ArduinoLight extends Application
 	}
 	
 	private void initGui(Stage stage) throws IOException{
+		SerialConnection connection = new SerialConnection();
+		AmbloneTransmission amblone = new AmbloneTransmission();
+		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
+		
 		stage.setTitle("ArduinoLight");
 		Parent root;
 		root = FXMLLoader.load(getClass().getResource("gui/fxml/MainPane.fxml"));
