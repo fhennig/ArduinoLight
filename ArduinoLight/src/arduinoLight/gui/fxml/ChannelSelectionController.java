@@ -58,7 +58,7 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 
     @FXML
     void selectedChannelChanged(ActionEvent event) {
-    	java.awt.event.ActionEvent evt = new java.awt.event.ActionEvent(this, 0, "CHANNEL_CHANGE");
+    	java.awt.event.ActionEvent evt = new java.awt.event.ActionEvent(this, 0, "CHANNEL_CHANGE"); //TODO Better Conversion of ActionEvents
 		for (ActionListener l : _listeners)
 			l.actionPerformed(evt);
     }
