@@ -94,10 +94,6 @@ public class ChannelPanel extends JPanel implements ChannelsChangedListener
 	
 	private class ChannelComboBoxHandler implements ActionListener
 	{
-		/**
-		 * Gets called by the channelComboBox if the selected Item changes.
-		 * Fires the Event again but with a different source.
-		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
