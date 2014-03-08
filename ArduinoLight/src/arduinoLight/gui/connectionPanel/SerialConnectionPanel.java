@@ -6,7 +6,6 @@ import gnu.io.PortInUseException;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
@@ -16,8 +15,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -40,14 +37,10 @@ public class SerialConnectionPanel extends JPanel
 	private AmbloneTransmission _amblone;
 	private PortMap _map;
 	
-	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("/arduinoLight/gui/images/view_refresh.png");
-	
 	private AmbloneChannelPanel _amblonePanel;
-	private ImageIcon _refreshIcon;
 	private JComboBox<PortItem> _portComboBox;
 	private JSpinner _frequencySpinner;
 	private JToggleButton _connectButton;
-	private JButton _refreshButton;
 	private JLabel _portLabel = new JLabel("COM-Port: ");
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	
@@ -65,13 +58,7 @@ public class SerialConnectionPanel extends JPanel
 	{
 		//amblonePanel
 		_amblonePanel = new AmbloneChannelPanel(_map, AmbloneTransmission.SUPPORTED_CHANNELS);
-		
-		//refreshButton
-		initRefreshIcon();
-		_refreshButton = new JButton(_refreshIcon);
-		_refreshButton.addActionListener(new RefreshButtonHandler());
-		_refreshButton.setPreferredSize(new Dimension(30, 0));
-		
+				
 		//frequencySpinner
 		_frequencySpinner = new JSpinner();
 		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_REFRESHRATE, 1));
@@ -103,7 +90,6 @@ public class SerialConnectionPanel extends JPanel
 			lowerLine.add(Box.createHorizontalStrut(20));
 			lowerLine.add(_portLabel);
 			lowerLine.add(_portComboBox);
-			lowerLine.add(_refreshButton);
 		gbc.gridy = 1;
 		this.add(lowerLine, gbc);
 		gbc.gridx = 1;
@@ -120,16 +106,7 @@ public class SerialConnectionPanel extends JPanel
 		
 		//preload CommPortIdentifiers
 		refreshComboBox();
-	}
-	
-	private void initRefreshIcon()
-	{
-		_refreshIcon = new ImageIcon(_REFRESH_IMG_URL, "refresh");
-		Image icon = _refreshIcon.getImage();
-		Image newIcon = icon.getScaledInstance(20, 17, Image.SCALE_DEFAULT);
-		_refreshIcon = new ImageIcon(newIcon);
-	}
-	
+	}	
 
 	private void refreshComboBox()
 	{
@@ -147,15 +124,6 @@ public class SerialConnectionPanel extends JPanel
 			_connectButton.setEnabled(true);
 		}
 		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
-	}
-	
-	class RefreshButtonHandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			refreshComboBox();
-		}
-		
 	}
 	
 	class ConnectButtonHandler implements ActionListener{
