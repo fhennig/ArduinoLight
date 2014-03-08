@@ -12,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import arduinoLight.arduino.amblone.PortMap;
+import arduinoLight.arduino.PortMap;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.gui.ChannelholderItem;

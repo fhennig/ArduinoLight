@@ -5,9 +5,9 @@ import gnu.io.PortInUseException;
 
 import java.util.Enumeration;
 
+import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.arduino.amblone.PortMap;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.channelholder.ambientlight.Areaselection;

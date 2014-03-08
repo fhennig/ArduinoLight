@@ -5,9 +5,9 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
+import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.arduino.amblone.PortMap;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.gui.ChannelModifyPanel;
 import arduinoLight.gui.Gui;

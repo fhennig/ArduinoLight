@@ -1,4 +1,4 @@
-package arduinoLight.arduino.amblone;
+package arduinoLight.arduino;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -8,7 +8,8 @@ import arduinoLight.util.DebugConsole;
 
 /**
  * This class maps Channels to Ports which are represented by positive Integers. 
- * By default, every Port is mapped to null. 
+ * By default, every Port is mapped to null. <br> 
+ * thread-safety: delegated to the ConcurrentMap.
  */
 public class PortMap
 {
@@ -50,7 +51,7 @@ public class PortMap
 		return _map.get((Integer)port);
 	}
 	
-	/** Throws IllegalArgumentException if the given port number is not supported by the protocol */
+	/** Throws IllegalArgumentException if the given port number is < 0 */
 	private void validatePort(int port)
 	{
 		if (port < 0)

@@ -28,9 +28,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.arduino.amblone.PortMap;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")

@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.channel.Channel;
 import arduinoLight.framework.ShutdownHandler;
@@ -16,9 +17,9 @@ import arduinoLight.util.RGBColor;
 import arduinoLight.util.Util;
 
 /**
- * This class maps channels to output ports. If the transmission is active, the colors of
- * the channels are transmitted through a given connection periodically.
- * to encode the colors, the amblone protocol is used (http://amblone.com). <br>
+ * This class transmits colors from a PortMap through a SerialConnection.
+ * If the transmission is active, the colors of the channels are transmitted.
+ * To encode the colors, the amblone protocol is used (http://amblone.com). <br>
  * thread-safety: In part, thread-safety is delegated to the ConcurrentMap, other methods are synchronized.
  */
 public class AmbloneTransmission implements ShutdownListener
@@ -143,22 +144,6 @@ public class AmbloneTransmission implements ShutdownListener
 		
 		return result;
 	}
-	
-//	/**
-//	 * static helper-method that returns a LinkedHashSet containing Integers
-//	 * that represent the possible ports.
-//	 * The Integers are returned in an ascending order, if the set is iterated.
-//	 * The Set is generated each time this method is called.
-//	 */
-//	public static Set<Integer> getPossiblePorts()
-//	{
-//		Set<Integer> possiblePorts = new LinkedHashSet<>();
-//		
-//		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
-//			possiblePorts.add(i);
-//		
-//		return possiblePorts;
-//	}
 
 	/**
 	 * Is called from the ShutdownHook to stop the transmission and shutdown the executor.
