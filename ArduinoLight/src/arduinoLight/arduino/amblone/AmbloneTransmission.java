@@ -1,11 +1,7 @@
 package arduinoLight.arduino.amblone;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -27,48 +23,21 @@ import arduinoLight.util.Util;
  */
 public class AmbloneTransmission implements ShutdownListener
 {
+	public static final int SUPPORTED_CHANNELS = 4;
 	public static final int MAX_REFRESHRATE = 240;
-	private static final int _SUPPORTED_CHANNELS = 4;
-	private final ConcurrentMap<Integer, Channel> _map = new ConcurrentHashMap<>(_SUPPORTED_CHANNELS);
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	private volatile boolean _active = false;
+	private final PortMap _map;
 	
-
 	
-	/**
-	 * @param port  an integer specifying an output port. 0 <= port < 4
-	 * @param channel  a channel that should be mapped to this output.
-	 * If channel == null, the selected port is cleared.
-	 */
-	public void setOutput(int port, Channel channel)
+	
+	public AmbloneTransmission(PortMap map)
 	{
-		validatePort(port);
-		
-		if (channel == null) //if channel == null, the key is removed (every key should have a valid channel)
-			clearOutput(port);
-		else
-			_map.put(port, channel);
-		DebugConsole.print("AmbloneTransmission", "setOutput", "Port " + port + " set to " + channel);
+		_map = map;
 	}
 	
-	/** Stops output on the specified port */
-	public void clearOutput(int port)
-	{
-		_map.remove(port);
-		DebugConsole.print("AmbloneTransmission", "clearOutput", "Port " + port + " cleared.");
-	}
 	
-	/**
-	 * Returns the Channel that is mapped to the given port,
-	 * or null if currently no channel is mapped to the port.
-	 */
-	public Channel getChannel(int port)
-	{
-		validatePort(port);
-		
-		return _map.get((Integer)port);
-	}
 	
 	/** Indicates if transmission is currently active. */
 	public boolean isActive()
@@ -94,7 +63,7 @@ public class AmbloneTransmission implements ShutdownListener
 		long period = Util.getPeriod(refreshRate);
 		Runnable transmission = new Runnable()
 		{
-			private int currentlySetPortsAtArduino = _SUPPORTED_CHANNELS;
+			private int currentlySetPortsAtArduino = SUPPORTED_CHANNELS;
 			public void run()
 			{
 				int currentlySetPortsInMap = getAmountPortsUsed();
@@ -138,14 +107,14 @@ public class AmbloneTransmission implements ShutdownListener
 	
 	/**
 	 * Searches for the highest port that is currently set. <br>
-	 * Example: If port 0 ist not set, but 1 is set, 2 is returned.
+	 * Example: If port 0 is not set, but 1 is set, 2 is returned.
 	 */
 	private int getAmountPortsUsed()
 	{
 		int portsUsed = 0;
-		for (int i = _SUPPORTED_CHANNELS - 1; i >= 0; i--)
+		for (int i = SUPPORTED_CHANNELS - 1; i >= 0; i--)
 		{
-			if (_map.get(i) != null)
+			if (_map.getChannel(i) != null)
 			{
 				portsUsed = i + 1;
 				break;
@@ -164,7 +133,7 @@ public class AmbloneTransmission implements ShutdownListener
 		List<RGBColor> result = new ArrayList<>(usedPorts);
 		for (int i = 0; i < usedPorts; i++)
 		{
-			Channel channel = _map.get(i);
+			Channel channel = _map.getChannel(i);
 			
 			if (channel != null)
 				result.add(channel.getColor());
@@ -175,35 +144,30 @@ public class AmbloneTransmission implements ShutdownListener
 		return result;
 	}
 	
-	/**
-	 * static helper-method that returns a LinkedHashSet containing Integers
-	 * that represent the possible ports.
-	 * The Integers are returned in an ascending order, if the set is iterated.
-	 * The Set is generated each time this method is called.
-	 */
-	public static Set<Integer> getPossiblePorts()
-	{
-		Set<Integer> possiblePorts = new LinkedHashSet<>();
-		
-		for (int i = 0; i < _SUPPORTED_CHANNELS; i++)
-			possiblePorts.add(i);
-		
-		return possiblePorts;
-	}
+//	/**
+//	 * static helper-method that returns a LinkedHashSet containing Integers
+//	 * that represent the possible ports.
+//	 * The Integers are returned in an ascending order, if the set is iterated.
+//	 * The Set is generated each time this method is called.
+//	 */
+//	public static Set<Integer> getPossiblePorts()
+//	{
+//		Set<Integer> possiblePorts = new LinkedHashSet<>();
+//		
+//		for (int i = 0; i < SUPPORTED_CHANNELS; i++)
+//			possiblePorts.add(i);
+//		
+//		return possiblePorts;
+//	}
 
+	/**
+	 * Is called from the ShutdownHook to stop the transmission and shutdown the executor.
+	 */
 	@Override
 	public void onShutdown()
 	{
 		ShutdownHandler.getInstance().verifyShutdown();
 		stop();
-	}
-	
-	/** Throws IllegalArgumentException if the given port number is not supported by the protocol */
-	private void validatePort(int port)
-	{
-		if (port < 0 || port >= _SUPPORTED_CHANNELS)
-			throw new IllegalArgumentException("Port '" + port + "' not supported. " + 
-											   "Must be between 0 and " + _SUPPORTED_CHANNELS + ".");
 	}
 	
 	//----------------------------------------------------------

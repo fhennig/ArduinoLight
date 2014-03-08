@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.JTabbedPane;
 
-import arduinoLight.gui.connectionPanel.ConnectionPanel;
+import arduinoLight.gui.connectionPanel.SerialConnectionPanel;
 
 /**
  * The Guided User Interface for the ArduinoLight
@@ -18,10 +18,10 @@ public class Gui
 {
 	private JFrame _frame = new JFrame("Arduino Light");
 	private JTabbedPane _menuTabs = new JTabbedPane(JTabbedPane.TOP);
-	private ConnectionPanel _connectionPanel;
+	private SerialConnectionPanel _connectionPanel;
 	private Set<TabPanel> _modulePanels;
 
-	public Gui(Set<TabPanel> panels, ConnectionPanel connectionPanel)
+	public Gui(Set<TabPanel> panels, SerialConnectionPanel connectionPanel)
 	{
 		_modulePanels = panels;
 		_connectionPanel = connectionPanel;

@@ -30,13 +30,15 @@ import javax.swing.event.PopupMenuListener;
 
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.arduino.amblone.PortMap;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
-	
+public class SerialConnectionPanel extends JPanel
+{
 	private SerialConnection _connection;
 	private AmbloneTransmission _amblone;
+	private PortMap _map;
 	
 	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("/arduinoLight/gui/images/view_refresh.png");
 	
@@ -50,10 +52,11 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	
 	
-	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission)
+	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission, PortMap map)
 	{
 		_connection = connection;
 		_amblone = ambloneTransmission;
+		_map = map;
 		
 		initComponents();
 	}
@@ -61,7 +64,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	private void initComponents()
 	{
 		//amblonePanel
-		_amblonePanel = new AmbloneChannelPanel(_amblone);
+		_amblonePanel = new AmbloneChannelPanel(_map, AmbloneTransmission.SUPPORTED_CHANNELS);
 		
 		//refreshButton
 		initRefreshIcon();
@@ -146,15 +149,6 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
 	}
 	
-	@Override
-	public void disconnect()
-	{
-		if (_amblone.isActive())
-			_amblone.stop();
-		_connection.close();
-		_connectButton.setText("Connect");
-	}
-	
 	class RefreshButtonHandler implements ActionListener{
 
 		@Override
@@ -189,7 +183,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 			}
 			else
 			{
-				disconnect();
+				_connection.close();
 			}
 		}
 	}
