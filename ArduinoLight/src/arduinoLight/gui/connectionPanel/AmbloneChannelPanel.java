@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.arduino.PortMap;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.gui.ChannelholderItem;
@@ -25,7 +24,8 @@ import arduinoLight.model.Model;
 @SuppressWarnings("serial")
 public class AmbloneChannelPanel extends JPanel
 {
-	private AmbloneTransmission _amblone;
+	private final PortMap _map;
+	private final int _supportedPorts;
 	
 	private JLabel _outputLabel;
 	private JComboBox<Integer> _outputComboBox;
@@ -33,9 +33,10 @@ public class AmbloneChannelPanel extends JPanel
 	private JComboBox<ChannelholderItem> _channelHolderComboBox;
 	private ChannelComboBox _channelComboBox;
 	
-	public AmbloneChannelPanel(AmbloneTransmission ambloneTransmission)
+	public AmbloneChannelPanel(PortMap map, int supportedPorts)
 	{
-		_amblone = ambloneTransmission;
+		_map = map;
+		_supportedPorts = supportedPorts;
 		initComponents();
 	}
 	
@@ -73,10 +74,11 @@ public class AmbloneChannelPanel extends JPanel
 	private void initOutputCB()
 	{
 		DefaultComboBoxModel<Integer> cbModel = new DefaultComboBoxModel<>();
-		Set<Integer> possiblePorts = AmbloneTransmission.getPossiblePorts();
 		
-		for (Integer i : possiblePorts)
-			cbModel.addElement(i);
+		for (int i = 0; i < _supportedPorts; i++)
+		{
+			cbModel.addElement(new Integer(i));
+		}
 		
 		_outputComboBox = new JComboBox<Integer>(cbModel);
 		OutputComboBoxHandler handler = new OutputComboBoxHandler();
@@ -122,7 +124,7 @@ public class AmbloneChannelPanel extends JPanel
 			if (selectedObj != null)
 			{
 				int selectedPort = ((Integer) selectedObj).intValue();
-				Channel associatedChannel = _amblone.getChannel(selectedPort);
+				Channel associatedChannel = _map.getChannel(selectedPort);
 				if (associatedChannel != null)
 				{
 					//Set other ComboBoxes to show associated Channel
@@ -178,7 +180,7 @@ public class AmbloneChannelPanel extends JPanel
 			
 			int selectedPort = ((Integer) selectedPortObj).intValue();
 			
-			Channel setChannel = _amblone.getChannel(selectedPort);
+			Channel setChannel = _map.getChannel(selectedPort);
 			
 			if (selectedChannel == setChannel)
 				return; //If the channel is already set, the 'actionPerformed' was probably not called,
@@ -186,7 +188,7 @@ public class AmbloneChannelPanel extends JPanel
 			
 			//selectedChannel might be null, but that means that the output should be cleared.
 			//setOutput supports this.
-			_amblone.setOutput(selectedPort, selectedChannel);
+			_map.setPort(selectedPort, selectedChannel);
 		}
 	}
 }

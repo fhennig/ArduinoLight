@@ -6,7 +6,6 @@ import gnu.io.PortInUseException;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
@@ -16,8 +15,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,32 +25,31 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
-public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
-	
+public class SerialConnectionPanel extends JPanel
+{
 	private SerialConnection _connection;
 	private AmbloneTransmission _amblone;
-	
-	private static final java.net.URL _REFRESH_IMG_URL = SerialConnectionPanel.class.getResource("/arduinoLight/gui/images/view_refresh.png");
+	private PortMap _map;
 	
 	private AmbloneChannelPanel _amblonePanel;
-	private ImageIcon _refreshIcon;
 	private JComboBox<PortItem> _portComboBox;
 	private JSpinner _frequencySpinner;
 	private JToggleButton _connectButton;
-	private JButton _refreshButton;
 	private JLabel _portLabel = new JLabel("COM-Port: ");
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	
 	
-	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission)
+	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission, PortMap map)
 	{
 		_connection = connection;
 		_amblone = ambloneTransmission;
+		_map = map;
 		
 		initComponents();
 	}
@@ -61,14 +57,8 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 	private void initComponents()
 	{
 		//amblonePanel
-		_amblonePanel = new AmbloneChannelPanel(_amblone);
-		
-		//refreshButton
-		initRefreshIcon();
-		_refreshButton = new JButton(_refreshIcon);
-		_refreshButton.addActionListener(new RefreshButtonHandler());
-		_refreshButton.setPreferredSize(new Dimension(30, 0));
-		
+		_amblonePanel = new AmbloneChannelPanel(_map, AmbloneTransmission.SUPPORTED_CHANNELS);
+				
 		//frequencySpinner
 		_frequencySpinner = new JSpinner();
 		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_REFRESHRATE, 1));
@@ -100,7 +90,6 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 			lowerLine.add(Box.createHorizontalStrut(20));
 			lowerLine.add(_portLabel);
 			lowerLine.add(_portComboBox);
-			lowerLine.add(_refreshButton);
 		gbc.gridy = 1;
 		this.add(lowerLine, gbc);
 		gbc.gridx = 1;
@@ -117,16 +106,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 		
 		//preload CommPortIdentifiers
 		refreshComboBox();
-	}
-	
-	private void initRefreshIcon()
-	{
-		_refreshIcon = new ImageIcon(_REFRESH_IMG_URL, "refresh");
-		Image icon = _refreshIcon.getImage();
-		Image newIcon = icon.getScaledInstance(20, 17, Image.SCALE_DEFAULT);
-		_refreshIcon = new ImageIcon(newIcon);
-	}
-	
+	}	
 
 	private void refreshComboBox()
 	{
@@ -144,24 +124,6 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 			_connectButton.setEnabled(true);
 		}
 		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
-	}
-	
-	@Override
-	public void disconnect()
-	{
-		if (_amblone.isActive())
-			_amblone.stop();
-		_connection.close();
-		_connectButton.setText("Connect");
-	}
-	
-	class RefreshButtonHandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			refreshComboBox();
-		}
-		
 	}
 	
 	class ConnectButtonHandler implements ActionListener{
@@ -189,7 +151,7 @@ public class SerialConnectionPanel extends JPanel implements ConnectionPanel{
 			}
 			else
 			{
-				disconnect();
+				_connection.close();
 			}
 		}
 	}
