@@ -92,8 +92,36 @@ public class Color implements RGBColor
 		return getAdjustedColor(getA(), getB());
 	}
 	
+	/**
+	 * Returns the Saturation of this Color as a value between 0 and 1,
+	 * where 0 means the color is gray and 1 means the color is "pure".
+	 */
+	public double getSaturation()
+	{
+		int max = Math.max(getR(), Math.max(getG(), getB()));
+		int min = Math.min(getR(), Math.min(getG(), getB()));
+		
+		double saturation = ((double)max - min) / max;
+		return saturation;
+	}
 	
-	
+	/**
+	 * Returns a new Color that is generated from this Color with a changed
+	 * Saturation value.
+	 * @param newSaturation  saturation, a value between 0 and 1 where 1 yields
+	 * the most intense color and 0 returns a gray value.
+	 */
+	public Color changeSaturation(double newSaturation)
+	{
+		int max = Math.max(getR(), Math.max(getG(), getB()));
+		
+		int r = (int) (getR() + (max - getR()) * Math.round(newSaturation));
+		int g = (int) (getR() + (max - getR()) * Math.round(newSaturation));
+		int b = (int) (getR() + (max - getR()) * Math.round(newSaturation));
+		
+		return new Color(getA(), r, g, b);
+	}
+		
 	//---------- static-helper-methods -------------------------
 	/**
 	 * Directly calculates the alpha-value into the color and returns the color as a byte.
