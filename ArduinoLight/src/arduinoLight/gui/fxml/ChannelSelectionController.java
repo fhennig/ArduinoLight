@@ -34,7 +34,7 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 	 
 	
 	public ChannelSelectionController(){
-		//_provider = provider;
+		//TODO get instance of model singleton
 	}
 
 
@@ -70,10 +70,6 @@ public class ChannelSelectionController implements ChannelsChangedListener {
     void initialize() {
 
 
-    }
-    
-    public void addModel(ModifiableChannelholder provider){
-    	_provider = provider;
     }
 
 	@Override
