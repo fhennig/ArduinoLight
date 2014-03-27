@@ -14,7 +14,7 @@
         <HBox id="HBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" HBox.hgrow="ALWAYS">
           <children>
             <Label text="Refresh Rate:" />
-            <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#refreshRateChanged" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+            <Slider fx:id="_frequencySlider" min="30.0" prefWidth="70.0" />
           </children>
         </HBox>
         <ToggleButton fx:id="_startButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="70.0" text="Start" />

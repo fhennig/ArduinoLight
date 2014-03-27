@@ -13,6 +13,7 @@ import arduinoLight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 
 //TODO is ChannelsChangedListener really necessary?
@@ -26,6 +27,9 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 	
 	@FXML
 	private ToggleButton _startButton;
+	
+	@FXML
+	private Slider _frequencySlider;
 
 	
 	public ChannelSelectionController(){
@@ -53,7 +57,7 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 
     @FXML
     void refreshRateChanged(ActionEvent event) {
-    	//TODO refreshRateChanged
+    	
     }
 
     @FXML
@@ -72,7 +76,7 @@ public class ChannelSelectionController implements ChannelsChangedListener {
     	}
     	else
     	{
-    		al.start(30); //TODO get refreshrate from slider
+    		al.start((int)_frequencySlider.getValue());
     	}
     }
 

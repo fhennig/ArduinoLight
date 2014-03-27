@@ -1,5 +1,8 @@
 package arduinoLight.gui.fxml;
 
+import arduinoLight.arduino.SerialConnection;
+import arduinoLight.arduino.amblone.AmblonePackage;
+import arduinoLight.arduino.amblone.AmbloneTransmission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +12,9 @@ import javafx.scene.control.Slider;
 
 public class ChannelPanelController {
 
+	private AmbloneTransmission ambloneTransmission;
+	private SerialConnection serialConnection;
+	
     @FXML
     private ComboBox<?> ChannelBox;
 
@@ -30,6 +36,7 @@ public class ChannelPanelController {
 
     @FXML
     void handleChannelBoxAction(ActionEvent event) {
+    	
     }
 
     @FXML
