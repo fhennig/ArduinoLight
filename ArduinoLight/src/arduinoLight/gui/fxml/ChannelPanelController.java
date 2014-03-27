@@ -3,6 +3,7 @@ package arduinoLight.gui.fxml;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmblonePackage;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,6 +34,9 @@ public class ChannelPanelController {
     @FXML
     private ComboBox<?> PortBox;
 
+    
+    public ChannelPanelController(){
+    }
 
     @FXML
     void handleChannelBoxAction(ActionEvent event) {
