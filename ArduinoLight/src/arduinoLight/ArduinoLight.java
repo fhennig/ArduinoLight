@@ -32,9 +32,6 @@ public class ArduinoLight extends Application
 	public void start(Stage stage) throws Exception {
 		initGui(stage);
 		
-		SerialConnection connection = new SerialConnection();
-		AmbloneTransmission amblone = new AmbloneTransmission();
-		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
 		
 		//Add some Channels for testing purposes:
 		Model.getInstance().getChannelFactory().newChannel("RED").setColor(Color.RED);
@@ -48,9 +45,6 @@ public class ArduinoLight extends Application
 	}
 	
 	private void initGui(Stage stage) throws IOException{
-		SerialConnection connection = new SerialConnection();
-		AmbloneTransmission amblone = new AmbloneTransmission();
-		Ambientlight ambientlight = Model.getInstance().getAmbientlight();
 		
 		stage.setTitle("ArduinoLight");
 		Parent root;
@@ -67,33 +61,8 @@ public class ArduinoLight extends Application
 		});
 		stage.show();
 	}
-		
-	/**	//Initialize GUI in Swing event dispatch thread
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				SerialConnection connection = new SerialConnection();
-				AmbloneTransmission amblone = new AmbloneTransmission();
-				Ambientlight ambientlight = Model.getInstance().getAmbientlight();
-				
-				Gui.initLookAndFeel();
-				SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone);
-				TabPanel ambiPanel = new AmbientlightPanel(ambientlight);
-				TabPanel chanModPanel = new ChannelModifyPanel();
-				
-				Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
-				panels.add(ambiPanel);
-				panels.add(chanModPanel);
-				
-				new Gui(panels, connectionPanel);
-			}
-		});
-	}**/
 	
-	
-	
+	//TODO put this somewhere else
 	public static void test()
 	{
 		Channel channel1 = Model.getInstance().getChannelFactory().newChannel();

@@ -1,40 +1,35 @@
 package arduinoLight.gui.fxml;
 
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
 import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ModifiableChannelholder;
+import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ToggleButton;
 
-
+//TODO is ChannelsChangedListener really necessary?
 public class ChannelSelectionController implements ChannelsChangedListener {
 	
 	private ModifiableChannelholder _provider;
-	
-	@FXML
-	private ComboBox<Channel> channelBox;
-	@FXML
-	private Button removeButton;
 	private List<ActionListener> _listeners = new ArrayList<ActionListener>();
-	@FXML
-	private ResourceBundle resources;
 	
 	@FXML
-	private URL location;
-	 
+	private ComboBox<Channel> _channelBox;
+	
+	@FXML
+	private ToggleButton _startButton;
+
 	
 	public ChannelSelectionController(){
-		//TODO get instance of model singleton
+		_provider = Model.getInstance().getAmbientlight();
 	}
 
 
@@ -42,17 +37,23 @@ public class ChannelSelectionController implements ChannelsChangedListener {
     void channelAdded(ActionEvent event) {
     	Channel newChannel = Model.getInstance().getChannelFactory().newChannel();
 		_provider.addChannel(newChannel);
-		channelBox.getSelectionModel().select(newChannel);
+		_channelBox.getItems().add(newChannel);
+		_channelBox.getSelectionModel().select(newChannel);
     }
 
     @FXML
     void channelRemoved(ActionEvent event) {
-    	_provider.removeChannel(channelBox.getSelectionModel().getSelectedItem());
+    	if(!_channelBox.getItems().isEmpty()){
+	    	_provider.removeChannel(_channelBox.getSelectionModel().getSelectedItem());
+	    	_channelBox.getItems().remove(_channelBox.getSelectionModel().getSelectedIndex());
+    	} else{
+    		//TODO error handling
+    	}
     }
 
     @FXML
     void refreshRateChanged(ActionEvent event) {
-    	
+    	//TODO refreshRateChanged
     }
 
     @FXML
@@ -64,22 +65,21 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 
     @FXML
     void startPressed(ActionEvent event) {
+    	Ambientlight al = (Ambientlight)_provider; //TODO fix the use of casting
+    	if(al.isActive())
+    	{
+    		al.stop();
+    	}
+    	else
+    	{
+    		al.start(30); //TODO get refreshrate from slider
+    	}
     }
 
     @FXML
     void initialize() {
-
-
+        assert _channelBox != null : "fx:id=\"channelBox\" was not injected: check your FXML file 'ChannelSelection.fxml'.";
     }
-
-	@Override
-	public void channelsChanged(ChannelsChangedEventArgs e) {
-		int channels = _provider.getChannels().size();
-		if (channels < 2)
-			removeButton.setDisable(true);
-		else
-			removeButton.setDisable(false);
-	}
 	
 	public void addActionListener(ActionListener l)
 	{
@@ -89,6 +89,13 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 	public void removeActionListener(ActionListener l)
 	{
 		_listeners.remove(l);
+	}
+
+
+	@Override
+	public void channelsChanged(ChannelsChangedEventArgs e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

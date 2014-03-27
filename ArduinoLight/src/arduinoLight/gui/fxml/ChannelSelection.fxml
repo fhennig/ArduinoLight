@@ -14,35 +14,19 @@
         <HBox id="HBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" HBox.hgrow="ALWAYS">
           <children>
             <Label text="Refresh Rate:" />
-            <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#refreshRateChanged" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
-              <items>
-                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Item 1" />
-                  <String fx:value="Item 2" />
-                  <String fx:value="Item 3" />
-                </FXCollections>
-              </items>
-            </ComboBox>
+            <ComboBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#refreshRateChanged" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
           </children>
         </HBox>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startPressed" prefWidth="-1.0" text="Start" HBox.hgrow="ALWAYS" />
+        <ToggleButton fx:id="_startButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="70.0" text="Start" />
       </children>
     </HBox>
     <HBox id="HBox" alignment="CENTER" layoutY="0.0" prefWidth="269.0" spacing="5.0" AnchorPane.leftAnchor="271.0" AnchorPane.rightAnchor="0.0">
       <children>
         <Label text="Selected Channel:" />
-        <ComboBox fx:id="channelBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#selectedChannelChanged" HBox.hgrow="ALWAYS">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
-        </ComboBox>
+        <ComboBox id="channelBox" fx:id="_channelBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#selectedChannelChanged" HBox.hgrow="ALWAYS" />
         <HBox id="HBox" alignment="CENTER" prefWidth="-1.0" spacing="0.0" HBox.hgrow="NEVER">
           <children>
-            <Button fx:id="removeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#channelRemoved" prefWidth="30.0" text="-" HBox.hgrow="NEVER" />
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#channelRemoved" prefWidth="30.0" text="-" HBox.hgrow="NEVER" />
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" mnemonicParsing="false" onAction="#channelAdded" prefWidth="30.0" text="+" HBox.hgrow="NEVER" />
           </children>
         </HBox>

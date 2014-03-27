@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="ChannelPannelController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="arduinoLight.gui.fxml.ChannelPanelController">
   <children>
-    <Button fx:id="ConnectButton" mnemonicParsing="false" onAction="#handleConnectButtonAction" prefHeight="-1.0" prefWidth="100.0" text="Button" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+    <Button fx:id="ConnectButton" mnemonicParsing="false" onAction="#handleConnectButtonAction" prefHeight="-1.0" prefWidth="100.0" text="Connect" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
     <HBox id="HBox" alignment="CENTER" prefWidth="350.0" spacing="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="20.0">
       <children>
         <Label maxHeight="-1.0" maxWidth="-1.0" text="Channel:" HBox.hgrow="ALWAYS" />

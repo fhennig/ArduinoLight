@@ -10,7 +10,7 @@
   <children>
     <TabPane disable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="600.0" rotateGraphic="false" side="TOP" style="" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <tabs>
-        <Tab closable="true" disable="false" text="Untitled Tab 1">
+        <Tab closable="true" disable="false" text="ArduinoLight">
           <content>
             <AnchorPane id="Content" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="-1.0" prefWidth="-1.0" style="">
               <children>
@@ -19,7 +19,7 @@
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="Untitled Tab 2">
+        <Tab text="Unspecified">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="" />
           </content>
@@ -27,6 +27,6 @@
       </tabs>
     </TabPane>
     <Separator prefWidth="600.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-    <fx:include source="ChannelPane.fxml" prefHeight="100.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+    <fx:include source="ChannelPanel.fxml" prefHeight="100.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
   </children>
 </AnchorPane>
