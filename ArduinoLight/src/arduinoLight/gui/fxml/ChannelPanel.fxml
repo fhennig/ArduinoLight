@@ -14,32 +14,11 @@
       <children>
         <Label maxHeight="-1.0" maxWidth="-1.0" text="Channel:" HBox.hgrow="ALWAYS" />
         <ComboBox id="ChannelBox" fx:id="PortBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-1.0" onAction="#handlePortBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
         </ComboBox>
         <Label maxHeight="-1.0" maxWidth="-1.0" text="Set to:" HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="ChannelHolderBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleChannelHolderBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
         </ComboBox>
         <ComboBox id="Chann" fx:id="ChannelBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleChannelBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
         </ComboBox>
       </children>
     </HBox>
@@ -49,13 +28,6 @@
         <Slider fx:id="FrequencySlider" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="117.0" HBox.hgrow="ALWAYS" />
         <Label text="COM-Port:" HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="ComPortBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleComPortBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
-          <items>
-            <FXCollections fx:factory="observableArrayList">
-              <String fx:value="Item 1" />
-              <String fx:value="Item 2" />
-              <String fx:value="Item 3" />
-            </FXCollections>
-          </items>
         </ComboBox>
       </children>
     </HBox>

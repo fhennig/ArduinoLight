@@ -1,8 +1,16 @@
 package arduinoLight.gui.fxml;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
+import gnu.io.CommPortIdentifier;
+import gnu.io.PortInUseException;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmblonePackage;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.channelholder.Channelholder;
+import arduinoLight.gui.ChannelholderItem;
 import arduinoLight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,17 +21,17 @@ import javafx.scene.control.Slider;
 
 public class ChannelPanelController {
 
-	private AmbloneTransmission ambloneTransmission;
-	private SerialConnection serialConnection;
+	private AmbloneTransmission _ambloneTransmission;
+	private SerialConnection _serialConnection;
 	
     @FXML
     private ComboBox<?> ChannelBox;
 
     @FXML
-    private ComboBox<?> ChannelHolderBox;
+    private ComboBox<Channelholder> ChannelHolderBox;
 
     @FXML
-    private ComboBox<?> ComPortBox;
+    private ComboBox<CommPortIdentifier> ComPortBox;
 
     @FXML
     private Button ConnectButton;
@@ -35,7 +43,10 @@ public class ChannelPanelController {
     private ComboBox<?> PortBox;
 
     
-    public ChannelPanelController(){
+    public ChannelPanelController()
+    {
+    	_ambloneTransmission = new AmbloneTransmission();
+    	_serialConnection = new SerialConnection();
     }
 
     @FXML
@@ -67,8 +78,36 @@ public class ChannelPanelController {
         assert ConnectButton != null : "fx:id=\"ConnectButton\" was not injected: check your FXML file 'ChannelPane.fxml'.";
         assert FrequencySlider != null : "fx:id=\"FrequencySlider\" was not injected: check your FXML file 'ChannelPane.fxml'.";
         assert PortBox != null : "fx:id=\"PortBox\" was not injected: check your FXML file 'ChannelPane.fxml'.";
+        
+        initCommPortBox();
+        initChannelholderBox();
+        
+        try {
+			_serialConnection.open((CommPortIdentifier)ComPortBox.getValue(), 100);
+			_ambloneTransmission.start(_serialConnection, (int) FrequencySlider.getValue());
+		} catch (PortInUseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-
+    }
+    
+    private void initCommPortBox(){
+    	Enumeration<CommPortIdentifier> ports = SerialConnection.getAvailablePorts();
+    	while(ports.hasMoreElements())
+    	{
+    		ComPortBox.getItems().add(ports.nextElement());
+    	}
+    	ComPortBox.getSelectionModel().select(0);
+    }
+    
+    private void initChannelholderBox(){
+    	List<Channelholder> channelholders = Model.getInstance().getChannelholders();
+    	for(Channelholder holder : channelholders)
+    	{
+    		ChannelHolderBox.getItems().add(holder);
+    	}
+    	ChannelHolderBox.getSelectionModel().select(0);
     }
 
 }
