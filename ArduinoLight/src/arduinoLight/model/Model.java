@@ -117,5 +117,11 @@ public class Model
 		{
 			//TODO
 		}
+		
+		@Override
+		public String toString()
+		{
+			return "Unused Model";
+		}
 	}
 }

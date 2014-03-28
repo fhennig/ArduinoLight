@@ -18,7 +18,7 @@
         <Label maxHeight="-1.0" maxWidth="-1.0" text="Set to:" HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="ChannelHolderBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleChannelHolderBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
         </ComboBox>
-        <ComboBox id="Chann" fx:id="ChannelBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleChannelBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+        <ComboBox fx:id="ChannelBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleChannelBoxAction" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
         </ComboBox>
       </children>
     </HBox>

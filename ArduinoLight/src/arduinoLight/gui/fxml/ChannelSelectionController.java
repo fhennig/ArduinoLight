@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelholder.ChannelsChangedEventArgs;
-import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.model.Model;
@@ -16,8 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 
-//TODO is ChannelsChangedListener really necessary?
-public class ChannelSelectionController implements ChannelsChangedListener {
+public class ChannelSelectionController {
 	
 	private ModifiableChannelholder _provider;
 	private List<ActionListener> _listeners = new ArrayList<ActionListener>();
@@ -56,11 +53,6 @@ public class ChannelSelectionController implements ChannelsChangedListener {
     }
 
     @FXML
-    void refreshRateChanged(ActionEvent event) {
-    	
-    }
-
-    @FXML
     void selectedChannelChanged(ActionEvent event) {
     	java.awt.event.ActionEvent evt = new java.awt.event.ActionEvent(this, 0, "CHANNEL_CHANGE"); //TODO Better Conversion of ActionEvents
 		for (ActionListener l : _listeners)
@@ -94,12 +86,4 @@ public class ChannelSelectionController implements ChannelsChangedListener {
 	{
 		_listeners.remove(l);
 	}
-
-
-	@Override
-	public void channelsChanged(ChannelsChangedEventArgs e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -1,16 +1,14 @@
 package arduinoLight.gui.fxml;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.amblone.AmblonePackage;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
-import arduinoLight.gui.ChannelholderItem;
 import arduinoLight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +23,7 @@ public class ChannelPanelController {
 	private SerialConnection _serialConnection;
 	
     @FXML
-    private ComboBox<?> ChannelBox;
+    private ComboBox<Channel> ChannelBox;
 
     @FXML
     private ComboBox<Channelholder> ChannelHolderBox;
@@ -85,10 +83,15 @@ public class ChannelPanelController {
         try {
 			_serialConnection.open((CommPortIdentifier)ComPortBox.getValue(), 100);
 			_ambloneTransmission.start(_serialConnection, (int) FrequencySlider.getValue());
-		} catch (PortInUseException e) {
+		} catch (PortInUseException e1) 
+		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
+		} catch(NullPointerException e2)
+		{
+			System.err.println("No Ports found"); //TODO better error handling
 		}
+		
 
     }
     
