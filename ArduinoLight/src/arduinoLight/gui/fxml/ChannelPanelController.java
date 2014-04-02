@@ -14,7 +14,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.util.Callback;
 
 
 public class ChannelPanelController {
@@ -101,6 +104,26 @@ public class ChannelPanelController {
     	{
     		ComPortBox.getItems().add(ports.nextElement());
     	}
+    	
+    	Callback<ListView<CommPortIdentifier>,ListCell<CommPortIdentifier>> cellFactory = new Callback<ListView<CommPortIdentifier>,ListCell<CommPortIdentifier>>(){
+			@Override
+			public ListCell<CommPortIdentifier> call(ListView<CommPortIdentifier> arg0) {
+				final ListCell<CommPortIdentifier> cell = new ListCell<CommPortIdentifier>(){
+                    @Override
+                    protected void updateItem(CommPortIdentifier port, boolean bln) {
+                        super.updateItem(port, bln);
+                        if(port != null){
+                            setText(port.getName());
+                        }else{
+                            setText(null);
+                        }
+                    }
+                };
+                return cell;
+			}
+    	};
+    	ComPortBox.setCellFactory(cellFactory);
+    	ComPortBox.setButtonCell(cellFactory.call(null));
     	ComPortBox.getSelectionModel().select(0);
     }
     
