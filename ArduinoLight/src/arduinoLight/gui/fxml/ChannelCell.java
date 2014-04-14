@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -31,26 +30,6 @@ public class ChannelCell extends ListCell<Channel>{
 			@Override
 			public void handle(MouseEvent me) {
 				getItem().setName("TEST");
-		    }
-		});
-		_upButton.setOnMousePressed(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent me) {
-				Channel channel = getItem();
-				ListView<Channel> view = getListView();
-				int index = getIndex();
-				view.getItems().remove(index);
-				view.getItems().add(index - 1, channel);
-		    }
-		});
-		_downButton.setOnMousePressed(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent me) {
-				Channel channel = getItem();
-				ListView<Channel> view = getListView();
-				int index = getIndex();
-				view.getItems().remove(index);
-				view.getItems().add(index + 1, channel);
 		    }
 		});
 	}
