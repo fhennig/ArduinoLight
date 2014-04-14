@@ -55,6 +55,8 @@ public class ChannelCell extends ListCell<Channel>{
 		if(item != null){
 			_name.setText(item.getName());
 			setGraphic(_grid);
+		} else {
+			setGraphic(null);
 		}
 	}
 }
