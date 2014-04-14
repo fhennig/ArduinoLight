@@ -17,8 +17,10 @@ public class ChannelCell extends ListCell<Channel>{
 	Button _downButton = new Button("V");
 	GridPane _grid = new GridPane();
 	Label _name = new Label();
+	ChannelContainerComponentController _parent;
 	
-	public ChannelCell(){
+	public ChannelCell(ChannelContainerComponentController parent){
+		_parent = parent;
 		GridPane.setHgrow(_name, Priority.ALWAYS);
 		GridPane.setVgrow(_filterButton, Priority.ALWAYS);
 		_filterButton.setMaxHeight(Double.MAX_VALUE);
@@ -30,6 +32,18 @@ public class ChannelCell extends ListCell<Channel>{
 			@Override
 			public void handle(MouseEvent me) {
 				getItem().setName("TEST");
+		    }
+		});
+		_upButton.setOnMousePressed(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent me) {
+				_parent.moveUp(getIndex());
+		    }
+		});
+		_downButton.setOnMousePressed(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent me) {
+				_parent.moveDown(getIndex());
 		    }
 		});
 	}
