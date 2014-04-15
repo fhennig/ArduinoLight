@@ -21,11 +21,11 @@ import javafx.util.Callback;
 //TODO sein ernie...
 public class ChannelContainerComponentController {
 
-    @FXML //TODO nicht wirklich benötigt
+    @FXML //TODO nicht wirklich benÃ¶tigt
     private Label _channelLabel;
 
     @FXML
-    private ListView<Channel> _channelList;
+    private ChannelListView _channelList;
 
     @FXML
     private Label _maxChannelLabel;
@@ -36,33 +36,7 @@ public class ChannelContainerComponentController {
         assert _channelList != null : "fx:id=\"_channelList\" was not injected: check your FXML file 'ChannelContainerComponent.fxml'.";
         assert _maxChannelLabel != null : "fx:id=\"_maxChannelLabel\" was not injected: check your FXML file 'ChannelContainerComponent.fxml'.";
 
-        initListView();
         _channelList.getItems().add(new ThreadingChannel(0));
         _channelList.getItems().add(new ThreadingChannel(1));
     }
-    
-    public void moveUp(int index){
-    	if(index > 0){
-    		Channel channel = _channelList.getItems().get(index);
-    		_channelList.getItems().remove(index);
-    		_channelList.getItems().add(index - 1, channel);
-    	}
-    }
-    
-    public void moveDown(int index){
-    	if(index < _channelList.getItems().size() - 1){
-    		Channel channel = _channelList.getItems().get(index);
-    		_channelList.getItems().remove(index);
-    		_channelList.getItems().add(index + 1, channel);
-    	}
-    }
-
-	private void initListView() {
-		_channelList.setCellFactory(new Callback<ListView<Channel>, ListCell<Channel>> () {
-			@Override
-			public ListCell<Channel> call(ListView<Channel> arg0) {
-				return new ChannelCell(ChannelContainerComponentController.this);
-			}
-		});
-	}
 }

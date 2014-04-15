@@ -5,10 +5,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import arduinoLight.gui.fxml.*?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="arduinoLight.gui.fxml.ChannelContainerComponentController">
   <children>
-    <ListView fx:id="_channelList" prefHeight="348.0" prefWidth="572.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="38.0" />
+    <ChannelListView fx:id="_channelList" prefHeight="348.0" prefWidth="572.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="38.0" />
     <Label fx:id="_channelLabel" prefHeight="16.0" prefWidth="57.0" text="Channels:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
     <Label fx:id="_maxChannelLabel" text="Max number of Channels: 4" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
   </children>

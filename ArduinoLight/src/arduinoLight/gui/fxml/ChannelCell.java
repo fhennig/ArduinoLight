@@ -1,5 +1,7 @@
 package arduinoLight.gui.fxml;
 
+import java.util.ArrayList;
+
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,15 +14,15 @@ import arduinoLight.channel.Channel;
 
 public class ChannelCell extends ListCell<Channel>{
 	
+	ArrayList<ChannelPositionChangeListener> _listeners  = new ArrayList<ChannelPositionChangeListener>();
+	
 	ToggleButton _filterButton = new ToggleButton("Filter");
 	Button _upButton = new Button("^");
 	Button _downButton = new Button("V");
 	GridPane _grid = new GridPane();
 	Label _name = new Label();
-	ChannelContainerComponentController _parent;
 	
-	public ChannelCell(ChannelContainerComponentController parent){
-		_parent = parent;
+	public ChannelCell(){
 		GridPane.setHgrow(_name, Priority.ALWAYS);
 		GridPane.setVgrow(_filterButton, Priority.ALWAYS);
 		_filterButton.setMaxHeight(Double.MAX_VALUE);
@@ -37,13 +39,13 @@ public class ChannelCell extends ListCell<Channel>{
 		_upButton.setOnMousePressed(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent me) {
-				_parent.moveUp(getIndex());
+				firePositionUpEvent();
 		    }
 		});
 		_downButton.setOnMousePressed(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent me) {
-				_parent.moveDown(getIndex());
+				firePositionDownEvent();
 		    }
 		});
 	}
@@ -57,6 +59,25 @@ public class ChannelCell extends ListCell<Channel>{
 			setGraphic(_grid);
 		} else {
 			setGraphic(null);
+		}
+	}
+	
+	/**
+	 * aua
+	 */
+	public void addChannelPositionChangeListener(ChannelPositionChangeListener listener){
+		_listeners.add(listener);
+	}
+	
+	private void firePositionUpEvent(){
+		for(ChannelPositionChangeListener listener : _listeners){
+			listener.moveUp(this);
+		}
+	}
+	
+	private void firePositionDownEvent(){
+		for(ChannelPositionChangeListener listener : _listeners){
+			listener.moveDown(this);
 		}
 	}
 }
