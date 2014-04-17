@@ -7,6 +7,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Border;
 import javafx.util.Callback;
 
 public class ChannelListView extends ListView<Channel> {
@@ -37,13 +38,7 @@ public class ChannelListView extends ListView<Channel> {
 				if (board.hasContent(ChannelCell.CHANNEL_DATA)) {
 					Channel droppedChannel = (Channel) board
 							.getContent(ChannelCell.CHANNEL_DATA);
-					boolean containsChannel = false;
-					for (Channel channel : getItems()) {
-						if (channel.getId() == droppedChannel.getId()) {
-							containsChannel = true;
-						}
-					}
-					if (!containsChannel) {
+					if (!containsChannel(droppedChannel.getId())) {
 						getItems().add(droppedChannel);
 						event.setDropCompleted(true);
 					} else {
@@ -53,6 +48,35 @@ public class ChannelListView extends ListView<Channel> {
 				event.consume();
 			}
 		});
+		setOnDragEntered(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent event) {
+				if (event.getDragboard().hasContent(ChannelCell.CHANNEL_DATA)) {
+					Channel channel = (Channel) event.getDragboard()
+							.getContent(ChannelCell.CHANNEL_DATA);
+					if (!containsChannel(channel.getId())) {
+						//TODO visual feedback for possible drop
+					}
+				}
+			}
+		});
+		setOnDragExited(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent arg0) {
+				//TODO remove visual feedback for possible drop
+			}
+		});
+	}
+
+	private boolean containsChannel(int channelID) {
+		for (Channel channel : getItems()) {
+			if (channel.getId() == channelID) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	class PositionChangeListener implements ChannelCellPositionChangeListener {
