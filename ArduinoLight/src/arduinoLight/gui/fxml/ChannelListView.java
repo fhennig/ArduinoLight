@@ -1,8 +1,12 @@
 package arduinoLight.gui.fxml;
 
 import arduinoLight.channel.Channel;
+import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
 public class ChannelListView extends ListView<Channel>
@@ -16,6 +20,37 @@ public class ChannelListView extends ListView<Channel>
 				ChannelCell cell = new ChannelCell();
 				cell.addChannelPositionChangeListener(new PositionChangeListener());
 				return cell;
+			}
+		});
+		setOnDragOver(new EventHandler<DragEvent>(){
+			@Override
+			public void handle(DragEvent event) {
+				if(event.getDragboard().hasContent(ChannelCell.CHANNEL)){
+					event.acceptTransferModes(TransferMode.MOVE);
+				}
+				event.consume();
+			}
+		});
+		setOnDragDropped(new EventHandler<DragEvent>(){
+			@Override
+			public void handle(DragEvent event) {
+				Dragboard board = event.getDragboard();
+				if(board.hasContent(ChannelCell.CHANNEL)){
+					Channel droppedChannel = (Channel) board.getContent(ChannelCell.CHANNEL);
+					boolean containsChannel = false;
+					for(Channel channel : getItems()){
+						if(channel.getId() == droppedChannel.getId()){
+							containsChannel = true;
+						}
+					}
+					if(!containsChannel){
+						getItems().add(droppedChannel);
+						event.setDropCompleted(true);
+					} else{
+						event.setDropCompleted(false);
+					}
+				}
+				event.consume();
 			}
 		});
 	}

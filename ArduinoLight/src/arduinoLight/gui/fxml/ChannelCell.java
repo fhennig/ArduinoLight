@@ -7,12 +7,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import arduinoLight.channel.Channel;
 
 public class ChannelCell extends ListCell<Channel>{
+	
+	public static final DataFormat CHANNEL =
+		    new DataFormat("channel");
 	
 	ArrayList<ChannelPositionChangeListener> _listeners  = new ArrayList<ChannelPositionChangeListener>();
 	
@@ -47,6 +54,17 @@ public class ChannelCell extends ListCell<Channel>{
 			public void handle(MouseEvent me) {
 				firePositionDownEvent();
 		    }
+		});
+		setOnDragDetected(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				Dragboard board = startDragAndDrop(TransferMode.MOVE);
+				
+				ClipboardContent content = new ClipboardContent();
+				content.put(CHANNEL, getItem());
+				board.setContent(content);
+				arg0.consume();
+			}
 		});
 	}
 	
