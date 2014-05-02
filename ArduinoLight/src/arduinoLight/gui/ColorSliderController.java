@@ -1,4 +1,4 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

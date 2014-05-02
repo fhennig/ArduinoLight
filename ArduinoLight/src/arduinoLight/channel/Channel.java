@@ -27,4 +27,10 @@ public interface Channel extends Serializable
 	
 	public void addNameListener(NameListener listener);
 	public void removeNameListener(NameListener listener);
+	
+	@Override
+	public boolean equals(Object arg0);
+	
+	@Override
+	public int hashCode();
 }

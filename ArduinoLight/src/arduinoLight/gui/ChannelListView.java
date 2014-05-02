@@ -1,14 +1,13 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
-import arduinoLight.channel.Channel;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Border;
 import javafx.util.Callback;
+import arduinoLight.channel.Channel;
 
 public class ChannelListView extends ListView<Channel> {
 
@@ -36,15 +35,16 @@ public class ChannelListView extends ListView<Channel> {
 			public void handle(DragEvent event) {
 				Dragboard board = event.getDragboard();
 				if (board.hasContent(ChannelCell.CHANNEL_DATA)) {
-					Channel droppedChannel = (Channel) board
+					Channel channel = (Channel) board
 							.getContent(ChannelCell.CHANNEL_DATA);
-					if (!containsChannel(droppedChannel.getId())) {
-						getItems().add(droppedChannel);
+					if (!getItems().contains(channel)) {
+						getItems().add(channel);
 						event.setDropCompleted(true);
 					} else {
 						event.setDropCompleted(false);
 					}
 				}
+			
 				event.consume();
 			}
 		});
@@ -55,8 +55,8 @@ public class ChannelListView extends ListView<Channel> {
 				if (event.getDragboard().hasContent(ChannelCell.CHANNEL_DATA)) {
 					Channel channel = (Channel) event.getDragboard()
 							.getContent(ChannelCell.CHANNEL_DATA);
-					if (!containsChannel(channel.getId())) {
-						//TODO visual feedback for possible drop
+					if (!getItems().contains(channel)) {
+						// TODO visual feedback for possible drop
 					}
 				}
 			}
@@ -65,18 +65,9 @@ public class ChannelListView extends ListView<Channel> {
 
 			@Override
 			public void handle(DragEvent arg0) {
-				//TODO remove visual feedback for possible drop
+				// TODO remove visual feedback for possible drop
 			}
 		});
-	}
-
-	private boolean containsChannel(int channelID) {
-		for (Channel channel : getItems()) {
-			if (channel.getId() == channelID) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	class PositionChangeListener implements ChannelCellPositionChangeListener {

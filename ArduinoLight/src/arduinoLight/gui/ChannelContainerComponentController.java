@@ -1,4 +1,4 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
 import arduinoLight.model.Model;
 import javafx.fxml.FXML;

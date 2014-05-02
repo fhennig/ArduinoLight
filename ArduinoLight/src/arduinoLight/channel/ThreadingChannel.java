@@ -9,126 +9,138 @@ import arduinoLight.util.Color;
 
 /**
  * Implementation of the Channel interface. <br>
- * thread-safety: Delegation to thread-safe collections; final fields; volatile, immutable fields.
+ * thread-safety: Delegation to thread-safe collections; final fields; volatile,
+ * immutable fields.
  */
-public class ThreadingChannel implements Channel
-{
+public class ThreadingChannel implements Channel {
 	/** unique id, used for hashCode. Is threadsafe because final and primitive */
 	private final int _id;
-	
-	/** immutable objects + volatile used to ensure visibility of changes across all threads */
+
+	/**
+	 * immutable objects + volatile used to ensure visibility of changes across
+	 * all threads
+	 */
 	private volatile Color _color = Color.BLACK;
 	private volatile String _name = "Channel";
-	
-	/** final CopyOnWriteArrayList used for save concurrent access / thread-safety */
+
+	/**
+	 * final CopyOnWriteArrayList used for save concurrent access /
+	 * thread-safety
+	 */
 	private final List<ColorListener> _colorListeners = new CopyOnWriteArrayList<>();
 	private final List<NameListener> _nameListeners = new CopyOnWriteArrayList<>();
-	
-	/** @param id  a unique integer. */
-	public ThreadingChannel(int id)
-	{
+
+	/**
+	 * @param id
+	 *            a unique integer.
+	 */
+	public ThreadingChannel(int id) {
 		_id = id;
 	}
-	
-	//---------- IChannel: Getters / Setters -------------------
+
+	// ---------- IChannel: Getters / Setters -------------------
 	@Override
-	public Color getColor()
-	{
+	public Color getColor() {
 		return _color;
 	}
 
 	@Override
-	public void setColor(Color color)
-	{
+	public void setColor(Color color) {
 		_color = color;
 		raiseColorChangedEvent(color);
 	}
-	
+
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return _name;
 	}
-	
+
 	@Override
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		_name = name;
 		raiseNameChangedEvent(name);
 	}
 
 	@Override
-	public int getId()
-	{
+	public int getId() {
 		return _id;
 	}
-	
-	//---------- Events ----------------------------------------
+
+	// ---------- Events ----------------------------------------
 	/**
-	 * Color needs to get passed in as a parameter, to ensure that the correct color
-	 * is sent to the listeners.
-	 * Events are fired concurrently via the EventDispatchHandler.
+	 * Color needs to get passed in as a parameter, to ensure that the correct
+	 * color is sent to the listeners. Events are fired concurrently via the
+	 * EventDispatchHandler.
 	 */
-	private void raiseColorChangedEvent(final Color color)
-	{
-		EventDispatchHandler.getInstance().dispatch(new Event(this, "ColorChanged")
-		{
-			@Override
-			public void notifyListeners()
-			{
-				for (ColorListener listener : _colorListeners)
-					listener.colorChanged(this, color);
-			}
-		});
+	private void raiseColorChangedEvent(final Color color) {
+		EventDispatchHandler.getInstance().dispatch(
+				new Event(this, "ColorChanged") {
+					@Override
+					public void notifyListeners() {
+						for (ColorListener listener : _colorListeners)
+							listener.colorChanged(this, color);
+					}
+				});
 	}
-	
-	private void raiseNameChangedEvent(final String name)
-	{
-		EventDispatchHandler.getInstance().dispatch(new Event(this, "NameChanged")
-		{
-			@Override
-			public void notifyListeners()
-			{
-				for (NameListener listener : _nameListeners)
-					listener.nameChanged(this, name);
-			}
-		});
+
+	private void raiseNameChangedEvent(final String name) {
+		EventDispatchHandler.getInstance().dispatch(
+				new Event(this, "NameChanged") {
+					@Override
+					public void notifyListeners() {
+						for (NameListener listener : _nameListeners)
+							listener.nameChanged(this, name);
+					}
+				});
 	}
 
 	@Override
-	public void addColorListener(ColorListener listener)
-	{
+	public void addColorListener(ColorListener listener) {
 		_colorListeners.add(listener);
 	}
 
 	@Override
-	public void removeColorListener(ColorListener listener)
-	{
+	public void removeColorListener(ColorListener listener) {
 		_colorListeners.remove(listener);
 	}
 
 	@Override
-	public void addNameListener(NameListener listener)
-	{
+	public void addNameListener(NameListener listener) {
 		_nameListeners.add(listener);
 	}
 
 	@Override
-	public void removeNameListener(NameListener listener)
-	{
-		_nameListeners.remove(listener);		
+	public void removeNameListener(NameListener listener) {
+		_nameListeners.remove(listener);
 	}
-	
-	//---------- overridden from object ------------------------
+
+	// ---------- overridden from object -----------------------
 	@Override
-	public int hashCode()
-	{
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+		if (object == this) {
+			return true;
+		}
+		if (!(object instanceof ThreadingChannel)) {
+			return false;
+		}
+		final ThreadingChannel other = (ThreadingChannel) object;
+		if (other.getColor().equals(this.getColor())
+				&& other.getName().equals(this.getName())) {
+			return true;
+		}
+		return false;
+	};
+
+	@Override
+	public int hashCode() {
 		return _id * 57;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return _name + "[" + _id + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

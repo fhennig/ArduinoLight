@@ -1,4 +1,4 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
 import java.util.ArrayList;
 

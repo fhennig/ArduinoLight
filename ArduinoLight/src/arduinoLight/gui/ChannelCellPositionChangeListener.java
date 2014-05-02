@@ -1,4 +1,4 @@
-package arduinoLight.gui.fxml;
+package arduinoLight.gui;
 
 public interface ChannelCellPositionChangeListener {
 	void moveUp(ChannelCell source);

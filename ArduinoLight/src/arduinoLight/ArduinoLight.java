@@ -20,6 +20,7 @@ import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.channelholder.ambientlight.Areaselection;
 import arduinoLight.model.Model;
 import arduinoLight.util.Color;
+import arduinoLight.util.CustomUncaughtExceptionHandler;
 
 /**
  * Main class containing the main method.
@@ -30,6 +31,7 @@ public class ArduinoLight extends Application
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		Thread.setDefaultUncaughtExceptionHandler(new CustomUncaughtExceptionHandler());
 		initGui(stage);
 		
 		
@@ -48,7 +50,7 @@ public class ArduinoLight extends Application
 		
 		stage.setTitle("ArduinoLight");
 		Parent root;
-		root = FXMLLoader.load(getClass().getResource("gui/fxml/MainPane.fxml"));
+		root = FXMLLoader.load(getClass().getResource("gui/MainPane.fxml"));
 		Scene scene = new Scene(root,600,400);
 		stage.setScene(scene);
 		stage.setMinWidth(600);
