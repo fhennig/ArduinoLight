@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -62,7 +61,7 @@ public class ErrorDialog {
 		assert _okButton != null : "fx:id=\"_okButton\" was not injected: check your FXML file 'ErrorDialog.fxml'.";
 
 		_errorTextField.setText(getStackTraceAsString(_throwable));
-		_messageTextField.setText("Something went wrong! Sorry!");
+		_messageTextField.setText(_throwable.getMessage());
 	}
 
 	private String getStackTraceAsString(Throwable throwable) {
