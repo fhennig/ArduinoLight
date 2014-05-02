@@ -1,7 +1,5 @@
 package arduinoLight.channel;
 
-import java.io.Serializable;
-
 import arduinoLight.util.Color;
 
 
@@ -12,7 +10,7 @@ import arduinoLight.util.Color;
  * Currently, a Channel also has an ID which makes the channel unique. <br>
  * Every Implementation should be thread-safe.
  */
-public interface Channel extends Serializable
+public interface Channel
 {
 	public int getId();
 	
