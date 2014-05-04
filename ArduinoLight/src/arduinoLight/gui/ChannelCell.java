@@ -22,7 +22,7 @@ import arduinoLight.channel.Channel;
 
 public class ChannelCell extends ListCell<Channel> {
 
-	public static final DataFormat CHANNEL_DATA = new DataFormat("Channel");
+	public static final DataFormat INTEGER = new DataFormat("ID");
 
 	ArrayList<ChannelCellPositionChangeListener> _listeners = new ArrayList<ChannelCellPositionChangeListener>();
 
@@ -70,7 +70,7 @@ public class ChannelCell extends ListCell<Channel> {
 				Dragboard board = startDragAndDrop(TransferMode.MOVE);
 
 				ClipboardContent content = new ClipboardContent();
-				content.put(CHANNEL_DATA, getItem());
+				content.put(INTEGER, getItem().getId());
 				board.setContent(content);
 				arg0.consume();
 			}

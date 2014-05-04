@@ -24,7 +24,7 @@ public class ChannelListView extends ListView<Channel> {
 		setOnDragOver(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				if (event.getDragboard().hasContent(ChannelCell.CHANNEL_DATA)) {
+				if (event.getDragboard().hasContent(ChannelCell.INTEGER)) {
 					event.acceptTransferModes(TransferMode.MOVE);
 				}
 				event.consume();
@@ -34,11 +34,10 @@ public class ChannelListView extends ListView<Channel> {
 			@Override
 			public void handle(DragEvent event) {
 				Dragboard board = event.getDragboard();
-				if (board.hasContent(ChannelCell.CHANNEL_DATA)) {
-					Channel channel = (Channel) board
-							.getContent(ChannelCell.CHANNEL_DATA);
-					if (!getItems().contains(channel)) {
-						getItems().add(channel);
+				if (board.hasContent(ChannelCell.INTEGER)) {
+					int channelID = (int) board.getContent(ChannelCell.INTEGER);
+					if (!containsChannel(channelID)) {
+						//getItems().add(channel); //TODO get Channel from ID
 						event.setDropCompleted(true);
 					} else {
 						event.setDropCompleted(false);
@@ -52,10 +51,9 @@ public class ChannelListView extends ListView<Channel> {
 
 			@Override
 			public void handle(DragEvent event) {
-				if (event.getDragboard().hasContent(ChannelCell.CHANNEL_DATA)) {
-					Channel channel = (Channel) event.getDragboard()
-							.getContent(ChannelCell.CHANNEL_DATA);
-					if (!getItems().contains(channel)) {
+				if (event.getDragboard().hasContent(ChannelCell.INTEGER)) {
+					int channelID = (int) event.getDragboard().getContent(ChannelCell.INTEGER);
+					if (!containsChannel(channelID)) {
 						// TODO visual feedback for possible drop
 					}
 				}
@@ -68,6 +66,17 @@ public class ChannelListView extends ListView<Channel> {
 				// TODO remove visual feedback for possible drop
 			}
 		});
+	}
+	
+	private boolean containsChannel(int id){
+		boolean contains = false;
+		for(Channel channel : getItems()){
+			if(channel.getId() == id){
+				contains = true;
+				break;
+			}
+		}
+		return contains;
 	}
 
 	class PositionChangeListener implements ChannelCellPositionChangeListener {
