@@ -1,13 +1,12 @@
 package arduinoLight.util;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * This class represents a color, consisting of 4 values; alpha, red, green and blue. <br>
  * thread-safety: This class is immutable and therefore thread-safe.
  */
-public class Color implements RGBColor, Serializable
+public class Color implements RGBColor
 {
 	public static final Color BLACK = new Color(255,   0,   0,   0);
 	public static final Color WHITE = new Color(255, 255, 255, 255);

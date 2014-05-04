@@ -8,51 +8,50 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-1.0" minWidth="-1.0" prefHeight="400.0" prefWidth="600.0" style="&#10;&#10;&#10;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <children>
-    <TabPane disable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="267.0" prefWidth="600.0" rotateGraphic="false" side="TOP" style="" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <tabs>
-        <Tab closable="true" disable="false" text="ArduinoLight">
-          <content>
-            <AnchorPane id="Content" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="-1.0" prefWidth="-1.0" style="">
-              <children>
-                <fx:include source="AmbientLightPane.fxml" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="249.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-        <Tab text="Unspecified">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="" />
-          </content>
-        </Tab>
-        <Tab text="Testing">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <fx:include source="ChannelContainerComponent.fxml" prefHeight="269.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                <fx:include source="ChannelContainerComponent.fxml" prefHeight="269.0" prefWidth="314.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="286.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-      </tabs>
-    </TabPane>
-    <TabPane layoutX="0.0" layoutY="267.0" prefHeight="133.0" prefWidth="600.0" rotateGraphic="false" tabClosingPolicy="SELECTED_TAB">
-      <tabs>
-        <Tab text="Untitled Tab 1">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <fx:include source="ChannelPanel.fxml" prefHeight="100.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-        <Tab closable="false" disable="false" text="+">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-          </content>
-        </Tab>
-      </tabs>
-    </TabPane>
+    <VBox prefHeight="400.0000999999975" prefWidth="600.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <TabPane disable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="267.0" prefWidth="600.0" rotateGraphic="false" side="TOP" style="" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+          <tabs>
+            <Tab closable="true" disable="false" text="ArduinoLight">
+              <content>
+                <AnchorPane id="Content" maxHeight="-1.0" maxWidth="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="-1.0" prefWidth="-1.0" style="">
+                  <children>
+                    <fx:include source="AmbientLightPane.fxml" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="249.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Testing">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <children>
+                    <fx:include source="ChannelContainerComponent.fxml" prefHeight="269.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    <fx:include source="ChannelContainerComponent.fxml" prefHeight="269.0" prefWidth="314.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="286.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+          </tabs>
+        </TabPane>
+        <TabPane prefHeight="133.0" prefWidth="600.0" rotateGraphic="false" tabClosingPolicy="SELECTED_TAB" VBox.vgrow="ALWAYS">
+          <tabs>
+            <Tab text="Untitled Tab 1">
+              <content>
+                <AnchorPane id="Content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="-1.0" prefWidth="-1.0">
+                  <children>
+                    <fx:include source="ConnectionPanel.fxml" prefHeight="100.0" prefWidth="600.0" style="" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+            <Tab closable="false" disable="false" text="+">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+          </tabs>
+        </TabPane>
+      </children>
+    </VBox>
   </children>
 </AnchorPane>

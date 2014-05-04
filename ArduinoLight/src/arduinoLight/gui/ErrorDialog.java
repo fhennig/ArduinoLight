@@ -35,6 +35,8 @@ public class ErrorDialog {
 		root = loader.load();
 		Stage stage = new Stage();
 		stage.setTitle("An Error Ocurred!");
+		stage.setMinWidth(420);
+		stage.setMinHeight(260);
 		Scene scene = new Scene(root, 420, 260);
 		stage.setScene(scene);
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
