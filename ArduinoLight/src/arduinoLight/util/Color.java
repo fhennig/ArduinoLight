@@ -4,6 +4,7 @@ import java.util.Collection;
 
 /**
  * This class represents a color, consisting of 4 values; alpha, red, green and blue. <br>
+ * This is a value-type, equals and hashcode are overridden accordingly. <br>
  * thread-safety: This class is immutable and therefore thread-safe.
  */
 public class Color implements RGBColor
@@ -51,27 +52,47 @@ public class Color implements RGBColor
 	
 	public int getA()
 	{
-		return _argb >>> 24;
-}
+		return getA(_argb);
+	}
+	
+	public static int getA(int color)
+	{
+		return color >>> 24;
+	}
 	
 	public int getR()
 	{
+		return getR(_argb);
+	}
+	
+	public static int getR(int color)
+	{
 		int mask = 0x00ff0000;
-		int red = _argb & mask;
+		int red = color & mask;
 		return red >>> 16;
 	}
 
 	public int getG()
 	{
+		return getG(_argb);
+	}
+
+	public static int getG(int color)
+	{
 		int mask = 0x0000ff00;
-		int green = _argb & mask;
+		int green = color & mask;
 		return green >>> 8;
 	}
 	
 	public int getB()
 	{
+		return getB(_argb);
+	}
+	
+	public static int getB(int color)
+	{
 		int mask = 0x000000ff;
-		int blue = _argb & mask;
+		int blue = color & mask;
 		return blue;
 	}
 	

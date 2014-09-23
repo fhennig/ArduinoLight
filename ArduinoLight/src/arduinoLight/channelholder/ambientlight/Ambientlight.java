@@ -99,37 +99,39 @@ public class Ambientlight implements ModifiableChannelholder, ShutdownListener
 		
 		Runnable colorSetLoop = new Runnable() //TODO add possiblity to interrupt
 		{
+			private ColorSetter _setter = new ColorSetter(_map);
 			public void run()
 			{
-				try
-				{
-					Image screenshot = null;
-					try {
-						//TODO somewhere before, check if permission to take screenshot is given
-						screenshot = ScreenshotHelper.getScreenshot();
-					} catch (Exception e) { e.printStackTrace();}
-					AverageColorGetter avgGetter = new AverageColorGetter(screenshot);
-					Iterator<Channel> channels = _map.keySet().iterator();
-					while (channels.hasNext())
-					{
-						Channel channel;
-						Areaselection selection;
-						synchronized (_map)
-						{
-							channel = channels.next();
-							selection = _map.get(channel);
-						}
-						channel.setColor(avgGetter.getAverageColor(selection));
-					}
-				}
-				catch (Exception e)
-				{
-					synchronized (Ambientlight.this)
-					{
-						_active = false;
-						fireActiveChangedEvent(_active);
-					}
-				}
+				_setter.setColors(ScreenshotHelper.getBufferedImageScreenshot());
+//				try
+//				{
+//					Image screenshot = null;
+//					try {
+//						//TODO somewhere before, check if permission to take screenshot is given
+//						screenshot = ScreenshotHelper.getScreenshot();
+//					} catch (Exception e) { e.printStackTrace();}
+//					AverageColorGetter avgGetter = new AverageColorGetter(screenshot);
+//					Iterator<Channel> channels = _map.keySet().iterator();
+//					while (channels.hasNext())
+//					{
+//						Channel channel;
+//						Areaselection selection;
+//						synchronized (_map)
+//						{
+//							channel = channels.next();
+//							selection = _map.get(channel);
+//						}
+//						channel.setColor(avgGetter.getAverageColor(selection));
+//					}
+//				}
+//				catch (Exception e)
+//				{
+//					synchronized (Ambientlight.this)
+//					{
+//						_active = false;
+//						fireActiveChangedEvent(_active);
+//					}
+//				}
 			}
 		};
 		refreshRate = Math.min(refreshRate, MAX_REFRESHRATE);

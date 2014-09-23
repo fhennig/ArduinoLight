@@ -45,7 +45,7 @@ public class ScreenshotHelper
 	/**
 	 * Used to get a Screenshot of the primary screen of the user.
 	 */
-	private static BufferedImage getBufferedImageScreenshot()
+	public static BufferedImage getBufferedImageScreenshot()
 	{
 		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage capture = null;

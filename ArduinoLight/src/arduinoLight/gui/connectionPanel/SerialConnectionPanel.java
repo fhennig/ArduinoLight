@@ -134,7 +134,7 @@ public class SerialConnectionPanel extends JPanel
 				PortItem selectedItem = (PortItem) _portComboBox.getModel().getSelectedItem();
 				try
 				{
-					_connection.open(selectedItem.getPort(), 256000);
+					_connection.open(selectedItem.getPort(), 115200);
 				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
 					_connectButton.setSelected(false);
 					JOptionPane.showMessageDialog(null,
