@@ -9,10 +9,10 @@ import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
 import arduinoLight.arduino.amblone.AmbloneTransmission;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
-import arduinoLight.gui.ChannelModifyPanel;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
+import arduinoLight.gui.colorpicker.ColorPickingPanel;
 import arduinoLight.gui.connectionPanel.SerialConnectionPanel;
 import arduinoLight.model.Model;
 import arduinoLight.util.Color;
@@ -39,16 +39,15 @@ public class ArduinoLight
 				PortMap map = new PortMap();
 				SerialConnection connection = new SerialConnection();
 				AmbloneTransmission amblone = new AmbloneTransmission(map);
-				Ambientlight ambientlight = Model.getInstance().getAmbientlight();
 				
 				Gui.initLookAndFeel();
 				SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone, map);
-				TabPanel ambiPanel = new AmbientlightPanel(ambientlight);
-				TabPanel chanModPanel = new ChannelModifyPanel();
+				TabPanel ambiPanel = new AmbientlightPanel(Model.getInstance().getAmbientlight());
+				TabPanel colorPickerPanel = new ColorPickingPanel(Model.getInstance().getColorPicker());
 				
 				Set<TabPanel> panels = new LinkedHashSet<TabPanel>();
 				panels.add(ambiPanel);
-				panels.add(chanModPanel);
+				panels.add(colorPickerPanel);
 				
 				new Gui(panels, connectionPanel);
 			}

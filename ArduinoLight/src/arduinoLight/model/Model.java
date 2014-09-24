@@ -9,6 +9,7 @@ import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.Channelholder;
 import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
+import arduinoLight.channelholder.colorpicker.ColorPicker;
 
 /**
  * An important core class of this project.
@@ -22,6 +23,7 @@ public class Model
 	
 	private ChannelFactory _channelFactory = new ChannelFactory();
 	private Ambientlight _ambientlight = new Ambientlight();
+	private ColorPicker _colorPicker = new ColorPicker();
 	private Channelholder _unusedChannels = new UnusedChannels();
 	private List<Channelholder> _channelwriters = new ArrayList<>();
 	
@@ -30,6 +32,7 @@ public class Model
 	{
 		//Initialize the List of Channelwriters:
 		_channelwriters.add(_ambientlight);
+		_channelwriters.add(_colorPicker);
 	}
 	
 	/** static method to get the current instance of this singleton */
@@ -55,6 +58,11 @@ public class Model
 	public Ambientlight getAmbientlight()
 	{
 		return _ambientlight;
+	}
+	
+	public ColorPicker getColorPicker()
+	{
+		return _colorPicker;
 	}
 	
 	/**

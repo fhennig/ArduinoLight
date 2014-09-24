@@ -7,7 +7,6 @@ package arduinoLight.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import arduinoLight.channel.Channel;
-import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ChannelsChangedEventArgs;
+import arduinoLight.channelholder.ChannelsChangedListener;
 import arduinoLight.channelholder.ModifiableChannelholder;
 import arduinoLight.gui.channelcombobox.ChannelComboBox;
 import arduinoLight.gui.channelcombobox.ChannelComboBoxModel;
@@ -61,10 +60,6 @@ public class ChannelPanel extends JPanel implements ChannelsChangedListener
 		this.add(_channelBox);
 		this.add(_addButton);
 		this.add(_removeButton);
-	}
-	
-	public void addComboBoxListener(ItemListener listener){
-		_channelBox.addItemListener(listener);
 	}
 	
 	public Channel getSelectedChannel()
