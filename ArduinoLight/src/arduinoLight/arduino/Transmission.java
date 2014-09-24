@@ -22,12 +22,11 @@ import arduinoLight.util.Util;
  */
 public class Transmission implements ShutdownListener
 {
-	private static final int SUPPORTED_CHANNELS = 4;
 	public static final int MAX_REFRESHRATE = 240;
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	private volatile boolean _active = false;
-	private PortMap _map = new PortMap(SUPPORTED_CHANNELS);
+	private PortMap _map;
 	
 		
 	
@@ -56,7 +55,7 @@ public class Transmission implements ShutdownListener
 		long period = Util.getPeriod(refreshRate);
 		Runnable transmission = new Runnable()
 		{
-			private int currentlySetPortsAtArduino = SUPPORTED_CHANNELS;
+			private int currentlySetPortsAtArduino = packageFactory.getMaxPackageSize();
 			public void run()
 			{
 				int currentlySetPortsInMap = getAmountPortsUsed();
@@ -73,7 +72,7 @@ public class Transmission implements ShutdownListener
 		_executor.scheduleAtFixedRate(transmission, 0, period, TimeUnit.NANOSECONDS);
 		_active = true;
 		ShutdownHandler.getInstance().addShutdownListener(this);
-		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + refreshRate);
+		DebugConsole.print("Transmission", "start", "starting successful! Frequency: " + refreshRate);
 		return _map;
 	}
 	
@@ -94,7 +93,7 @@ public class Transmission implements ShutdownListener
 		_executor = null;
 		SerialConnection c = _connection;
 		_connection = null;
-		DebugConsole.print("AmbloneTransmission", "stopTransmission", "stopping successful");
+		DebugConsole.print("Transmission", "stopTransmission", "stopping successful");
 		return c;
 	}
 	
@@ -105,7 +104,7 @@ public class Transmission implements ShutdownListener
 	private int getAmountPortsUsed()
 	{
 		int portsUsed = 0;
-		for (int i = SUPPORTED_CHANNELS - 1; i >= 0; i--)
+		for (int i = _map.getSupportedChannels() - 1; i >= 0; i--)
 		{
 			if (_map.getChannel(i) != null)
 			{
@@ -151,6 +150,6 @@ public class Transmission implements ShutdownListener
 	@Override
 	public String toString()
 	{
-		return "AmbloneTransmission";
+		return "Transmission";
 	}
 }

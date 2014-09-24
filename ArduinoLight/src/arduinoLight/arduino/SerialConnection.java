@@ -106,6 +106,7 @@ public class SerialConnection implements ShutdownListener
 		{
 			_serialOutputStream.write(bytes);
 			_serialOutputStream.flush();
+			debugprint("transmit", "transmitted yo");
 		}
 		catch(IOException ex)
 		{

@@ -40,7 +40,7 @@ public class SerialConnectionPanel extends JPanel
 	private Transmission _amblone;
 	private List<PackageFactory> _packageFactories;
 	
-	private PortMapPanel _amblonePanel;
+	private PortMapPanel _portMapPanel;
 	private JComboBox<PortItem> _portComboBox;
 	private JComboBox<Integer> _baudComboBox;
 	private JComboBox<CBItem<PackageFactory>> _protocolComboBox;
@@ -49,7 +49,7 @@ public class SerialConnectionPanel extends JPanel
 	private JLabel _portLabel = new JLabel("COM-Port: ");
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
 	private JLabel _baudLabel = new JLabel("Baudrate: ");
-	
+	private JPanel _wrapperPanel;
 	
 	public SerialConnectionPanel(SerialConnection connection,
 			Transmission ambloneTransmission,
@@ -65,7 +65,8 @@ public class SerialConnectionPanel extends JPanel
 	private void initComponents()
 	{
 		//amblonePanel
-		_amblonePanel = new PortMapPanel(new PortMap(0));
+		_portMapPanel = new PortMapPanel(new PortMap(0));
+		_portMapPanel.setEnabled(false);
 				
 		//frequencySpinner
 		_frequencySpinner = new JSpinner();
@@ -89,7 +90,6 @@ public class SerialConnectionPanel extends JPanel
 		initBaudComboBox();
 		
 		//protocolComboBox
-		ComboBoxModel<CBItem<PackageFactory>> protocolModel = new DefaultComboBoxModel<>();
 		_protocolComboBox = new JComboBox<CBItem<PackageFactory>>();
 		_protocolComboBox.setPreferredSize(new Dimension(80, 0));
 		initProtocolComboBox();
@@ -107,8 +107,9 @@ public class SerialConnectionPanel extends JPanel
 		this.setBorder(BorderFactory.createTitledBorder("Connection Settings"));
 		this.setLayout(new GridBagLayout());
 
-		this.add(_amblonePanel);
+		this.add(_portMapPanel);
 		JPanel lowerLine = new JPanel();
+		_wrapperPanel = lowerLine;
 			lowerLine.setLayout(new BoxLayout(lowerLine, BoxLayout.X_AXIS));
 			lowerLine.add(_protocolComboBox);
 			lowerLine.add(_frequencyLabel);
@@ -179,6 +180,9 @@ public class SerialConnectionPanel extends JPanel
 				try
 				{
 					_connection.open(selectedItem.getPort(), (Integer)_baudComboBox.getSelectedItem());
+					_portMapPanel.setEnabled(true);
+					_wrapperPanel.setEnabled(false);
+					System.out.println("wrapperPanel setEnabled false");
 				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
 					_connectButton.setSelected(false);
 					JOptionPane.showMessageDialog(null,
@@ -193,12 +197,15 @@ public class SerialConnectionPanel extends JPanel
 					PortMap map = _amblone.start(_connection, frequency,
 							((CBItem<PackageFactory>)_protocolComboBox.getSelectedItem()).getItem());
 					_connectButton.setText("Disconnect");
-					_amblonePanel.setPortMap(map);
+					_portMapPanel.setPortMap(map);
 				}
 			}
 			else
 			{
 				_connection.close();
+				_connectButton.setText("Connect");
+				_portMapPanel.setEnabled(false);
+				_wrapperPanel.setEnabled(true);
 			}
 		}
 	}
