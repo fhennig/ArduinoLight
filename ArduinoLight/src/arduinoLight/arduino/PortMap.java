@@ -14,8 +14,17 @@ import arduinoLight.util.DebugConsole;
 public class PortMap
 {
 	private final ConcurrentMap<Integer, Channel> _map = new ConcurrentHashMap<>();
+	private final int _supportedChannels;
 	
 		
+	
+	public PortMap(int supportedChannels)
+	{
+		assert supportedChannels >= 0;
+		_supportedChannels = supportedChannels;
+	}
+	
+	
 	
 	/**
 	 * @param port  an integer specifying an output port. 0 <= port
@@ -51,10 +60,15 @@ public class PortMap
 		return _map.get((Integer)port);
 	}
 	
+	public int getSupportedChannels()
+	{
+		return _supportedChannels;
+	}
+	
 	/** Throws IllegalArgumentException if the given port number is < 0 */
 	private void validatePort(int port)
 	{
-		if (port < 0)
+		if (port < 0 || port >= _supportedChannels)
 			throw new IllegalArgumentException("Port '" + port + "' not supported. " + 
 											   "Must be greater than or equal to 0.");
 	}

@@ -1,4 +1,4 @@
-package arduinoLight.arduino.amblone;
+package arduinoLight.arduino;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import arduinoLight.arduino.PortMap;
-import arduinoLight.arduino.SerialConnection;
 import arduinoLight.channel.Channel;
 import arduinoLight.framework.ShutdownHandler;
 import arduinoLight.framework.ShutdownListener;
@@ -22,23 +20,16 @@ import arduinoLight.util.Util;
  * To encode the colors, the amblone protocol is used (http://amblone.com). <br>
  * thread-safety: In part, thread-safety is delegated to the ConcurrentMap, other methods are synchronized.
  */
-public class AmbloneTransmission implements ShutdownListener
+public class Transmission implements ShutdownListener
 {
-	public static final int SUPPORTED_CHANNELS = 4;
+	private static final int SUPPORTED_CHANNELS = 4;
 	public static final int MAX_REFRESHRATE = 240;
 	private SerialConnection _connection;
 	private ScheduledExecutorService _executor;
 	private volatile boolean _active = false;
-	private final PortMap _map;
+	private PortMap _map = new PortMap(SUPPORTED_CHANNELS);
 	
-	
-	
-	public AmbloneTransmission(PortMap map)
-	{
-		_map = map;
-	}
-	
-	
+		
 	
 	/** Indicates if transmission is currently active. */
 	public boolean isActive()
@@ -53,11 +44,12 @@ public class AmbloneTransmission implements ShutdownListener
 	 * @param refreshRate  the amount of refreshes per second (Hz)
  	 * If the given refreshRate is greater than MAX_REFRESHRATE, MAX_REFRESHRATE is used instead.
 	 */
-	public synchronized void start(SerialConnection connection, int refreshRate)
+	public synchronized PortMap start(SerialConnection connection, int refreshRate, final PackageFactory packageFactory)
 	{
 		if (connection.isOpen() == false)
 			throw new IllegalArgumentException("the connection must be open!");
 
+		_map = new PortMap(packageFactory.getMaxPackageSize());
 		_connection = connection;
 		_executor = Executors.newSingleThreadScheduledExecutor();
 		refreshRate = Math.min(refreshRate, MAX_REFRESHRATE);
@@ -73,8 +65,7 @@ public class AmbloneTransmission implements ShutdownListener
 					return; //If there are no ports in use, there is nothing to transmit.
 				
 				List<RGBColor> colorsForTransmission = getColorsForTransmission(currentlyUsedPorts);
-				AmblonePackage p = new AmblonePackage(colorsForTransmission);
-				_connection.transmit(p.toByteArray());
+				_connection.transmit(packageFactory.createPackage(colorsForTransmission));
 				currentlySetPortsAtArduino = currentlySetPortsInMap;
 			}
 		};
@@ -83,6 +74,7 @@ public class AmbloneTransmission implements ShutdownListener
 		_active = true;
 		ShutdownHandler.getInstance().addShutdownListener(this);
 		DebugConsole.print("AmbloneTransmission", "start", "starting successful! Frequency: " + refreshRate);
+		return _map;
 	}
 	
 	/**

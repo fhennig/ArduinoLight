@@ -5,9 +5,10 @@ import gnu.io.PortInUseException;
 
 import java.util.Enumeration;
 
+import arduinoLight.arduino.AmblonePackageFactory;
 import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.arduino.Transmission;
 import arduinoLight.channel.Channel;
 import arduinoLight.channelholder.ambientlight.Ambientlight;
 import arduinoLight.channelholder.ambientlight.Areaselection;
@@ -62,13 +63,13 @@ public class Test
 			return;
 		}
 		
-		PortMap map = new PortMap();
-		AmbloneTransmission amblone = new AmbloneTransmission(map);
+		PortMap map = new PortMap(4);
+		Transmission amblone = new Transmission();
 		map.setPort(1, channel1);
 		map.setPort(0, channel2);
 		
 		
-		amblone.start(connection, 100);
+		amblone.start(connection, 100, new AmblonePackageFactory());
 		ambientlight.start(10);
 	}
 }

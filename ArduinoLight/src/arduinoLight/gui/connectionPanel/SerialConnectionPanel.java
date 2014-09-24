@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -25,21 +26,24 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import arduinoLight.arduino.PackageFactory;
 import arduinoLight.arduino.PortMap;
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.amblone.AmbloneTransmission;
+import arduinoLight.arduino.Transmission;
+import arduinoLight.gui.CBItem;
 import arduinoLight.util.DebugConsole;
 
 @SuppressWarnings("serial")
 public class SerialConnectionPanel extends JPanel
 {
 	private SerialConnection _connection;
-	private AmbloneTransmission _amblone;
-	private PortMap _map;
+	private Transmission _amblone;
+	private List<PackageFactory> _packageFactories;
 	
-	private AmbloneChannelPanel _amblonePanel;
+	private PortMapPanel _amblonePanel;
 	private JComboBox<PortItem> _portComboBox;
 	private JComboBox<Integer> _baudComboBox;
+	private JComboBox<CBItem<PackageFactory>> _protocolComboBox;
 	private JSpinner _frequencySpinner;
 	private JToggleButton _connectButton;
 	private JLabel _portLabel = new JLabel("COM-Port: ");
@@ -47,11 +51,13 @@ public class SerialConnectionPanel extends JPanel
 	private JLabel _baudLabel = new JLabel("Baudrate: ");
 	
 	
-	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission, PortMap map)
+	public SerialConnectionPanel(SerialConnection connection,
+			Transmission ambloneTransmission,
+			List<PackageFactory> packageFactories)
 	{
 		_connection = connection;
 		_amblone = ambloneTransmission;
-		_map = map;
+		_packageFactories = packageFactories;
 		
 		initComponents();
 	}
@@ -59,22 +65,34 @@ public class SerialConnectionPanel extends JPanel
 	private void initComponents()
 	{
 		//amblonePanel
-		_amblonePanel = new AmbloneChannelPanel(_map, AmbloneTransmission.SUPPORTED_CHANNELS);
+		_amblonePanel = new PortMapPanel(new PortMap(0));
 				
 		//frequencySpinner
 		_frequencySpinner = new JSpinner();
-		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_REFRESHRATE, 1));
+		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, Transmission.MAX_REFRESHRATE, 1));
+
+		//connectButton
+		_connectButton = new JToggleButton("Connect");
+		_connectButton.addActionListener(new ConnectButtonHandler());
 		
 		//portComboBox
 		ComboBoxModel<PortItem> pcbModel = new DefaultComboBoxModel<PortItem>();
 		_portComboBox = new JComboBox<PortItem>(pcbModel);
 		_portComboBox.addPopupMenuListener(new ComboBoxMenuListener());
 		_portComboBox.setPreferredSize(new Dimension(120, 0));
+		refreshComboBox();
 		
 		//baudComboBox
 		ComboBoxModel<Integer> bcbModel = new DefaultComboBoxModel<>();
 		_baudComboBox = new JComboBox<>(bcbModel);
 		_portComboBox.setPreferredSize(new Dimension(80, 0));
+		initBaudComboBox();
+		
+		//protocolComboBox
+		ComboBoxModel<CBItem<PackageFactory>> protocolModel = new DefaultComboBoxModel<>();
+		_protocolComboBox = new JComboBox<CBItem<PackageFactory>>();
+		_protocolComboBox.setPreferredSize(new Dimension(80, 0));
+		initProtocolComboBox();
 		
 		//connectButton
 		_connectButton = new JToggleButton("Connect");
@@ -92,6 +110,7 @@ public class SerialConnectionPanel extends JPanel
 		this.add(_amblonePanel);
 		JPanel lowerLine = new JPanel();
 			lowerLine.setLayout(new BoxLayout(lowerLine, BoxLayout.X_AXIS));
+			lowerLine.add(_protocolComboBox);
 			lowerLine.add(_frequencyLabel);
 			lowerLine.add(_frequencySpinner);
 			lowerLine.add(Box.createHorizontalStrut(20));
@@ -114,9 +133,6 @@ public class SerialConnectionPanel extends JPanel
 		gbc.gridx = 2;
 		this.add(_connectButton, gbc);
 		
-		//preload CommPortIdentifiers
-		refreshComboBox();
-		initBaudComboBox();
 	}	
 
 	private void refreshComboBox()
@@ -144,6 +160,16 @@ public class SerialConnectionPanel extends JPanel
 		model.addElement(256000);
 	}
 	
+	private void initProtocolComboBox()
+	{
+		DefaultComboBoxModel<CBItem<PackageFactory>> model = (DefaultComboBoxModel<CBItem<PackageFactory>>)_protocolComboBox.getModel();
+		for (PackageFactory pf : _packageFactories)
+		{
+			model.addElement(new CBItem<PackageFactory>(pf, factory -> factory.getName()));
+		}
+		
+	}
+	
 	class ConnectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -163,8 +189,11 @@ public class SerialConnectionPanel extends JPanel
 				if (_connection.isOpen())
 				{
 					int frequency = ((Integer) _frequencySpinner.getValue());
-					_amblone.start(_connection, frequency);
+					@SuppressWarnings("unchecked")
+					PortMap map = _amblone.start(_connection, frequency,
+							((CBItem<PackageFactory>)_protocolComboBox.getSelectedItem()).getItem());
 					_connectButton.setText("Disconnect");
+					_amblonePanel.setPortMap(map);
 				}
 			}
 			else

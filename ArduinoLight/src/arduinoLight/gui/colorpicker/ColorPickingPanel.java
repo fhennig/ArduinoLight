@@ -59,8 +59,11 @@ public class ColorPickingPanel extends TabPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			if (_channelPanel.getSelectedChannel() == null)
+				return;
 			Color c = _channelPanel.getSelectedChannel().getColor();
-			java.awt.Color selectedColor = JColorChooser.showDialog(ColorPickingPanel.this, "Choose a Color",
+			java.awt.Color selectedColor = JColorChooser.showDialog(ColorPickingPanel.this,
+					"Choose a Color for " + _channelPanel.getSelectedChannel(),
 					new java.awt.Color(c.getR(), c.getG(), c.getB(), c.getA()));
 			if (selectedColor != null)
 				_channelPanel.getSelectedChannel().setColor(new Color(selectedColor.getRGB()));

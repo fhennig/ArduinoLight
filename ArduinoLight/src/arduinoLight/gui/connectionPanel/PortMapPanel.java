@@ -22,10 +22,9 @@ import arduinoLight.gui.channelcombobox.ChannelComboBoxModel;
 import arduinoLight.model.Model;
 
 @SuppressWarnings("serial")
-public class AmbloneChannelPanel extends JPanel
+public class PortMapPanel extends JPanel
 {
-	private final PortMap _map;
-	private final int _supportedPorts;
+	private PortMap _map;
 	
 	private JLabel _outputLabel;
 	private JComboBox<Integer> _outputComboBox;
@@ -33,11 +32,16 @@ public class AmbloneChannelPanel extends JPanel
 	private JComboBox<ChannelholderItem> _channelHolderComboBox;
 	private ChannelComboBox _channelComboBox;
 	
-	public AmbloneChannelPanel(PortMap map, int supportedPorts)
+	public PortMapPanel(PortMap map)
 	{
 		_map = map;
-		_supportedPorts = supportedPorts;
 		initComponents();
+	}
+	
+	public void setPortMap(PortMap map)
+	{
+		_map = map;
+		refreshOutputCB();
 	}
 	
 	private void initComponents()
@@ -73,16 +77,22 @@ public class AmbloneChannelPanel extends JPanel
 	/** Initializes the OutputComboBox with Model and Handler */
 	private void initOutputCB()
 	{
+		_outputComboBox = new JComboBox<Integer>();
+		OutputComboBoxHandler handler = new OutputComboBoxHandler();
+		_outputComboBox.addActionListener(handler);
+		refreshOutputCB();
+	}
+	
+	private void refreshOutputCB()
+	{
 		DefaultComboBoxModel<Integer> cbModel = new DefaultComboBoxModel<>();
 		
-		for (int i = 0; i < _supportedPorts; i++)
+		for (int i = 0; i < _map.getSupportedChannels(); i++)
 		{
 			cbModel.addElement(new Integer(i));
 		}
 		
-		_outputComboBox = new JComboBox<Integer>(cbModel);
-		OutputComboBoxHandler handler = new OutputComboBoxHandler();
-		_outputComboBox.addActionListener(handler);
+		_outputComboBox.setModel(cbModel);
 	}
 	
 	/** Initializes the ChannelholderComboBox with Model and Handler */

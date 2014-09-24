@@ -1,14 +1,17 @@
 package arduinoLight;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import arduinoLight.arduino.PortMap;
+import arduinoLight.arduino.AdalightPackageFactory;
+import arduinoLight.arduino.AmblonePackageFactory;
+import arduinoLight.arduino.PackageFactory;
 import arduinoLight.arduino.SerialConnection;
-import arduinoLight.arduino.amblone.AmbloneTransmission;
-import arduinoLight.channelholder.ambientlight.Ambientlight;
+import arduinoLight.arduino.Transmission;
 import arduinoLight.gui.Gui;
 import arduinoLight.gui.TabPanel;
 import arduinoLight.gui.ambientLight.AmbientlightPanel;
@@ -36,12 +39,14 @@ public class ArduinoLight
 			@Override
 			public void run()
 			{
-				PortMap map = new PortMap();
 				SerialConnection connection = new SerialConnection();
-				AmbloneTransmission amblone = new AmbloneTransmission(map);
+				Transmission amblone = new Transmission();
+				List<PackageFactory> factories = new ArrayList<>();
+				factories.add(new AmblonePackageFactory());
+				factories.add(new AdalightPackageFactory());
 				
 				Gui.initLookAndFeel();
-				SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone, map);
+				SerialConnectionPanel connectionPanel = new SerialConnectionPanel(connection, amblone, factories);
 				TabPanel ambiPanel = new AmbientlightPanel(Model.getInstance().getAmbientlight());
 				TabPanel colorPickerPanel = new ColorPickingPanel(Model.getInstance().getColorPicker());
 				

@@ -1,4 +1,4 @@
-package arduinoLight.arduino.amblone;
+package arduinoLight.arduino;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,19 +15,16 @@ import arduinoLight.util.RGBColor;
  * These Bytes can then be used to send them over a serialconnection. Get the bytes with 'toByteArray()'. <br>
  * thread-safety: This class is immutable.
  */
-public class AmblonePackage
+public class AmblonePackageFactory implements PackageFactory
 {	
-	private final List<RGBColor> _colors;
-	private final int colorCount;
-	private final List<Byte> _package;
+	private List<RGBColor> _colors;
+	private int colorCount;
+	private List<Byte> _package;
 	
 	
-	/**
-	 * Constructs an AmblonePackage from the given colors.
-	 * @param colors  List with at least one and maximum 4 Colors
-	 * @throws IllegalArgumentException  if more than 4 Colors or no Colors are given
-	 */
-	public AmblonePackage(List<RGBColor> colors)
+
+	@Override
+	public byte[] createPackage(List<RGBColor> colors)
 	{
 		if (colors.size() > 4 || colors.size() == 0)
 			throw new IllegalArgumentException("Only 1 to 4 Colors supported. Given: " + colors.size());
@@ -41,15 +38,18 @@ public class AmblonePackage
 		addStartflag();
 		addColorflags();
 		addEndflag();
+		byte[] result = toByteArray();
+		_colors = null;
+		colorCount = 0;
+		_package = null;
+		return result;
 	}
-	
-	
 	
 	/**
 	 * The returned array is constructed when the method is called. It is not stored in the object.
 	 * @return  a byte-Array representing an Amblonepackage (Startflag, colorvalues, Endflag)
 	 */
-	public byte[] toByteArray()
+	private byte[] toByteArray()
 	{
 		byte[] byteArray = new byte[_package.size()];
 		
@@ -157,5 +157,17 @@ public class AmblonePackage
 			_reservedFlags.add(ENDFLAG);
 			_reservedFlags.add(ESCFLAG);
 		}
+	}
+
+	@Override
+	public int getMaxPackageSize()
+	{
+		return 4;
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Amblone Protocol";
 	}
 }
