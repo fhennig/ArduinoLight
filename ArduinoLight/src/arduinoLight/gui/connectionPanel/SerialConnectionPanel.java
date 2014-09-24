@@ -39,10 +39,12 @@ public class SerialConnectionPanel extends JPanel
 	
 	private AmbloneChannelPanel _amblonePanel;
 	private JComboBox<PortItem> _portComboBox;
+	private JComboBox<Integer> _baudComboBox;
 	private JSpinner _frequencySpinner;
 	private JToggleButton _connectButton;
 	private JLabel _portLabel = new JLabel("COM-Port: ");
 	private JLabel _frequencyLabel = new JLabel("Frequency: ");
+	private JLabel _baudLabel = new JLabel("Baudrate: ");
 	
 	
 	public SerialConnectionPanel(SerialConnection connection, AmbloneTransmission ambloneTransmission, PortMap map)
@@ -64,10 +66,15 @@ public class SerialConnectionPanel extends JPanel
 		_frequencySpinner.setModel(new SpinnerNumberModel(100, 1, AmbloneTransmission.MAX_REFRESHRATE, 1));
 		
 		//portComboBox
-		ComboBoxModel<PortItem> cbModel = new DefaultComboBoxModel<PortItem>();
-		_portComboBox = new JComboBox<PortItem>(cbModel);
+		ComboBoxModel<PortItem> pcbModel = new DefaultComboBoxModel<PortItem>();
+		_portComboBox = new JComboBox<PortItem>(pcbModel);
 		_portComboBox.addPopupMenuListener(new ComboBoxMenuListener());
-		_portComboBox.setPreferredSize(new Dimension(100, 0));
+		_portComboBox.setPreferredSize(new Dimension(120, 0));
+		
+		//baudComboBox
+		ComboBoxModel<Integer> bcbModel = new DefaultComboBoxModel<>();
+		_baudComboBox = new JComboBox<>(bcbModel);
+		_portComboBox.setPreferredSize(new Dimension(80, 0));
 		
 		//connectButton
 		_connectButton = new JToggleButton("Connect");
@@ -90,6 +97,9 @@ public class SerialConnectionPanel extends JPanel
 			lowerLine.add(Box.createHorizontalStrut(20));
 			lowerLine.add(_portLabel);
 			lowerLine.add(_portComboBox);
+			lowerLine.add(Box.createHorizontalStrut(20));
+			lowerLine.add(_baudLabel);
+			lowerLine.add(_baudComboBox);
 		gbc.gridy = 1;
 		this.add(lowerLine, gbc);
 		gbc.gridx = 1;
@@ -106,6 +116,7 @@ public class SerialConnectionPanel extends JPanel
 		
 		//preload CommPortIdentifiers
 		refreshComboBox();
+		initBaudComboBox();
 	}	
 
 	private void refreshComboBox()
@@ -126,6 +137,13 @@ public class SerialConnectionPanel extends JPanel
 		DebugConsole.print("SerialConnectionPanel", "refreshComboBox", "comboBox refreshed!");
 	}
 	
+	private void initBaudComboBox()
+	{
+		DefaultComboBoxModel<Integer> model = (DefaultComboBoxModel<Integer>)_baudComboBox.getModel();
+		model.addElement(115200);
+		model.addElement(256000);
+	}
+	
 	class ConnectButtonHandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -134,7 +152,7 @@ public class SerialConnectionPanel extends JPanel
 				PortItem selectedItem = (PortItem) _portComboBox.getModel().getSelectedItem();
 				try
 				{
-					_connection.open(selectedItem.getPort(), 115200);
+					_connection.open(selectedItem.getPort(), (Integer)_baudComboBox.getSelectedItem());
 				} catch (PortInUseException | IllegalStateException | IllegalArgumentException e1) {
 					_connectButton.setSelected(false);
 					JOptionPane.showMessageDialog(null,
